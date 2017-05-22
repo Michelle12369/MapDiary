@@ -1,0 +1,25 @@
+.navbar-nav a {
+  color: white !important; }
+
+.sign-form {
+  margin: 50px auto;
+  width: 50%;
+  background: #f0f0f0;
+  padding: 20px;
+  border-radius: 0.2rem; }
+  .sign-form h2 {
+    text-align: center; }
+  .sign-form div {
+    margin: 5px; }
+    .sign-form div input {
+      width: 100%; }
+  .sign-form .sign-btn {
+    background: #0abab5;
+    border: none;
+    color: white;
+    border-radius: 0.2rem;
+    padding: 10px;
+    width: 100%;
+    margin-top: 10px; }
+
+/*# sourceMappingURL=sign.css.map */

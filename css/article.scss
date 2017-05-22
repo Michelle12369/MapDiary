@@ -1,0 +1,40 @@
+nav {
+    position: fixed;
+}
+
+article {
+    margin-top: 64px;
+}
+
+iframe {
+    border: 0;
+    position: fixed;
+}
+
+@media (max-width: 576px) {
+    iframe {
+        left: -2.5px;
+        margin-top: 64px;
+        top: 0;
+        height: 300px;
+    }
+    .result {
+        margin-top: 300px;
+    }
+}
+
+.article {
+    .article-pic {
+        width: 100%;
+        margin: 30px 0;
+    }
+    .comment {
+        img {
+            width: 40%;
+            border: solid 2px #0abab5;
+        }
+    }
+    input{
+        width:100%;
+    }
+}

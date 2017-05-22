@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Mapping</title>
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap-grid.min.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/user.css">
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb"
+        crossorigin="anonymous"></script>
+    <script src="js/bootstrap.min.js"></script>
+</head>
+<body>
+    <nav class="navbar navbar-toggleable-md navbar-light bg-faded fixed-top">
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01"
+            aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+        <a href="index.html" class="navbar-brand">
+            <img src="img/logo.png" alt="logo" class="logo">
+        </a>
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+            <form class="form-inline my-2 my-lg-0">
+                <input type="text" name="search" placeholder="請輸入地點" class="form-control mr-sm-2">
+                <select class="select-bar">
+                    <option value="旅行">旅行</option>
+                    <option value="saa">心情</option>
+                    <option value="opel">朋友</option>
+                    <option value="audi">美食</option>
+                    <option value="audi">公益</option>
+                    <option value="audi">約會</option>
+                    <option value="audi">靈異</option>
+                    <option value="audi">瘋狂</option>
+                </select>
+                <input type="submit" value="搜尋" class="search" />
+            </form>
+            <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false">
+                        <img src="img/shao.jpg" alt="" width="40px">
+        </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="edit.html">新增文章</a>
+                        <a class="dropdown-item" href="user.html">個人頁面</a>
+                        <a class="dropdown-item" href="index.html">登出</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false">
+                        <img src="img/bell.png" alt="" width="40px"></a>
+        </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="article.html">劉皪說你的文章讚</a>
+                        <a class="dropdown-item" href="article.html">劉皪對你的文章流言</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <article class="container">
+        <div class="row">
+            <div class="col-sm-4 user-info">
+                <img src="img/shao.jpg" alt="user image">
+                <h1>邵家怡</h1>
+                <p># 6篇美食</p>
+                <p># 5篇旅行</p>
+            </div>
+            <section class="col-sm-8">
+                <div class="content">
+                    <h2>酒這四記亞古</h2>
+                    <p>台北市 美食</p>
+                    <p>早是野也影像相類精現作面重布正負山教的起，以的發例特千操質字？臺院查清然小校問然有地且……片動不式到生業：紀性子，們大財市而給，成例超買育可識頭人可地，是山發前主裡法不樓同大廣不白實我火創大族財電一紙人高之不：市差視分叫易不麼不戲了景麼險同，動日有。難小未……就不體吃安校得再落風酒要的業年車樓！眾時導是子此能會把告麼車則不紙能資認者，最教見的跑受落市有。接標市東為，導治現已人真裡是及李個所他動得光功明們對方我，動國他要必們多說這般公不；不前元家官種人來都像超了語一漸費生切不適坡房道物況考不不食大，子沒是同氣完回團解實期教新的，文了業生能選令然但太國！由整業難，然業子原往那是來通小果像可人走以我整了選一不上保單自最工是作票大，己滿而，方影立過之不自時醫灣。</p>
+                    <a href="article.html">繼續閱讀</a>
+                </div>
+                <div class="content">
+                    <h2>酒這四記亞古</h2>
+                    <p>台北市 美食</p>
+                    <img src="img/rectangle.jpg" alt="">
+                    <p>早是野也影像相類精現作面重布正負山教的起，以的發例特千操質字？臺院查清然小校問然有地且……片動不式到生業：紀性子，們大財市而給，成例超買育可識頭人可地，是山發前主裡法不樓同大廣不白實我火創大族財電一紙人高之不：市差視分叫易不麼不戲了景麼險同，動日有。難小未……就不體吃安校得再落風酒要的業年車樓！眾時導是子此能會把告麼車則不紙能資認者，最教見的跑受落市有。接標市東為，導治現已人真裡是及李個所他動得光功明們對方我，動國他要必們多說這般公不；不前元家官種人來都像超了語一漸費生切不適坡房道物況考不不食大，子沒是同氣完回團解實期教新的，文了業生能選令然但太國！由整業難，然業子原往那是來通小果像可人走以我整了選一不上保單自最工是作票大，己滿而，方影立過之不自時醫灣。</p>
+                    <a href="article.html">繼續閱讀</a>
+                </div>
+            </section>
+        </div>
+
+    </article>
+    
+</body>
+</html>
