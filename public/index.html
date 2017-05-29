@@ -7,30 +7,22 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Mapping</title>
     <link rel="stylesheet" href="css/normalize.css">
-    <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/bootstrap-grid.min.css">
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/index.css">
     <link rel="icon" href="img/favicon.png">
     <link href="https://fonts.googleapis.com/css?family=Rancho" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n"
-        crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb"
-        crossorigin="anonymous"></script>
-    <script src="js/bootstrap.min.js"></script>
 </head>
 
 <body>
-    <nav class="navbar navbar-toggleable-sm navbar-light bg-inverse">
-        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01"
-            aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-        </button>
-        <img src="img/logo-light.png" alt="logo" class="navbar-brand logo">
-        <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-            <form class="form-inline my-2 my-lg-0">
-                <input type="text" name="search" placeholder="請輸入地點" class="form-control mr-sm-2">
-                <select class="select-bar">
+    <!--navbar 與搜尋列-->
+    <nav>
+        <a href="index.html">
+            <img src="img/logo-light.png" alt="logo" class="logo">
+        </a>
+        <form class="">
+            <input type="text" name="search" placeholder="城市、地點" class="form-control mr-sm-2">
+            <select class="select-bar">
                     <option value="-">-</option>
                     <option value="旅行">旅行</option>
                     <option value="美食">美食</option>
@@ -40,17 +32,11 @@
                     <option value="親子">親子</option>
                     <option value="朋友">朋友</option>
                 </select>
-                <input type="submit" value="搜尋" class="search" />
-            </form>
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="signup.html">註冊 </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">登入</a>
-                </li>
-            </ul>
-        </div>
+            <input type="submit" value="搜尋" class="search" />
+        </form>
+            <a class="nav-link" href="signin.html">登入</a>
+            <a class="nav-link" href="signup.html">註冊 </a>
+
     </nav>
 
     <header>
@@ -86,6 +72,7 @@
                 </div>
             </div>
         </section>
+
         <section class="hot-issue">
             <div class="container">
                 <h2>熱門文章</h2>
@@ -98,10 +85,10 @@
                         </a>
                     </div>
                     <div class="col-sm-6 col-md-4">
-                        <a href="article2.html">
-                            <img src="./img/twice.jpg" alt="hot issue">
-                            <h3>TWICE搞怪回歸 洗腦金曲《SIGNAL》又一發！</h3>
-                            <p>台北市 邵家怡</p>
+                        <a href="article.html">
+                            <img src="./img/food.jpg" alt="hot issue">
+                            <h3>北村豆腐家</h3>
+                            <p class="small-text">台北市 邵家怡</p>
                         </a>
                     </div>
                     <div class="col-sm-6 col-md-4">
@@ -112,10 +99,10 @@
                         </a>
                     </div>
                     <div class="col-sm-6 col-md-4">
-                        <a href="article2.html">
-                            <img src="./img/twice.jpg" alt="hot issue">
-                            <h3>TWICE搞怪回歸 洗腦金曲《SIGNAL》又一發！</h3>
-                            <p>台北市 邵家怡</p>
+                        <a href="article.html">
+                            <img src="./img/food.jpg" alt="hot issue">
+                            <h3>北村豆腐家</h3>
+                            <p class="small-text">台北市 邵家怡</p>
                         </a>
                     </div>
                     <div class="col-sm-6 col-md-4">
@@ -126,15 +113,16 @@
                         </a>
                     </div>
                     <div class="col-sm-6 col-md-4">
-                        <a href="article2.html">
-                            <img src="./img/twice.jpg" alt="hot issue">
-                            <h3>TWICE搞怪回歸 洗腦金曲《SIGNAL》又一發！</h3>
-                            <p>台北市 邵家怡</p>
+                        <a href="article.html">
+                            <img src="./img/food.jpg" alt="hot issue">
+                            <h3>北村豆腐家</h3>
+                            <p class="small-text">台北市 邵家怡</p>
                         </a>
                     </div>
                 </div>
             </div>
         </section>
+
         <section class="container">
             <h2>主要分類</h2>
             <div class="row category">
@@ -196,10 +184,10 @@
                 </div>
             </div>
         </section>
+
     </article>
     <footer>
     </footer>
-
 </body>
 
 </html>
