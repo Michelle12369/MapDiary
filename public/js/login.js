@@ -8,7 +8,8 @@ function statusChangeCallback(response) {
   // for FB.getLoginStatus().
   if (response.status === 'connected') {
     // Logged into your app and Facebook.
-    testAPI();
+    testAPI(response);
+
   } else {
     // The person is not logged into your app or we are unable to tell.
     document.getElementById('status').innerHTML = 'Please log ' +
@@ -63,13 +64,44 @@ FB.getLoginStatus(function(response) {
 
 // Here we run a very simple test of the Graph API after login is
 // successful.  See statusChangeCallback() for when this call is made.
-function testAPI() {
+function testAPI(a) {
   console.log('Welcome!  Fetching your information.... ');
-  FB.api('/me', function(response) {
+  FB.api('/me', 'GET',{
+  	"fields": "email,first_name,name,gender"
+  },function(response) {
     console.log('Successful login for: ' + response.name);
     document.getElementById('status').innerHTML =
       'Thanks for logging in, ' + response.name + '!';
+      // console.log(response.id);
+      // console.log(response.email);
+      // console.log(response.name);
+      // console.log(response.gender);
+      var email = response.email;
+      var password = "1234567890"
+      // var token = a.authResponse.accessToken;
+   //    firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
+			//   // Handle Errors here.
+			//   var errorCode = error.code;
+			//   var errorMessage = error.message;
+			// });
   });
+  FB.api( //拿大頭貼
+    '/me/picture',
+    'GET', {
+        "fields": "redirect,url",
+        "type": "normal"
+    },
+    function(response) {
+        document.getElementById('pic').src = response.data.url;
+        document.getElementById('pic-small').src = response.data.url;
+   	}
+	);
+	var b = a.authResponse.userID;
+	console.log(b);
+	firebase.database().ref('User/').push().set({
+		userID: b,
+		rrr:'rrr'
+	});
 }
 
 function logout() {
@@ -84,16 +116,7 @@ function logout() {
 // require("firebase/auth");
 // require("firebase/database");
 
-// Initialize Firebase
-var config = {
-  apiKey: "AIzaSyCxtNaITKHzASF0PNhcr1mU6ah0Ru7FTqc",
-  authDomain: "sna-map-4f1bb.firebaseapp.com",
-  databaseURL: "https://sna-map-4f1bb.firebaseio.com",
-  projectId: "sna-map-4f1bb",
-  storageBucket: "sna-map-4f1bb.appspot.com",
-  messagingSenderId: "1022375312771"
-};
-// firebase.initializeApp(config);
+
 
 
 // var provider = new firebase.auth.FacebookAuthProvider();
@@ -140,9 +163,40 @@ var config = {
 //   // ...
 // });
 
+var rootRef = firebase.database().ref();
+var adaRef = firebase.database().ref("User/ada");
+
+var signIn = document.getElementById("signIn");
+
+signIn.addEventListener("click",function(){
+	var email = document.getElementById("email").value;
+	var password = document.getElementById("pwd").value;
+	signIn1(email,password);
+});
 
 
+// 登入
+function signIn1(email,password){
+	firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
+	  // Handle Errors here.
+	  var errorCode = error.code;
+	  var errorMessage = error.message;
+	  // ...
+		console.log("登入失敗");
+	});
+}
+// 登出
+function signOut(){
+	firebase.auth().signOut().then(function() {
+	  // Sign-out successful.
+	}).catch(function(error) {
+	  // An error happened.
+	});
+}
 
 
-
-
+firebase.auth().onAuthStateChanged(function(user) {
+  if (user) {
+    // window.location.replace("/index.html");
+  }
+});

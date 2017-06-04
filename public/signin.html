@@ -36,6 +36,7 @@
 
         <div class="right">
             <a class="nav-link" href="signup.html">註冊 </a>
+            <img src="" id="pic">
         </div>
     </nav>
 
@@ -45,29 +46,26 @@
         <form action="">
             <div>
                 <label for="email">信箱</label>
-                <input type="email">
+                <input type="email" id="email">
             </div>
             <div>
                 <label for="password">密碼</label>
-                <input type="password">
+                <input type="password" id="pwd">
             </div>
-            <input type="submit" value="登入"class="sign-btn">
+            <input type="value" value="登入" class="sign-btn" id="signIn">
         </form>
         <hr>
         <button class="sign-btn">FACEBOOK登入</button>
         <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
 </fb:login-button>
         <div id="status"></div>
-        <!-- <button onclick="logout();">logout</button> -->
+        
+        <img src="" id="pic-small">
+        <button onclick="logout();">logout</button>
     </div>
 </body>
-<!-- <script src="https://www.gstatic.com/firebasejs/4.1.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/4.1.1/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/4.1.1/firebase-database.js"></script>
-<script src="https://www.gstatic.com/firebasejs/4.1.1/firebase-messaging.js"></script>
- -->
-<script src="https://www.gstatic.com/firebasejs/4.1.1/firebase.js"></script>
-<script type="text/javascript" src="https://cdn.firebase.com/js/client/2.4.2/firebase.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/4.1.0/firebase.js"></script>
 <script>
   // Initialize Firebase
   var config = {
