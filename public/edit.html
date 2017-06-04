@@ -13,6 +13,9 @@
     <link rel="icon" href="img/favicon.png">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/0.8.1/cropper.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/0.8.1/cropper.min.js"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCxtNaITKHzASF0PNhcr1mU6ah0Ru7FTqc&libraries=places&callback=initMap">
+    </script>
+
 </head>
 
 <body>
@@ -70,23 +73,23 @@
                     <form>
                         <div>
                             <label for="title">文章標題</label>
-                            <input type="text">
+                            <input type="text" id="title">
                         </div>
                         <div>
                             <label for="category">文章分類</label>
-                            <select class="select-bar">
-                            <option value="旅行">旅行</option>
-                            <option value="美食">美食</option>
-                            <option value="愛情">愛情</option>
-                            <option value="心情">心情</option>
-                            <option value="公益">公益</option>
-                            <option value="親子">親子</option>
-                            <option value="朋友">朋友</option>
-                        </select>
+                            <select id="category_select" class="select-bar">
+                            <option value="Travel">旅行</option>
+                            <option value="Mood">心情</option>
+                            <option value="Friend">朋友</option>
+                            <option value="Food">美食</option>
+                            <option value="Charity">公益</option>
+                            <option value="Love">愛情</option>
+                            <option value="Family">家庭</option>
+                            </select>
                         </div>
                         <div>
                             <label for="content">文章內容</label>
-                            <textarea name="content" id="" cols="60" rows="20"></textarea>
+                            <textarea name="content" id="p_content" cols="60" rows="20"></textarea>
                         </div>
                         <div>
                             <label for="photo">封面照片上傳</label>
@@ -125,13 +128,26 @@
 
             <!--地圖-->
             <div class="col-sm-6 map">
-                <iframe width="100%" height="450" frameborder="0" src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBy5JYq1_BVxB1A2Xtofn9PcRryxQJ4Ess
-    &q=國立政治大學" allowfullscreen>
-                </iframe>
+                <input id="pac-input" class="controls" type="text" placeholder="Search Box">
+                <button type="button" id="gps">定位</button>
+                <div id="pickmap" style="width:100%; height:100%"></div>
             </div>
 
             </div>
     </article>
+    <script src="https://www.gstatic.com/firebasejs/4.1.0/firebase.js"></script>
+    <script>
+      // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyCr3tX6GOxWNEKHCk6UEGPPdaQoYfstZm8",
+        authDomain: "sna-map-4f1bb.firebaseapp.com",
+        databaseURL: "https://sna-map-4f1bb.firebaseio.com",
+        projectId: "sna-map-4f1bb",
+        storageBucket: "sna-map-4f1bb.appspot.com",
+        messagingSenderId: "1022375312771"
+      };
+      firebase.initializeApp(config);
+    </script>
     <script src="js/edit.js"></script>
     <script src="js/main.js"></script>
 </body>
