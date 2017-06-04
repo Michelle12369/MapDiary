@@ -1,0 +1,31 @@
+nav{
+    position:fixed;
+}
+
+article{
+    margin-top:64px;
+}
+
+.result{
+    img{
+        width:100%;
+    }
+}
+
+iframe{
+    border:0;
+    position: fixed;
+}
+
+ @media (max-width: 576px) {
+    iframe{
+        left:-2.5px;
+        margin-top:64px;
+        top:0;
+        height:300px;
+    }
+    .result{
+        margin-top:300px;
+    }
+
+ }
