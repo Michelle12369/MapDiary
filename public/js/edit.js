@@ -14,7 +14,7 @@ var selectbox = document.querySelector('#category_select');
 var userid = 'joy_shao37';
 var myLatlng = "";
 var marker,lat,lng;
-
+var selectedFile;
 
   /*問題: marker會有重複的情況再檢查、reloading page more than twice will cause error*/
 
@@ -22,17 +22,21 @@ submit.addEventListener('click',function () {
 
         var title = document.querySelector('#title').value;
         var category = selectbox.options[selectbox.options.selectedIndex].value;
-        var p_content = document.querySelector('#p_content').value;
+        var p_content = tinyMCE.get('p_content').getContent();
 
         /*if-else判斷有沒有填寫完整*/
-        uploadPost(title,category,p_content);
+        //uploadPost(title,category,p_content);
+        uploadImageStorage();
+       // setTimeout(function(){window.location.reload(1);}, 5000);
+
 
 })
 
 
 function uploadPost (title,category,p_content){
 
-       firebase.database().ref('Post/'+category).push().set({
+
+        firebase.database().ref('Post/'+category).push().set({
 
         userid : userid,
         title: title,
@@ -197,10 +201,29 @@ function initMap() {
 
       }
 
+
+  function uploadImageStorage () {
+
+      var filename = selectedFile.name;
+      /*fpostkey*/
+      // Create a root reference
+      var storageRef = firebase.storage().ref('/postimage/'+filename);
+      storageRef.put(selectedFile).then(function(snapshot) {
+          console.log('Uploaded a data_url string!');
+          var downloadURL = uploadTask.snapshot.downloadURL;
+          console.log(downloadURL);
+      });
+
+     }
+
+
+
 /*End*/
 
 uploadImage.addEventListener('change', function () {
 
+
+    selectedFile = this.files[0];
 
     if (this.files && this.files[0]) {
         var reader = new FileReader();
@@ -224,8 +247,9 @@ uploadImage.addEventListener('change', function () {
                 var croppedCanvas;
                // Crop
                 croppedCanvas = cropper.getCroppedCanvas();
-                // Show
-                roundedImage.src = croppedCanvas.toDataURL('image/png');
+               // Show
+               roundedImage.src = croppedCanvas.toDataURL('image/png');
+
             };
 
 

@@ -16,6 +16,7 @@
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCxtNaITKHzASF0PNhcr1mU6ah0Ru7FTqc&libraries=places&callback=initMap">
     </script>
 
+
 </head>
 
 <body>
@@ -111,7 +112,7 @@
 
             <!--地圖-->
             <div class="col-sm-6 map">
-                <input id="pac-input" class="controls" type="text" placeholder="Search Box">
+                <input id="pac-input" class="controls" type="text" placeholder="地址">
                 <button type="button" id="gps">定位</button>
                 <div id="pickmap" style="width:100%; height:100%"></div>
             </div>
@@ -133,5 +134,11 @@
     </script>
     <script src="js/edit.js"></script>
     <script src="js/main.js"></script>
+    <script src="https://cloud.tinymce.com/stable/tinymce.min.js"></script>
+    <script>
+    tinymce.init({ 
+        selector:'textarea'
+    });
+    </script>
 </body>
 </html>
