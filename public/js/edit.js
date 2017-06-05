@@ -1,4 +1,4 @@
-var uploadImage = document.querySelector('input[type=file]');
+var uploadImage = document.querySelector('#file');
 var roundedImage = document.querySelector('#result');
 var image = document.querySelector('#image');
 var button = document.querySelector('#button');
@@ -8,14 +8,22 @@ var input = document.querySelector('#pac-input');
 
 
 
+
+var file = document.getElementById("file");
+var submit = document.getElementById("submit");
+var selectedFile;
+
+
+
 // by chien
 uploadImage.addEventListener('change', function () {
+
+    
     if (document.querySelector('.cropper-container') != null) {
         document.querySelector('.cropper-container').remove();
     }
     if (this.files && this.files[0]) {
         var reader = new FileReader();
-
         reader.onload = function (ev) {
             var cropper = new Cropper(image, {
                 aspectRatio: 16 / 9,
@@ -28,11 +36,13 @@ uploadImage.addEventListener('change', function () {
                 croppedCanvas = cropper.getCroppedCanvas();
                 // Show
                 roundedImage.src = croppedCanvas.toDataURL('image/png');
+                
             };
-
-
         }
-        reader.readAsDataURL(this.files[0]);
+       
+        reader.readAsDataURL(this.files[0]);  
+        selectedFile = this.files[0]; 
+
     }
 
 });
@@ -58,7 +68,7 @@ span.onclick = function () {
 //by shao
 //Jun 1st 修改
 var database = firebase.database();
-var submit = document.querySelector('#submit');
+//var submit = document.querySelector('#submit');
 var selectbox = document.querySelector('#category_select');
 var userid = 'joy_shao37';
 var myLatlng = "";
@@ -69,12 +79,21 @@ var marker, lat, lng;
 
 submit.addEventListener('click', function () {
 
-    var title = document.querySelector('#title').value;
-    var category = selectbox.options[selectbox.options.selectedIndex].value;
-    var p_content = document.querySelector('#p_content').value;
+        // var title = document.querySelector('#title').value;
+        // var category = selectbox.options[selectbox.options.selectedIndex].value;
+        // var p_content = tinyMCE.get('p_content').getContent();
 
-    /*if-else判斷有沒有填寫完整*/
-    uploadPost(title, category, p_content);
+        
+
+        var storageRef = firebase.storage().ref();
+        var uploadTask = storageRef.child(selectedFile.name).put(selectedFile);
+        uploadTask.on('state_changed', null, null, function() {
+            var downloadURL = uploadTask.snapshot.downloadURL;
+        });
+  
+        /*if-else判斷有沒有填寫完整*/
+        //uploadPost(title,category,p_content);
+       
 
 })
 
@@ -82,7 +101,6 @@ submit.addEventListener('click', function () {
 function uploadPost(title, category, p_content) {
 
     firebase.database().ref('Post/' + category).push().set({
-
         userid: userid,
         title: title,
         lat: lat,
@@ -91,7 +109,6 @@ function uploadPost(title, category, p_content) {
         //p_photo:    
         like_count: 0,
         like_user: ""
-
     });
 }
 
@@ -234,9 +251,9 @@ function initMap() {
             handleLocationError(false, map.getCenter());
         }
     }
-
-
 }
+
+
 
 //更換Marker位置
 function placeMarker(latLng, map) {
@@ -248,6 +265,7 @@ function placeMarker(latLng, map) {
 
 }
 
+
 function handleLocationError(browserHasGeolocation, pos) {
     // infoWindow.setPosition(pos);
     // infoWindow.setContent(browserHasGeolocation ?
@@ -256,4 +274,3 @@ function handleLocationError(browserHasGeolocation, pos) {
 
 }
 
-/*End*/
