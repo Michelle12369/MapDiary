@@ -5,20 +5,16 @@ var button = document.querySelector('#button');
 var result = document.querySelector('#result');
 var gps = document.querySelector('#gps');
 var input = document.querySelector('#pac-input');
-
-
-
-
-var file = document.getElementById("file");
-var submit = document.getElementById("submit");
 var selectedFile;
+
 
 
 
 // by chien
 uploadImage.addEventListener('change', function () {
 
-    
+    selectedFile = this.files[0]; 
+
     if (document.querySelector('.cropper-container') != null) {
         document.querySelector('.cropper-container').remove();
     }
@@ -39,10 +35,8 @@ uploadImage.addEventListener('change', function () {
                 
             };
         }
-       
-        reader.readAsDataURL(this.files[0]);  
-        selectedFile = this.files[0]; 
 
+        reader.readAsDataURL(this.files[0]);    
     }
 
 });
@@ -68,49 +62,74 @@ span.onclick = function () {
 //by shao
 //Jun 1st 修改
 var database = firebase.database();
-//var submit = document.querySelector('#submit');
+var submit = document.querySelector('#submit');
 var selectbox = document.querySelector('#category_select');
 var userid = 'joy_shao37';
 var myLatlng = "";
 var marker, lat, lng;
 
 
-/*問題: marker會有重複的情況再檢查、reloading page more than twice will cause error*/
+/*問題: 讓文字視窗先不要顯示、上傳成功後顯示success、如果沒有選擇圖片*/
+/*問題: storage 建置 （要不要以post id 將照片取名、或是以使用者ID）*/
 
 submit.addEventListener('click', function () {
 
-        // var title = document.querySelector('#title').value;
-        // var category = selectbox.options[selectbox.options.selectedIndex].value;
-        // var p_content = tinyMCE.get('p_content').getContent();
+        var title = document.querySelector('#title').value;
+        var category = selectbox.options[selectbox.options.selectedIndex].value;
+        var p_content = tinyMCE.get('p_content').getContent();
+        var downloadURL;
 
-        
 
-        var storageRef = firebase.storage().ref();
-        var uploadTask = storageRef.child(selectedFile.name).put(selectedFile);
-        uploadTask.on('state_changed', null, null, function() {
-            var downloadURL = uploadTask.snapshot.downloadURL;
+        if (!title || !p_content) { 
+
+            alert( "沒有填寫完整" ); 
+
+        }else if (!selectedFile){
+
+            alert("您尚未選擇圖片");
+
+        }else if (!roundedImage)
+
+            alert("您尚未裁切圖片");
+
+        else{
+
+            var storageRef = firebase.storage().ref();    
+            var uploadTask = storageRef.child('images/'+selectedFile.name).putString(roundedImage.src,'data_url');
+            uploadTask.on('state_changed', function(snapshot){
+         
+        }, function(error) {
+
+            alert('照片上傳失敗');
+
+        }, function() {
+
+            downloadURL = uploadTask.snapshot.downloadURL;
+         
         });
-  
-        /*if-else判斷有沒有填寫完整*/
-        //uploadPost(title,category,p_content);
+
+        }           
        
+        uploadPost(title,category,p_content,downloadURL);        
+});
 
-})
 
+function uploadPost(title, category, p_content, downloadURL) {
 
-function uploadPost(title, category, p_content) {
+        var newPost = firebase.database().ref('Post/' + category).push({
+            userid: userid,
+            title: title,
+            lat: lat,
+            lng: lng,
+            p_content: p_content,
+            p_photo: downloadURL, 
+            like_count: 0,
+            like_user: ""
+        });
 
-    firebase.database().ref('Post/' + category).push().set({
-        userid: userid,
-        title: title,
-        lat: lat,
-        lng: lng,
-        p_content: p_content,
-        //p_photo:    
-        like_count: 0,
-        like_user: ""
-    });
+        var postId = newPost.getKey();
 }
+
 
 
 function initMap() {
@@ -122,22 +141,28 @@ function initMap() {
         zoomControl: false,
         mapTypeControl: false,
         streetViewControl: false
-
     });
 
+    map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(gps);
+    map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+    //marker icon resize
+    var icon = {
+    url: 'img/placeholder.png', // url
+    scaledSize: new google.maps.Size(50, 50), // scaled size
+    };
 
     marker = new google.maps.Marker({
 
         position: myLatlng,
         map: map,
+        animation: google.maps.Animation.DROP,
+        icon: icon
 
     });
 
-
     lat = myLatlng.lat();
     lng = myLatlng.lng();
-
-
 
     // var input = document.createElement("input");
     // input.id = "pac-input";
@@ -230,12 +255,7 @@ function initMap() {
     });
 
 
-    map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(gps);
-    map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-
     gps.onclick = function () {
-
-        // var infoWindow = new google.maps.InfoWindow({map: map});
 
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function (position) {
