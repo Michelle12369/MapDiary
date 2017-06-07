@@ -93,7 +93,8 @@ submit.addEventListener('click', function () {
         else{
 
             var storageRef = firebase.storage().ref();    
-            var uploadTask = storageRef.child('images/'+selectedFile.name).putString(roundedImage.src,'data_url');
+            var ranNum = Math.floor(Math.random() * 999999999);  
+            var uploadTask = storageRef.child('images/'+ ranNum +selectedFile.name).putString(roundedImage.src,'data_url');
             uploadTask.on('state_changed', function(snapshot){
          
         }, function(error) {
@@ -106,8 +107,8 @@ submit.addEventListener('click', function () {
             firebase.auth().onAuthStateChanged(function(user) {
                 if (user) {
                     console.log("signin");
-                    console.log(user.uid);
-                    uploadPost(title,category,p_content,downloadURL,user.uid);  
+                    console.log(user);
+                    uploadPost(title,category,p_content,downloadURL,user.uid,user.displayName);  
                 } else {
                     user = null;
                     console.log("User is not logined yet.");
@@ -121,7 +122,7 @@ submit.addEventListener('click', function () {
 });
 
 
-function uploadPost(title, category, p_content, downloadURL,email) {
+function uploadPost(title, category, p_content, downloadURL,email,name) {
 
         var d = new Date();
         var month = d.getMonth()+1;
@@ -130,6 +131,7 @@ function uploadPost(title, category, p_content, downloadURL,email) {
 
         var newPost = firebase.database().ref('Post/' + category).push({
             userid: email,
+            username: name,
             title: title,
             date: date,
             lat: lat,
