@@ -49,10 +49,34 @@
                 padding: 22px 5px;
             }
         </style>
-        <a href="/user.html" class="nav-right" id="Dname"></a>
-        <a href="/signin.html" class="nav-right" id="SignIn"></a>
+        <!-- <a href="/user.html" class="nav-right" id="Dname"></a> -->
+        <!-- <a href="/signin.html" class="nav-right" id="SignIn"></a> -->
         <!-- <a class="nav-link" href="signin.html">登入</a>
         <a class="nav-link" href="signup.html">註冊 </a>  -->
+        <div class="dropdown">
+            <div class="dropbtn">
+                <style type="text/css">
+                    /*#Dname{
+                        display: inline-block;
+                        width: 100%;
+                        height: 64px;
+                    }*/
+                    #Dname>img{
+                        width: 40px;
+                        /*padding: 12px 0;*/
+                        /*margin: 0 12px;*/
+                    }
+                </style>
+                <!-- <a id="Dname"></a> -->
+                <a  class="nav-right" id="Dname"></a>
+                <a href="/signin.html" class="nav-right" id="SignIn"></a>
+            </div>
+            <div class="dropdown-content dropMenu">
+                <a class="dropdown-item" href="edit.html">新增文章</a>
+                <a class="dropdown-item" href="user.html">個人頁面</a>
+                <a class="dropdown-item" id="signoutSmtBtn">登出</a>
+            </div>
+        </div>
     </nav>
 
     <header>
@@ -219,6 +243,7 @@
   firebase.initializeApp(config);
 </script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
     <script type="text/javascript" src="js/judgeBar.js"></script>
     <script type="text/javascript" src="js/logout.js"></script>
 </html>

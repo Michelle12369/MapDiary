@@ -12,9 +12,9 @@ firebase.auth().onAuthStateChanged(function(user) {
       // Dname.innerHTML = user.displayName+"您好";
       var img = document.createElement("img");
       img.src = user.photoURL;
-      // console.log(img);
+      img.className += " dropclick";
       Dname.append(img);
-      SignIn.innerHTML = "";
+      // SignIn.innerHTML = "";
       if(profilePic != null){
         profilePic.src = user.photoURL;
         profileName.innerHTML = user.displayName;
