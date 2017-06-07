@@ -109,6 +109,8 @@ submit.addEventListener('click', function () {
                     console.log("signin");
                     console.log(user);
                     uploadPost(title,category,p_content,downloadURL,user.uid,user.displayName);  
+
+
                 } else {
                     user = null;
                     console.log("User is not logined yet.");
@@ -142,6 +144,9 @@ function uploadPost(title, category, p_content, downloadURL,email,name) {
         });
 
         var postId = newPost.getKey();
+
+        alert('上傳成功');
+        window.location.reload();
 }
 
 
