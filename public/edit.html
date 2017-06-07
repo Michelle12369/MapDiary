@@ -13,6 +13,9 @@
     <link rel="icon" href="img/favicon.png">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/0.8.1/cropper.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/0.8.1/cropper.min.js"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCxtNaITKHzASF0PNhcr1mU6ah0Ru7FTqc&libraries=places&callback=initMap">
+    </script>
+
 </head>
 
 <body>
@@ -48,7 +51,7 @@
                 <a class="dropdown-item" href="index.html">登出</a>
             </div>
         </div>
-         <div class="dropdown">
+        <div class="dropdown">
             <div class="dropbtn">
                 <img src="img/bell.png" alt="" width="40px" class="dropclick"></a>
             </div>
@@ -70,53 +73,83 @@
                     <form>
                         <div>
                             <label for="title">文章標題</label>
-                            <input type="text">
+                            <input type="text" id="title">
                         </div>
                         <div>
                             <label for="category">文章分類</label>
-                            <select class="select-bar">
-                            <option value="旅行">旅行</option>
-                            <option value="saa">心情</option>
-                            <option value="opel">朋友</option>
-                            <option value="audi">美食</option>
-                            <option value="audi">公益</option>
-                            <option value="audi">約會</option>
-                            <option value="audi">靈異</option>
-                            <option value="audi">瘋狂</option>
-                        </select>
+                            <select id="category_select" class="select-bar">
+                            <option value="Travel">旅行</option>
+                            <option value="Mood">心情</option>
+                            <option value="Friend">朋友</option>
+                            <option value="Food">美食</option>
+                            <option value="Charity">公益</option>
+                            <option value="Love">愛情</option>
+                            <option value="Family">家庭</option>
+                            </select>
                         </div>
                         <div>
                             <label for="content">文章內容</label>
-                            <textarea name="content" id="" cols="60" rows="20"></textarea>
+                            <textarea name="content" id="p_content" cols="60" rows="20"></textarea>
                         </div>
                         <div>
-                            <label for="photo">照片上傳</label>
-                            <input type="file" accept='image/*'>
-                        </div>
-                        <div>
-                            <label for="location">地圖標示</label>
-                            <span>請直接點選地圖上的地點</span>
-                        </div>
-                        <input type="submit" value="上傳" class="upload">
+                            <label for="photo">封面照片上傳</label>
+                            <span id="myBtn">編輯圖片</span>
+                            <div id="myModal" class="modal">
+
+                                <!-- Modal content -->
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <span class="close">&times;</span>
+                                        <h2>編輯封面照片</h2>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>Step1. 選擇圖片</p>
+                                        <input type="file" accept='image/*'>
+                                        <p>Step2. 裁切圖片</p>
+                                        <div id="crop-img">
+                                            <img id="image">
+                                        </div>
+                                        <button type="button" id="button">Crop</button>
+                                        <p>Step3. 圖片結果</p>
+                                        <img id="result">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label for="location">地圖標示</label>
+                                <span>請直接點選地圖上的地點</span>
+                            </div>
+                            <input type="submit" value="上傳" class="upload">
                     </form>
-                </div>
-                <div>
-                    <img id="image">
-                </div>
-                <button type="button" id="button">Crop</button>
-                <img id="result">
+                    </div>
+
             </section>
 
             <!--地圖-->
             <div class="col-sm-6 map">
-                <iframe width="100%" height="450" frameborder="0" src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBy5JYq1_BVxB1A2Xtofn9PcRryxQJ4Ess
-    &q=國立政治大學" allowfullscreen>
-                </iframe>
+                <input id="pac-input" class="controls" type="text" placeholder="Search Box">
+                <button type="button" id="gps">定位</button>
+                <div id="pickmap" style="width:100%; height:100%"></div>
             </div>
 
-        </div>
+            </div>
     </article>
+    <script src="https://www.gstatic.com/firebasejs/4.1.0/firebase.js"></script>
+    <script>
+      // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyCr3tX6GOxWNEKHCk6UEGPPdaQoYfstZm8",
+        authDomain: "sna-map-4f1bb.firebaseapp.com",
+        databaseURL: "https://sna-map-4f1bb.firebaseio.com",
+        projectId: "sna-map-4f1bb",
+        storageBucket: "sna-map-4f1bb.appspot.com",
+        messagingSenderId: "1022375312771"
+      };
+      firebase.initializeApp(config);
+    </script>
     <script src="js/edit.js"></script>
     <script src="js/main.js"></script>
 </body>
+
 </html>
