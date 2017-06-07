@@ -6,6 +6,15 @@ nav {
     background: rgb(70, 70, 70);
     .right{
         float: right;
+        padding-right:10px;
+        #Dname{
+            display: inline-block;
+            height: 64px;
+            color: white;
+            // line-height: 64px;
+            font-size: 14pt;
+            // padding-top:10px;
+        }
     }
     .nav-link{
         display: inline-block;
@@ -40,5 +49,8 @@ nav {
         padding: 10px;
         width: 100%;
         margin-top:10px;
+        text-align: center;
+        margin:10px 0;
+        cursor: pointer;
     }
 }
