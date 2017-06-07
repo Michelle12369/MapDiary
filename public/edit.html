@@ -1,36 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
-
+ 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Mapping</title>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCxtNaITKHzASF0PNhcr1mU6ah0Ru7FTqc&libraries=places&callback=initMap">
-    </script>
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/bootstrap-grid.min.css">
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/edit.css">
     <link rel="icon" href="img/favicon.png">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/0.8.1/cropper.min.css" rel="stylesheet">
-    <script src="https://www.gstatic.com/firebasejs/4.1.0/firebase.js"></script>
-
-    <script>
-        // Initialize Firebase
-          var config = {
-            apiKey: "AIzaSyCxtNaITKHzASF0PNhcr1mU6ah0Ru7FTqc",
-            authDomain: "sna-map-4f1bb.firebaseapp.com",
-            databaseURL: "https://sna-map-4f1bb.firebaseio.com",
-            projectId: "sna-map-4f1bb",
-            storageBucket: "sna-map-4f1bb.appspot.com",
-            messagingSenderId: "1022375312771"
-          };
-          firebase.initializeApp(config);
+    <script sync defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCxtNaITKHzASF0PNhcr1mU6ah0Ru7FTqc&libraries=places&callback=initMap">
     </script>
-
 </head>
-
+ 
 <body>
     <!--navbar 與搜尋列-->
     <nav>
@@ -75,10 +60,10 @@
             </div>
         </div>
     </nav>
-
+ 
     <article class="container article">
         <div class="row">
-
+ 
             <!--文章編輯-->
             <section class="result col-sm-6">
                 <div>
@@ -102,13 +87,14 @@
                         </div>
                         <div>
                             <label for="content">文章內容</label>
-                            <textarea name="content" id="p_content" cols="60" rows="20"></textarea>
+                            <div></div>
+                            <textarea name="content" id="p_content" cols="60" rows="20" style="visibility:hidden"></textarea>
                         </div>
                         <div>
                             <label for="photo">封面照片上傳</label>
                             <span id="myBtn">編輯圖片</span>
                             <div id="myModal" class="modal">
-
+ 
                                 <!-- Modal content -->
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -128,30 +114,43 @@
                                     </div>
                                 </div>
                             </div>
-
+ 
                             <div>
                                 <label for="location">地圖標示</label>
                                 <span>請直接點選地圖上的地點</span>
                             </div>
-                            <button id="submit" type="button" value="上傳" class="upload">上傳</button>
+                            <button id="submit" type="button" value="上傳" class="upload">上傳</button>       
                     </form>
                     </div>
-
+ 
             </section>
-
+ 
             <!--地圖-->
             <div class="col-sm-6 map">
-                <input id="pac-input" class="controls" type="text" placeholder="地址">
-                <button type="button" id="gps">定位</button>
                 <div id="pickmap" style="width:100%; height:100%"></div>
+                <input id="pac-input" class="controls" type="text" placeholder="地址" style="visibility:hidden">
+                <img src="img/gps.png" id="gps" style="visibility:hidden">
             </div>
-
-            </div>
+ 
+        </div>
     </article>
+    <script src="https://www.gstatic.com/firebasejs/4.1.1/firebase.js"></script>
+    <script>
+        // Initialize Firebase
+          var config = {
+            apiKey: "AIzaSyCxtNaITKHzASF0PNhcr1mU6ah0Ru7FTqc",
+            authDomain: "sna-map-4f1bb.firebaseapp.com",
+            databaseURL: "https://sna-map-4f1bb.firebaseio.com",
+            projectId: "sna-map-4f1bb",
+            storageBucket: "sna-map-4f1bb.appspot.com",
+            messagingSenderId: "1022375312771"
+          };
+          firebase.initializeApp(config);
+    </script>
     <script src="js/edit.js"></script>
     <script src="js/main.js"></script>
-    <script src="https://cloud.tinymce.com/stable/tinymce.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/0.8.1/cropper.min.js"></script>
+    <script src="https://cloud.tinymce.com/stable/tinymce.min.js"></script>
+    <script>tinymce.init({ selector:'textarea' });</script>
 </body>
-
 </html>
