@@ -86,7 +86,7 @@
             </section>
 
             <!--地圖-->
-            <div class="col-sm-6 map" id="GoogleMap" width="100%",height="450">
+            <div class="col-sm-6 map" id="GoogleMap"  style="width:100%; height: 710px;top:10px;" >
 
             </div>
         </div>
@@ -101,8 +101,22 @@
     <script src="https://www.gstatic.com/firebasejs/4.1.1/firebase.js"></script>
 
     <script>
-    function add_col(i){
+    var query = location.search.substring(1);
+    var parameters = {};
+    var keyValuePairs = query.split("=");
+    var kind = keyValuePairs[0];
+    var value = keyValuePairs[1];
+    parameters[kind] = value;
+    var toggle = true;
+
+
+
+
+
+
     var  Css_div = document.createElement('div');
+    function add_col(i){
+    Css_div = document.createElement('div');
     var att = document.createAttribute("class");
     att.value = "col-md-6";
     Css_div.setAttributeNode(att);
@@ -111,9 +125,12 @@
     Css_div.setAttributeNode(Css_id);
     document.getElementById("AddArticle").appendChild(Css_div);
   }
+   function del_col(i){
+
+      document.getElementById("AddArticle").removeChild(Css_div);
 
 
-
+   }
 
     // Initialize Firebase
     var config = {
@@ -128,10 +145,194 @@
 
     function initMap() {
 
+
       var uluru = {lat: 25.98551343504224, lng: 121.57895565032959};
       var map = new google.maps.Map(document.getElementById('GoogleMap'), {
         zoom: 15,
-        center: uluru
+        center: uluru,
+        styles:[
+      {
+          "featureType": "water",
+          "elementType": "all",
+          "stylers": [
+              {
+                  "hue": "#7fc8ed"
+              },
+              {
+                  "saturation": 55
+              },
+              {
+                  "lightness": -6
+              },
+              {
+                  "visibility": "on"
+              }
+          ]
+      },
+      {
+          "featureType": "water",
+          "elementType": "labels",
+          "stylers": [
+              {
+                  "hue": "#7fc8ed"
+              },
+              {
+                  "saturation": 55
+              },
+              {
+                  "lightness": -6
+              },
+              {
+                  "visibility": "off"
+              }
+          ]
+      },
+      {
+          "featureType": "poi.park",
+          "elementType": "geometry",
+          "stylers": [
+              {
+                  "hue": "#83cead"
+              },
+              {
+                  "saturation": 1
+              },
+              {
+                  "lightness": -15
+              },
+              {
+                  "visibility": "on"
+              }
+          ]
+      },
+      {
+          "featureType": "landscape",
+          "elementType": "geometry",
+          "stylers": [
+              {
+                  "hue": "#f3f4f4"
+              },
+              {
+                  "saturation": -84
+              },
+              {
+                  "lightness": 59
+              },
+              {
+                  "visibility": "on"
+              }
+          ]
+      },
+      {
+          "featureType": "landscape",
+          "elementType": "labels",
+          "stylers": [
+              {
+                  "hue": "#ffffff"
+              },
+              {
+                  "saturation": -100
+              },
+              {
+                  "lightness": 100
+              },
+              {
+                  "visibility": "off"
+              }
+          ]
+      },
+      {
+          "featureType": "road",
+          "elementType": "geometry",
+          "stylers": [
+              {
+                  "hue": "#ffffff"
+              },
+              {
+                  "saturation": -100
+              },
+              {
+                  "lightness": 100
+              },
+              {
+                  "visibility": "on"
+              }
+          ]
+      },
+      {
+          "featureType": "road",
+          "elementType": "labels",
+          "stylers": [
+              {
+                  "hue": "#bbbbbb"
+              },
+              {
+                  "saturation": -100
+              },
+              {
+                  "lightness": 26
+              },
+              {
+                  "visibility": "on"
+              }
+          ]
+      },
+      {
+          "featureType": "road.arterial",
+          "elementType": "geometry",
+          "stylers": [
+              {
+                  "hue": "#ffcc00"
+              },
+              {
+                  "saturation": 100
+              },
+              {
+                  "lightness": -35
+              },
+              {
+                  "visibility": "simplified"
+              }
+          ]
+      },
+      {
+          "featureType": "road.highway",
+          "elementType": "geometry",
+          "stylers": [
+              {
+                  "hue": "#ffcc00"
+              },
+              {
+                  "saturation": 100
+              },
+              {
+                  "lightness": -22
+              },
+              {
+                  "visibility": "on"
+              }
+          ]
+      },
+      {
+          "featureType": "poi.school",
+          "elementType": "all",
+          "stylers": [
+              {
+                  "hue": "#d7e4e4"
+              },
+              {
+                  "saturation": -60
+              },
+              {
+                  "lightness": 23
+              },
+              {
+                  "visibility": "on"
+              }
+          ]
+      }
+  ]
+
        });
        var icons = {
            user_icon: {
@@ -188,15 +389,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
     var userid = [];
     var title = [];
     var Lat = [];
@@ -204,12 +396,15 @@
     var locations = [];
     var newLocations = [];
     var a=0;
+    var article_title_array = [];
+    var article_title = 0;
+
     var ref = firebase.database().ref('Post');
-    ref.child("Travel").on("child_added", function(snapshot) {
+    ref.child(value).on("child_added", function(snapshot) {
       locations.length = 0 ;
       userid.length = 0 ;
       title.length = 0  ;
-      var firebase_userid = snapshot.child('userid').val();
+      var firebase_userid = snapshot.child('username').val();
       var firebase_title = snapshot.child('title').val();
       var firebaseLat = snapshot.child('lat').val();
       var firebaseLng = snapshot.child('lng').val();
@@ -219,24 +414,30 @@
       title.push(firebase_title);
 
 
-      map.addListener('dragend', function(e) {
-          a += 1;
+map.addListener('dragend', function(e) {
+        a += 1;
         var bounds = map.getBounds();
         var ne = bounds.getNorthEast();
         var sw = bounds.getSouthWest();
-      if (firebaseLat>= sw.lat() && firebaseLat<=ne.lat() && firebaseLng>= sw.lat() && firebaseLng>= ne.lat()){
-            var article_userid = snapshot.child('userid').val();
-            var article_title = snapshot.child('title').val();
 
+    if (firebaseLat>= sw.lat() && firebaseLat<=ne.lat() && firebaseLng>= sw.lat() && firebaseLng>= ne.lat()){
+          if (firebaseLat!= null){
+            console.log(sw.lat(),firebaseLat,ne.lat());
+            var article_userid = snapshot.child('username').val();
+            var article_title = snapshot.child('title').val();
+            var acticle_key = snapshot.getKey();
+
+      if (acticle_key != 0) {
+           if (article_title_array.includes(article_title)==false){
             //auto article layout
 
             //<div class="col-md-6" >
             add_col(a)
             //<a href="article.html">
             var  url  = document.createElement('a');
-            var  url_herf = document.createAttribute("herf");
-            url_herf.value = "article.html";
-            url.setAttributeNode(url_herf);
+            var  url_href = document.createAttribute("href");
+            url_href.value = "article.html?key="+acticle_key;
+            url.setAttributeNode(url_href);
             //var textnode = document.createTextNode("article.html"); 
             //url.appendChild(textnode);  
             document.getElementById(a).appendChild(url);
@@ -257,6 +458,7 @@
               // <h3>北村豆腐家</h3>
               var user_locotion = document.createElement('h3');
               var location_text = document.createTextNode(article_title); 
+              article_title_array.push(article_title)
               user_locotion.appendChild(location_text);  
               document.getElementById("url_"+a).appendChild(user_locotion);
               //  <p>台北市 邵家怡</p>
@@ -266,57 +468,73 @@
               document.getElementById("url_"+a).appendChild(user_name);
 
           }
-
+        }
+        }
+}
       });
 
 
       map.addListener('zoom_changed', function() {
-                       var bounds = map.getBounds();
-                       var ne = bounds.getNorthEast();
-                       var sw = bounds.getSouthWest();
-                     if (firebaseLat>= sw.lat() && firebaseLat<=ne.lat() && firebaseLng>= sw.lat() && firebaseLng>= ne.lat()){
-                           var article_userid = snapshot.child('userid').val();
-                           var article_title = snapshot.child('title').val();
+        a += 1;
+        var bounds = map.getBounds();
+        var ne = bounds.getNorthEast();
+        var sw = bounds.getSouthWest();
 
-                           //auto article layout
+    if (firebaseLat>= sw.lat() && firebaseLat<=ne.lat() && firebaseLng>= sw.lat() && firebaseLng>= ne.lat()){
+          if (firebaseLat!= null){
+            console.log(sw.lat(),firebaseLat,ne.lat());
+            var article_userid = snapshot.child('username').val();
+            var article_title = snapshot.child('title').val();
+            var acticle_key = snapshot.getKey();
 
-                           //<div class="col-md-6" >
-                           add_col(a)
-                           //<a href="article.html">
-                           var  url  = document.createElement('a');
-                           var  url_herf = document.createAttribute("herf");
-                           url_herf.value = "article.html";
-                           url.setAttributeNode(url_herf);
-                           //var textnode = document.createTextNode("article.html"); 
-                           //url.appendChild(textnode);  
-                           document.getElementById(a).appendChild(url);
-                           var url_id = document.createAttribute("id");
-                           url_id.value = "url_"+a
-                           url.setAttributeNode(url_id)
+      if (acticle_key != 0) {
+           if (article_title_array.includes(article_title)==false){
+            //auto article layout
 
-                           //<img src="./img/food.jpg" alt="hot issue">
+            //<div class="col-md-6" >
+            add_col(a)
+            //<a href="article.html">
+            var  url  = document.createElement('a');
+            var  url_href = document.createAttribute("href");
+            url_href.value = "article.html?key="+acticle_key;
+            url.setAttributeNode(url_href);
+            //var textnode = document.createTextNode("article.html"); 
+            //url.appendChild(textnode);  
+            document.getElementById(a).appendChild(url);
+            var url_id = document.createAttribute("id");
+            url_id.value = "url_"+a
+            url.setAttributeNode(url_id)
 
-                             var  photo  = document.createElement('img');
-                             var  url_src = document.createAttribute("src");
-                             url_src.value = "./img/food.jpg"
-                             photo.setAttributeNode(url_src)
-                             var img_alt =  document.createAttribute("alt");
-                             img_alt.value = 'hot issue';
-                             photo.setAttributeNode(img_alt);
-                             document.getElementById("url_"+a).appendChild(photo);
-                             // <h3>北村豆腐家</h3>
-                             var user_locotion = document.createElement('h3');
-                             var location_text = document.createTextNode(article_title); 
-                             user_locotion.appendChild(location_text);  
-                             document.getElementById("url_"+a).appendChild(user_locotion);
-                             //  <p>台北市 邵家怡</p>
-                             var user_name = document.createElement('p');
-                             var name_text = document.createTextNode(article_userid); 
-                             user_name.appendChild(name_text);  
-                             document.getElementById("url_"+a).appendChild(user_name);
+            //<img src="./img/food.jpg" alt="hot issue">
+
+              var  photo  = document.createElement('img');
+              var  url_src = document.createAttribute("src");
+              url_src.value = "./img/food.jpg"
+              photo.setAttributeNode(url_src)
+              var img_alt =  document.createAttribute("alt");
+              img_alt.value = 'hot issue';
+              photo.setAttributeNode(img_alt);
+              document.getElementById("url_"+a).appendChild(photo);
+              // <h3>北村豆腐家</h3>
+              var user_locotion = document.createElement('h3');
+              var location_text = document.createTextNode(article_title); 
+              article_title_array.push(article_title)
+              user_locotion.appendChild(location_text);  
+              document.getElementById("url_"+a).appendChild(user_locotion);
+              //  <p>台北市 邵家怡</p>
+              var user_name = document.createElement('p');
+              var name_text = document.createTextNode(article_userid); 
+              user_name.appendChild(name_text);  
+              document.getElementById("url_"+a).appendChild(user_name);
+
+          }
+        }
+        }
+
 
                          }
                     });
+
 
 
 
@@ -332,6 +550,11 @@
 
     }
 
+    // var infowindow02 = new google.maps.InfoWindow({
+    //  content: article_title
+    // });
+
+
       var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
       var markers = locations.map(function(location, i) {
       return new google.maps.Marker({
@@ -341,6 +564,9 @@
 
        });
        });
+      //  marker.addListener('click', function() {
+      //   infowindow02.open(map, markers);
+      //  });
        var markerCluster = new MarkerClusterer(map, markers,
              {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
 
