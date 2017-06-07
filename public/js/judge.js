@@ -11,12 +11,17 @@ firebase.auth().onAuthStateChanged(function(user) {
     if(user.photoURL != null){
       var img = document.createElement("img");
       img.src = user.photoURL;
-
       if(profilePic != null){
         profilePic.src = user.photoURL;
         profileName.innerHTML = user.displayName;
-      }
-      kind.forEach(function(value,index){
+      }     
+    } else {
+      console.log(profilePic);
+      profilePic.src = "img/man.png";
+      // var i = user.email.indexOf("@");
+      // Dname.innerHTML = user.email.slice(0,i)+"您好";
+    }
+    kind.forEach(function(value,index){
         firebase.database().ref('/Post/'+value).once('value').then(function(snapshot) {
           // console.log(snapshot.key.userid);
 
@@ -42,11 +47,16 @@ firebase.auth().onAuthStateChanged(function(user) {
               userPic.src = snapshot.child(key[i]).val().p_photo;
               userPic.style.width = "100%";
 
+              console.log(Object.keys(snapshot.val())[i]);
+              var aTag = document.createElement("a");
+              aTag.href = "/article.html?key=" + Object.keys(snapshot.val())[i];
+              aTag.prepend(userPic);
+              aTag.append(userTitle);
+              aTag.append(userKind);
+              aTag.append(userContent);
+
               var userBlock = document.createElement("div");
-              userBlock.prepend(userPic);
-              userBlock.append(userTitle);
-              userBlock.append(userKind);
-              userBlock.append(userContent);
+              userBlock.append(aTag);
 
               contents.prepend(userBlock);
               j++;
@@ -58,13 +68,6 @@ firebase.auth().onAuthStateChanged(function(user) {
           }
         })  
       })
-      
-    } else {
-      console.log(profilePic);
-      profilePic.src = "img/man.png";
-      // var i = user.email.indexOf("@");
-      // Dname.innerHTML = user.email.slice(0,i)+"您好";
-    }
     // user.sendEmailVerification(); 送驗證信
   } else {
     user = null;
