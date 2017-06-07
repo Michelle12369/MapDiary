@@ -34,29 +34,44 @@
         <div class="triangle">
             <img src="img/triangle.png" alt="triangle">
         </div>
+        <style type="text/css">
+            .nav-right{
+                color:black;
+                float: right;
+            }
+            .nav-right img{
+                cursor: pointer;
+                width: 40px;
+                margin-right:10px;
+            }
+            .nav-right>span{
+                vertical-align: top;
+                display: inline-block;
+                margin-top:16px;
+            }
+            .dropdown{
+                /*margin:12px;*/
+            }
+            #Dname{
+                vertical-align: top;
+            }
+            .dropdown-content{
+                top:64px;
+            }
+        </style>
         <div class="dropdown">
             <div class="dropbtn">
-                <style type="text/css">
-                    /*#Dname{
-                        display: inline-block;
-                        width: 100%;
-                        height: 64px;
-                    }*/
-                    #Dname>img{
-                        width: 40px;
-                        /*padding: 12px 0;*/
-                        /*margin: 0 12px;*/
-                    }
-                </style>
-                <a id="Dname"></a>
-                <!-- <img class="dropclick" src="img/shao.jpg" alt="" width="40px"> -->
+                <a  class="nav-right" id="Dname"></a>
+                <a href="/signin.html" class="nav-right" id="SignIn"></a>
+
             </div>
             <div class="dropdown-content dropMenu">
                 <a class="dropdown-item" href="edit.html">新增文章</a>
                 <a class="dropdown-item" href="user.html">個人頁面</a>
-                <a class="dropdown-item" href="index.html">登出</a>
+                <a class="dropdown-item" id="signoutSmtBtn">登出</a>
             </div>
         </div>
+
          <div class="dropdown">
             <div class="dropbtn">
                 <img src="img/bell.png" alt="" width="40px" class="dropclick"></a>
@@ -74,10 +89,9 @@
             <!--個人資訊-->
             <div class="col-sm-4 user-info">
                 <img src="img/default.jpg" id="profile-pic">
-                <!-- <img src="img/shao.jpg" alt="user image"> -->
                 <h1 id="profile-name"></h1>
-                <p># 6篇美食</p>
-                <p># 5篇旅行</p>
+                <!-- <p># 6篇美食</p> -->
+                <!-- <p># 5篇旅行</p> -->
             </div>
             
             <!--文章-->
@@ -90,30 +104,15 @@
                     }
                 </style>
                 <div id="contents"></div>
-                <!-- <div class="content">
-                    <h2>TWICE搞怪回歸 洗腦金曲《SIGNAL》又一發！</h2>
-                    <p>台北市 心情</p>
-                    &nbsp;&nbsp;&nbsp;&nbsp;在一連串預告強力放送下，南韓當今人氣最高女團TWICE宣布正式回歸， 選在5/15發行第四張迷你專輯《SIGNAL》，首波同名主打MV也同步曝光，只見所有團員大玩超能力梗，還與一隻大眼外星怪出現有趣互動，更大跳萌翻「六六」舞，又一次迷倒所有粉絲。
-                        <br><br>&nbsp;&nbsp;&nbsp;&nbsp; 即便南韓現在政局混亂，但人氣旺翻天的TWICE根本沒在怕，搶在4月底就預告5月中旬要發行最新大碟，還特別拍攝一支支預告片釣足粉絲胃口，終於在15日完整曝光。在新歌《SIGNAL》MV中，TWICE收到神秘訊號，原來是一位藍色外星人降臨地球，所有人便展示各種超能力來跟外星人PK，從子瑜的大力女子、志效的千里眼、Mina的催眠、Momo的快速移動、多賢的分身術等，種種逗趣超能力加上可愛舞蹈動作，有望讓影片點閱率再創新高。
-                    <br>
-                    <a href="article2.html">繼續閱讀</a>
-                </div>
-                <div class="content">
-                    <h2>北村豆腐家</h2>
-                    <p>台北市 美食</p>
-                    <img src="img/food.jpg" alt="">
-                    
-                    <p>被最近悶熱的天氣搞得食慾不振 唯一能讓我提起食欲的就是韓式料理了！！！ 最近經過阪急都會一直被這間北村豆腐家吸引 原因沒別的，就是超多人排隊啊！！！！ 這間北村豆腐家就位於台北阪急B2美食街 不過不是像美食攤位而是有店面的
-                        專賣豆腐煲豆腐鍋、鐵拌飯、韓式料理，種類不多但每一樣我都超愛阿～～ 是我最近超愛的愛店呀！！！ 真的太喜歡覺得不介紹不行，馬上就來分享我吃了什麼好料</p>
-                    <a href="article.html">繼續閱讀</a>
-                </div> -->
             </section>
         </div>
 
     </article>
     <script src="https://www.gstatic.com/firebasejs/4.1.0/firebase.js"></script>
     <script type="text/javascript" src="js/init.js"></script>
-    <script src="js/main.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
     <script type="text/javascript" src="js/judge.js"></script>
+    <script type="text/javascript" src="js/judgeBar.js"></script>
+    <script type="text/javascript" src="js/logout.js"></script>
 </body>
 </html>

@@ -6,14 +6,9 @@ var profileName = document.getElementById('profile-name');
 firebase.auth().onAuthStateChanged(function(user) {
   if (user) {
     user = user;
-    console.log(user.photoURL);
     if(user.photoURL != null){
-      // Dname.innerHTML = user.displayName+"您好";
       var img = document.createElement("img");
       img.src = user.photoURL;
-      img.className += " dropclick";
-      // console.log(img);
-      Dname.append(img);
 
       if(profilePic != null){
         profilePic.src = user.photoURL;
@@ -50,8 +45,10 @@ firebase.auth().onAuthStateChanged(function(user) {
         }
       })
     } else {
-      var i = user.email.indexOf("@");
-      Dname.innerHTML = user.email.slice(0,i)+"您好";
+      console.log(profilePic);
+      profilePic.src = "img/man.png";
+      // var i = user.email.indexOf("@");
+      // Dname.innerHTML = user.email.slice(0,i)+"您好";
     }
     // user.sendEmailVerification(); 送驗證信
   } else {
