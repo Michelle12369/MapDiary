@@ -69,7 +69,7 @@ var myLatlng = "";
 var marker, lat, lng;
 
 
-/*問題: 讓文字視窗先不要顯示、上傳成功後顯示success、如果沒有選擇圖片*/
+/*問題: 讓文字視窗先不要顯示、上傳成功後顯示success、如果沒有選擇圖片、重新整理*/
 /*問題: storage 建置 （要不要以post id 將照片取名、或是以使用者ID）*/
 
 submit.addEventListener('click', function () {
@@ -105,20 +105,26 @@ submit.addEventListener('click', function () {
         }, function() {
 
             downloadURL = uploadTask.snapshot.downloadURL;
+            uploadPost(title,category,p_content,downloadURL);  
          
         });
 
         }           
        
-        uploadPost(title,category,p_content,downloadURL);        
+             
 });
 
 
 function uploadPost(title, category, p_content, downloadURL) {
 
+        var d = new Date();
+        var date = d.getFullYear()+"/"+d.getMonth()+1+"/"+d.getDate();
+
+
         var newPost = firebase.database().ref('Post/' + category).push({
             userid: userid,
             title: title,
+            date: date,
             lat: lat,
             lng: lng,
             p_content: p_content,
@@ -260,6 +266,7 @@ function initMap() {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function (position) {
                 var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                console.log(pos);
                 map.setCenter(pos);
                 map.setZoom(18);
                 placeMarker(pos, map);
@@ -293,4 +300,3 @@ function handleLocationError(browserHasGeolocation, pos) {
     //                      'Error: Your browser doesn\'t support geolocation.');
 
 }
-
