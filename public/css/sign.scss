@@ -1,0 +1,56 @@
+body{
+    margin: 0;
+}
+nav {
+    position: relative;
+    background: rgb(70, 70, 70);
+    .right{
+        float: right;
+        padding-right:10px;
+        #Dname{
+            display: inline-block;
+            height: 64px;
+            color: white;
+            // line-height: 64px;
+            font-size: 14pt;
+            // padding-top:10px;
+        }
+    }
+    .nav-link{
+        display: inline-block;
+        padding:25px 15px;
+        color:white;
+        &:hover{
+            color:white;
+            text-decoration: none;
+        }
+    }
+}
+.sign-form {
+    margin: 50px auto;
+    width: 50%;
+    background: rgb(240, 240, 240);
+    padding: 20px;
+    border-radius: 0.2rem;
+    h2 {
+        text-align: center;
+    }
+    div {
+        margin: 5px;
+        input {
+            width: 100%;
+        }
+    }
+    .sign-btn {
+        background: #0abab5;
+        border: none;
+        color: white;
+        border-radius: 0.2rem;
+        padding: 10px;
+        width: 100%;
+        margin-top:10px;
+        text-align: center;
+        margin:10px 0;
+        cursor: pointer;
+    }
+}

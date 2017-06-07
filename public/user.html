@@ -36,7 +36,20 @@
         </div>
         <div class="dropdown">
             <div class="dropbtn">
-                <img class="dropclick" src="img/shao.jpg" alt="" width="40px">
+                <style type="text/css">
+                    /*#Dname{
+                        display: inline-block;
+                        width: 100%;
+                        height: 64px;
+                    }*/
+                    #Dname>img{
+                        width: 40px;
+                        /*padding: 12px 0;*/
+                        /*margin: 0 12px;*/
+                    }
+                </style>
+                <a id="Dname"></a>
+                <!-- <img class="dropclick" src="img/shao.jpg" alt="" width="40px"> -->
             </div>
             <div class="dropdown-content dropMenu">
                 <a class="dropdown-item" href="edit.html">新增文章</a>
@@ -60,15 +73,24 @@
         <div class="row">
             <!--個人資訊-->
             <div class="col-sm-4 user-info">
-                <img src="img/shao.jpg" alt="user image">
-                <h1>邵家怡</h1>
+                <img src="img/default.jpg" id="profile-pic">
+                <!-- <img src="img/shao.jpg" alt="user image"> -->
+                <h1 id="profile-name"></h1>
                 <p># 6篇美食</p>
                 <p># 5篇旅行</p>
             </div>
             
             <!--文章-->
             <section class="col-sm-8">
-                <div class="content">
+                <style type="text/css">
+                    #contents>div{
+                        padding:10px 20px;
+                        margin-top:20px; 
+                        background-color: #f0f0f0;
+                    }
+                </style>
+                <div id="contents"></div>
+                <!-- <div class="content">
                     <h2>TWICE搞怪回歸 洗腦金曲《SIGNAL》又一發！</h2>
                     <p>台北市 心情</p>
                     &nbsp;&nbsp;&nbsp;&nbsp;在一連串預告強力放送下，南韓當今人氣最高女團TWICE宣布正式回歸， 選在5/15發行第四張迷你專輯《SIGNAL》，首波同名主打MV也同步曝光，只見所有團員大玩超能力梗，還與一隻大眼外星怪出現有趣互動，更大跳萌翻「六六」舞，又一次迷倒所有粉絲。
@@ -84,11 +106,14 @@
                     <p>被最近悶熱的天氣搞得食慾不振 唯一能讓我提起食欲的就是韓式料理了！！！ 最近經過阪急都會一直被這間北村豆腐家吸引 原因沒別的，就是超多人排隊啊！！！！ 這間北村豆腐家就位於台北阪急B2美食街 不過不是像美食攤位而是有店面的
                         專賣豆腐煲豆腐鍋、鐵拌飯、韓式料理，種類不多但每一樣我都超愛阿～～ 是我最近超愛的愛店呀！！！ 真的太喜歡覺得不介紹不行，馬上就來分享我吃了什麼好料</p>
                     <a href="article.html">繼續閱讀</a>
-                </div>
+                </div> -->
             </section>
         </div>
 
     </article>
+    <script src="https://www.gstatic.com/firebasejs/4.1.0/firebase.js"></script>
+    <script type="text/javascript" src="js/init.js"></script>
     <script src="js/main.js"></script>
+    <script type="text/javascript" src="js/judge.js"></script>
 </body>
 </html>
