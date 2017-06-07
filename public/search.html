@@ -86,7 +86,7 @@
             </section>
 
             <!--地圖-->
-            <div class="col-sm-6 map" id="GoogleMap" width="100%",height="450">
+            <div class="col-sm-6 map" id="GoogleMap"  style="width:100%; height: 710px;top:10px;" >
 
             </div>
         </div>
@@ -111,9 +111,6 @@
     Css_div.setAttributeNode(Css_id);
     document.getElementById("AddArticle").appendChild(Css_div);
   }
-
-
-
 
     // Initialize Firebase
     var config = {
@@ -188,15 +185,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
     var userid = [];
     var title = [];
     var Lat = [];
@@ -204,6 +192,7 @@
     var locations = [];
     var newLocations = [];
     var a=0;
+
     var ref = firebase.database().ref('Post');
     ref.child("Travel").on("child_added", function(snapshot) {
       locations.length = 0 ;
@@ -227,6 +216,8 @@
       if (firebaseLat>= sw.lat() && firebaseLat<=ne.lat() && firebaseLng>= sw.lat() && firebaseLng>= ne.lat()){
             var article_userid = snapshot.child('userid').val();
             var article_title = snapshot.child('title').val();
+            var acticle_key = snapshot.getKey();
+
 
             //auto article layout
 
@@ -234,9 +225,9 @@
             add_col(a)
             //<a href="article.html">
             var  url  = document.createElement('a');
-            var  url_herf = document.createAttribute("herf");
-            url_herf.value = "article.html";
-            url.setAttributeNode(url_herf);
+            var  url_href = document.createAttribute("href");
+            url_href.value = "article.html?key="+acticle_key;
+            url.setAttributeNode(url_href);
             //var textnode = document.createTextNode("article.html"); 
             //url.appendChild(textnode);  
             document.getElementById(a).appendChild(url);
@@ -277,16 +268,16 @@
                      if (firebaseLat>= sw.lat() && firebaseLat<=ne.lat() && firebaseLng>= sw.lat() && firebaseLng>= ne.lat()){
                            var article_userid = snapshot.child('userid').val();
                            var article_title = snapshot.child('title').val();
-
+                           var article_key = snapshot.getKey()
                            //auto article layout
 
                            //<div class="col-md-6" >
                            add_col(a)
                            //<a href="article.html">
                            var  url  = document.createElement('a');
-                           var  url_herf = document.createAttribute("herf");
-                           url_herf.value = "article.html";
-                           url.setAttributeNode(url_herf);
+                           var  url_href = document.createAttribute("href");
+                           url_href.value = "article.html?key="+acticle_key;
+                           url.setAttributeNode(url_href);
                            //var textnode = document.createTextNode("article.html"); 
                            //url.appendChild(textnode);  
                            document.getElementById(a).appendChild(url);
@@ -315,8 +306,10 @@
                              user_name.appendChild(name_text);  
                              document.getElementById("url_"+a).appendChild(user_name);
 
+
                          }
                     });
+
 
 
 
