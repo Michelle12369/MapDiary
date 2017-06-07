@@ -41,24 +41,46 @@
     <!--註冊-->
     <div class="sign-form">
         <h2>註冊</h2>
-        <form action="">
+<!--         <form action="">
             <div>
-                <label for="email">信箱</label>
-                <input type="email">
+                <label for="email" >信箱</label>
+                <input type="email" id="email">
             </div>
             <div>
-                <label for="password">密碼</label>
-                <input type="password">
+                <label for="password" >密碼</label>
+                <input type="password" id="pwd">
             </div>
             <div>
                 <label for="username">使用者名稱</label>
-                <input type="text">
+                <input type="text" id="displayname">
             </div>
-            <input type="submit" class="sign-btn" value="註冊">
-        </form>
+            <div class="sign-btn" id="signUp">註冊</div>
+        </form> -->
+        <h3>帳號</h3>
+        <lable for="account"></lable>
+        <input id="account" type="text">
+        <h3>密碼</h3>
+        <lable for="pwd"></lable>
+        <input id="pwds" type="password">
+        <button type="submit" id="registerSmtBtn">Signup</button>
         <hr>
-        <button class="sign-btn">FACEBOOK登入</button>
+        <button id="fbLoginBtn" class="sign-btn">FB 登入</button>
     </div>
 </body>
 
+<script src="https://www.gstatic.com/firebasejs/4.1.0/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyCxtNaITKHzASF0PNhcr1mU6ah0Ru7FTqc",
+    authDomain: "sna-map-4f1bb.firebaseapp.com",
+    databaseURL: "https://sna-map-4f1bb.firebaseio.com",
+    projectId: "sna-map-4f1bb",
+    storageBucket: "sna-map-4f1bb.appspot.com",
+    messagingSenderId: "1022375312771"
+  };
+  firebase.initializeApp(config);
+</script>
+<script type="text/javascript" src="js/signUp.js"></script>
+<script type="text/javascript" src="js/fb_login.js"></script>
 </html>
