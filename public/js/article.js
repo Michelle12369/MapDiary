@@ -7,8 +7,7 @@ var image = document.querySelector('#image');
 var content = document.querySelector('#content');
 var map = document.querySelector('iframe');
 var like = document.querySelector('#like');
-var map_url = 'https://www.google.com/maps/embed/v1/place?key=AIzaSyBy5JYq1_BVxB1A2Xtofn9PcRryxQJ4Ess';
-var c,id;
+var c,id,lat,lng;
 
 //Get the post ID (parameter) passed from search.html
 var query = location.search.substring(1);
@@ -18,6 +17,7 @@ var key = keyValuePairs[0];
 var value = keyValuePairs[1];
 parameters[key] = value;
 var toggle = true;
+var postRef = firebase.database().ref('Post');
 
 // var query = location.search.substring(1);
 // var parameters = {};
@@ -32,7 +32,9 @@ var toggle = true;
 // alert(parameters['yourKey']);
 
 //只傳入ID
-var postRef = firebase.database().ref('Post');
+function initMap() {
+
+
 postRef.on('value', function(snapshot) {
   
   snapshot.forEach(function(childSnapshot) {
@@ -47,27 +49,245 @@ postRef.on('value', function(snapshot) {
         if (postId == value){
       
           title.innerHTML = childData2.title;
-          author.innerHTML = childData2.userid+" # ";
+
+          if (!childData2.username){
+
+             author.innerHTML = '匿名使用者'+" # ";
+
+          }else{
+
+             author.innerHTML = childData2.username+" # ";
+
+          }
           date.innerHTML = childData2.date+" # ";
           type.innerHTML = "關於 "+category;
             content.innerHTML = childData2.p_content;
             //未來: 經緯度轉換成地址
-            map.src = map_url+'&q='+childData2.lat+','+childData2.lng;
+            //map.src = map_url+'&q='+childData2.lat+','+childData2.lng;
             image.src = childData2.p_photo;
             like.innerHTML = childData2.like_count;
             console.log(childData2.like_count);
 
             c = category;
             id = postId;
+            lat = childData2.lat;
+            lng = childData2.lng;
+
 
       
         }
 
     });
   });
+
+
+
+      var uluru = {lat: lat, lng: lng};
+      var map = new google.maps.Map(document.getElementById('GoogleMap'), {
+        zoom: 15,
+        center: uluru,
+        styles:[
+      {
+          "featureType": "water",
+          "elementType": "all",
+          "stylers": [
+              {
+                  "hue": "#7fc8ed"
+              },
+              {
+                  "saturation": 55
+              },
+              {
+                  "lightness": -6
+              },
+              {
+                  "visibility": "on"
+              }
+          ]
+      },
+      {
+          "featureType": "water",
+          "elementType": "labels",
+          "stylers": [
+              {
+                  "hue": "#7fc8ed"
+              },
+              {
+                  "saturation": 55
+              },
+              {
+                  "lightness": -6
+              },
+              {
+                  "visibility": "off"
+              }
+          ]
+      },
+      {
+          "featureType": "poi.park",
+          "elementType": "geometry",
+          "stylers": [
+              {
+                  "hue": "#83cead"
+              },
+              {
+                  "saturation": 1
+              },
+              {
+                  "lightness": -15
+              },
+              {
+                  "visibility": "on"
+              }
+          ]
+      },
+      {
+          "featureType": "landscape",
+          "elementType": "geometry",
+          "stylers": [
+              {
+                  "hue": "#f3f4f4"
+              },
+              {
+                  "saturation": -84
+              },
+              {
+                  "lightness": 59
+              },
+              {
+                  "visibility": "on"
+              }
+          ]
+      },
+      {
+          "featureType": "landscape",
+          "elementType": "labels",
+          "stylers": [
+              {
+                  "hue": "#ffffff"
+              },
+              {
+                  "saturation": -100
+              },
+              {
+                  "lightness": 100
+              },
+              {
+                  "visibility": "off"
+              }
+          ]
+      },
+      {
+          "featureType": "road",
+          "elementType": "geometry",
+          "stylers": [
+              {
+                  "hue": "#ffffff"
+              },
+              {
+                  "saturation": -100
+              },
+              {
+                  "lightness": 100
+              },
+              {
+                  "visibility": "on"
+              }
+          ]
+      },
+      {
+          "featureType": "road",
+          "elementType": "labels",
+          "stylers": [
+              {
+                  "hue": "#bbbbbb"
+              },
+              {
+                  "saturation": -100
+              },
+              {
+                  "lightness": 26
+              },
+              {
+                  "visibility": "on"
+              }
+          ]
+      },
+      {
+          "featureType": "road.arterial",
+          "elementType": "geometry",
+          "stylers": [
+              {
+                  "hue": "#ffcc00"
+              },
+              {
+                  "saturation": 100
+              },
+              {
+                  "lightness": -35
+              },
+              {
+                  "visibility": "simplified"
+              }
+          ]
+      },
+      {
+          "featureType": "road.highway",
+          "elementType": "geometry",
+          "stylers": [
+              {
+                  "hue": "#ffcc00"
+              },
+              {
+                  "saturation": 100
+              },
+              {
+                  "lightness": -22
+              },
+              {
+                  "visibility": "on"
+              }
+          ]
+      },
+      {
+          "featureType": "poi.school",
+          "elementType": "all",
+          "stylers": [
+              {
+                  "hue": "#d7e4e4"
+              },
+              {
+                  "saturation": -60
+              },
+              {
+                  "lightness": 23
+              },
+              {
+                  "visibility": "on"
+              }
+          ]
+      }
+  ]
+
+       });
+var icon = {
+    url: 'img/placeholder.png', // url
+    scaledSize: new google.maps.Size(50, 50), // scaled size
+    };
+
+    marker = new google.maps.Marker({
+
+        position: uluru,
+        map: map,
+        animation: google.maps.Animation.DROP,
+        icon: icon
+
+    });
+ 
+
 });
 
-
+}
 
 
 
@@ -147,9 +367,14 @@ document.querySelector(".likes-count").addEventListener('click',function(e){
  } else {
                   
       user = null;
-      alert ('您尚未登入');                
+      //alert ('您尚未登入');                
         
          }
  });
+
+
+ 
+
+
 
 
