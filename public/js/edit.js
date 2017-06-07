@@ -9,7 +9,6 @@ var selectedFile;
 
 
 
-
 // by chien
 uploadImage.addEventListener('change', function () {
 
@@ -278,8 +277,9 @@ function initMap() {
             handleLocationError(false, map.getCenter());
         }
     }
-}
 
+
+}
 
 
 //更換Marker位置
