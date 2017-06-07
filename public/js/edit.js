@@ -9,7 +9,6 @@ var selectedFile;
 
 
 
-
 // by chien
 uploadImage.addEventListener('change', function () {
 
@@ -64,7 +63,6 @@ span.onclick = function () {
 var database = firebase.database();
 var submit = document.querySelector('#submit');
 var selectbox = document.querySelector('#category_select');
-var userid = 'joy_shao37';
 var myLatlng = "";
 var marker, lat, lng;
 
@@ -105,8 +103,16 @@ submit.addEventListener('click', function () {
         }, function() {
 
             downloadURL = uploadTask.snapshot.downloadURL;
-            uploadPost(title,category,p_content,downloadURL);  
-         
+            firebase.auth().onAuthStateChanged(function(user) {
+                if (user) {
+                    console.log("signin");
+                    console.log(user.uid);
+                    uploadPost(title,category,p_content,downloadURL,user.uid);  
+                } else {
+                    user = null;
+                    console.log("User is not logined yet.");
+                }
+            });
         });
 
         }           
@@ -115,14 +121,15 @@ submit.addEventListener('click', function () {
 });
 
 
-function uploadPost(title, category, p_content, downloadURL) {
+function uploadPost(title, category, p_content, downloadURL,email) {
 
         var d = new Date();
-        var date = d.getFullYear()+"/"+d.getMonth()+1+"/"+d.getDate();
+        var month = d.getMonth()+1;
+        var date = d.getFullYear()+"/"+month+"/"+d.getDate();
 
 
         var newPost = firebase.database().ref('Post/' + category).push({
-            userid: userid,
+            userid: email,
             title: title,
             date: date,
             lat: lat,
@@ -130,11 +137,11 @@ function uploadPost(title, category, p_content, downloadURL) {
             p_content: p_content,
             p_photo: downloadURL, 
             like_count: 0,
-            like_user: ""
         });
 
         var postId = newPost.getKey();
 }
+
 
 
 
@@ -300,3 +307,15 @@ function handleLocationError(browserHasGeolocation, pos) {
     //                      'Error: Your browser doesn\'t support geolocation.');
 
 }
+
+
+
+
+
+
+
+
+
+
+
+

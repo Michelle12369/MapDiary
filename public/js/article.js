@@ -17,6 +17,7 @@ var keyValuePairs = query.split("=");
 var key = keyValuePairs[0];
 var value = keyValuePairs[1];
 parameters[key] = value;
+var toggle = true;
 
 // var query = location.search.substring(1);
 // var parameters = {};
@@ -34,21 +35,21 @@ parameters[key] = value;
 var postRef = firebase.database().ref('Post');
 postRef.on('value', function(snapshot) {
   
-	snapshot.forEach(function(childSnapshot) {
+  snapshot.forEach(function(childSnapshot) {
 
-	  var category = childSnapshot.key;
+    var category = childSnapshot.key;
 
- 	  childSnapshot.forEach(function(postIDSnapshot){
+    childSnapshot.forEach(function(postIDSnapshot){
 
-      	var postId = postIDSnapshot.key;
-      	var childData2 = postIDSnapshot.val();
+        var postId = postIDSnapshot.key;
+        var childData2 = postIDSnapshot.val();
 
-      	if (postId == value){
+        if (postId == value){
       
-      		title.innerHTML = childData2.title;
-      		author.innerHTML = childData2.userid+" # ";
-      		date.innerHTML = childData2.date+" # ";
-      		type.innerHTML = "關於 "+category;
+          title.innerHTML = childData2.title;
+          author.innerHTML = childData2.userid+" # ";
+          date.innerHTML = childData2.date+" # ";
+          type.innerHTML = "關於 "+category;
             content.innerHTML = childData2.p_content;
             //未來: 經緯度轉換成地址
             map.src = map_url+'&q='+childData2.lat+','+childData2.lng;
@@ -59,31 +60,96 @@ postRef.on('value', function(snapshot) {
             c = category;
             id = postId;
 
-  		
-      	}
+      
+        }
 
- 	  });
+    });
   });
 });
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+firebase.auth().onAuthStateChanged(function(user) {
+
+if (user) {
+          
+var userid = user.uid;     
+
 document.querySelector(".likes-count").addEventListener('click',function(e){
-   this.classList.toggle("like-click") ;
-
-   console.log(c+"="+id);
    
 
+      var likes = like.innerHTML;
+      var likeRef = firebase.database().ref('Post/'+c+'/'+id);
 
 
+      likeRef.once('value',function(snapshot){
+
+            var count = snapshot.val().like_count;
+           
+          
+
+            //如果有likes欄位->已經有人按讚、如果likes欄位有使用者的ID -> 已經按過讚了
+            if(snapshot.child('like_user').exists() && snapshot.child('like_user').hasChild(userid)){
+
+                postRef.child(c).child(id).child('like_user').child(userid).remove();
+                count--;
+                postRef.child(c).child(id).child('like_count').set(count);
+                toggle = false;
 
 
+                              
+            }else{
+
+                postRef.child(c).child(id).child('like_user').child(userid).set(true);
+                count++;
+                postRef.child(c).child(id).child('like_count').set(count);
+                toggle = true;
+
+               }
+
+               //改變btn上的讚數
+               like.innerHTML = count;      
+      });   
 
 
+            // if (toggle = true){
 
 
+            //    heart_btn.class = '.like-click';
+
+            //    //this.classList.toggle("like-click") ;
 
 
+            // }else{
 
 
-   
+            //    //this.classList.toggle("like-count") ;
+
+
+            // }
+
 });
+
+ 
+
+ } else {
+                  
+      user = null;
+      alert ('您尚未登入');                
+        
+         }
+ });
+
+
