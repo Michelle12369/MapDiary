@@ -7,21 +7,45 @@ var profileName = document.getElementById('profile-name');
 firebase.auth().onAuthStateChanged(function(user) {
   if (user) {
     user = user;
-    console.log(user.photoURL);
+     console.log(SignIn);
+    SignIn.innerHTML = "";
     if(user.photoURL != null){
-      // Dname.innerHTML = user.displayName+"您好";
+
+      var toUser = document.createElement("a");
+      toUser.href = "user.html";
       var img = document.createElement("img");
       img.src = user.photoURL;
-      img.className += " dropclick";
-      Dname.append(img);
-      // SignIn.innerHTML = "";
+      toUser.append(img);
+      // img.className += " dropclick";
+
+      var triangle = document.createElement("span");
+      triangle.innerHTML = "▼";
+      triangle.className += " dropclick";
+
+      Dname.append(toUser);
+      Dname.append(triangle);
+      
       if(profilePic != null){
         profilePic.src = user.photoURL;
         profileName.innerHTML = user.displayName;
       }
     } else {
-      var i = user.email.indexOf("@");
-      Dname.innerHTML = user.email.slice(0,i)+"您好";
+      var toUser = document.createElement("a");
+      toUser.href = "user.html";
+      var img = document.createElement("img");
+      img.src = "img/man.png";
+      toUser.append(img);
+      // img.className += " dropclick";
+
+      var triangle = document.createElement("span");
+      triangle.innerHTML = "▼";
+      triangle.className += " dropclick";
+
+      Dname.append(toUser);
+      Dname.append(triangle);
+
+      // var i = user.email.indexOf("@");
+      // Dname.innerHTML = user.email.slice(0,i)+"您好";
     }
     // user.sendEmailVerification(); 送驗證信
   } else {
@@ -34,3 +58,14 @@ firebase.auth().onAuthStateChanged(function(user) {
     console.log("User is not logined yet.!");
   }
 });
+
+//登出
+var signoutSmtBtn = document.getElementById("signoutSmtBtn");
+signoutSmtBtn.addEventListener("click",function(){
+  firebase.auth().signOut().then(function() {
+    console.log("User sign out!");
+  }, function(error) {
+    console.log("User sign out error!");
+  })
+},false);
+

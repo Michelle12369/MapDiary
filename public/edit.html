@@ -41,12 +41,32 @@
         </div>
         <div class="dropdown">
             <div class="dropbtn">
-                <img class="dropclick" src="img/shao.jpg" alt="" width="40px">
+                <style type="text/css">
+                    /*#Dname{
+                        display: inline-block;
+                        width: 100%;
+                        height: 64px;
+                    }*/
+                    #Dname img{
+                        width: 40px;
+                        /*padding: 12px 0;*/
+                        margin-right:10px;
+                    }
+                    #Dname{
+                    }
+                    #Dname>span{
+                        vertical-align: top;
+                        display: inline-block;
+                        margin-top: 20px;
+                    }
+                </style>
+                <a id="Dname"></a>
+                <!-- <img class="dropclick" src="img/shao.jpg" alt="" width="40px"> -->
             </div>
             <div class="dropdown-content dropMenu">
                 <a class="dropdown-item" href="edit.html">新增文章</a>
                 <a class="dropdown-item" href="user.html">個人頁面</a>
-                <a class="dropdown-item" href="index.html">登出</a>
+                <a class="dropdown-item" id="signoutSmtBtn">登出</a>
             </div>
         </div>
         <div class="dropdown">
@@ -153,4 +173,6 @@
     <script src="https://cloud.tinymce.com/stable/tinymce.min.js"></script>
     <script>tinymce.init({ selector:'textarea' });</script>
 </body>
+
+<script type="text/javascript" src="js/judgeBar.js"></script>
 </html>
