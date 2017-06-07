@@ -58,7 +58,7 @@ firebase.auth().onAuthStateChanged(function(user) {
               var userBlock = document.createElement("div");
               userBlock.append(aTag);
 
-              contents.prepend(userBlock);
+              contents.append(userBlock);
               j++;
             }
             if(j==0){

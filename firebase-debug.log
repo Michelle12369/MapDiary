@@ -1,79 +1,9 @@
 [debug] ----------------------------------------------------------------------
-[debug] Command:      /usr/local/bin/node /usr/local/bin/firebase serve
-[debug] CLI Version:  3.5.0
-[debug] Platform:     darwin
-[debug] Node Version: v6.10.1
-[debug] Time:         Wed Jun 07 2017 22:37:12 GMT+0800 (CST)
-[debug] ----------------------------------------------------------------------
-[debug] 
-[info] Starting Firebase development server...
-[info] 
-[info] Project Directory: /Users/chiayi/Github/MapDiary
-[info] Public Directory: public
-[info] 
-[info] Server listening at: http://localhost:5000
-[debug] ----------------------------------------------------------------------
-[debug] Command:      /usr/local/bin/node /usr/local/bin/firebase serve
-[debug] CLI Version:  3.5.0
-[debug] Platform:     darwin
-[debug] Node Version: v6.10.1
-[debug] Time:         Thu Jun 08 2017 00:53:41 GMT+0800 (CST)
-[debug] ----------------------------------------------------------------------
-[debug] 
-[info] Starting Firebase development server...
-[info] 
-[info] Project Directory: /Users/chiayi/Github/MapDiary
-[info] Public Directory: public
-[info] 
-[info] Server listening at: http://localhost:5000
-[debug] ----------------------------------------------------------------------
 [debug] Command:      /Users/Leo/.nvm/versions/node/v6.10.2/bin/node /usr/local/bin/firebase serve
 [debug] CLI Version:  3.5.0
 [debug] Platform:     darwin
 [debug] Node Version: v6.10.2
-[debug] Time:         Thu Jun 08 2017 02:07:18 GMT+0800 (CST)
-[debug] ----------------------------------------------------------------------
-[debug] 
-[info] Starting Firebase development server...
-[info] 
-[info] Project Directory: /Users/Leo/programing/MapDiary
-[info] Public Directory: public
-[info] 
-[info] Server listening at: http://localhost:5000
-[debug] ----------------------------------------------------------------------
-[debug] Command:      /usr/local/bin/node /usr/local/bin/firebase serve
-[debug] CLI Version:  3.5.0
-[debug] Platform:     darwin
-[debug] Node Version: v6.10.1
-[debug] Time:         Thu Jun 08 2017 02:18:02 GMT+0800 (CST)
-[debug] ----------------------------------------------------------------------
-[debug] 
-[info] Starting Firebase development server...
-[info] 
-[info] Project Directory: /Users/chiayi/Github/MapDiary
-[info] Public Directory: public
-[info] 
-[info] Server listening at: http://localhost:5000
-[debug] ----------------------------------------------------------------------
-[debug] Command:      /usr/local/bin/node /usr/local/bin/firebase serve
-[debug] CLI Version:  3.5.0
-[debug] Platform:     darwin
-[debug] Node Version: v6.10.1
-[debug] Time:         Thu Jun 08 2017 03:20:24 GMT+0800 (CST)
-[debug] ----------------------------------------------------------------------
-[debug] 
-[info] Starting Firebase development server...
-[info] 
-[info] Project Directory: /Users/chiayi/Github/MapDiary
-[info] Public Directory: public
-[info] 
-[info] Server listening at: http://localhost:5000
-[debug] ----------------------------------------------------------------------
-[debug] Command:      /Users/Leo/.nvm/versions/node/v6.10.2/bin/node /usr/local/bin/firebase serve
-[debug] CLI Version:  3.5.0
-[debug] Platform:     darwin
-[debug] Node Version: v6.10.2
-[debug] Time:         Thu Jun 08 2017 04:29:40 GMT+0800 (CST)
+[debug] Time:         Thu Jun 08 2017 05:26:33 GMT+0800 (CST)
 [debug] ----------------------------------------------------------------------
 [debug] 
 [info] Starting Firebase development server...
