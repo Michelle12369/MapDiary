@@ -41,7 +41,7 @@
     <!--註冊-->
     <div class="sign-form">
         <h2>註冊</h2>
-        <form action="">
+<!--         <form action="">
             <div>
                 <label for="email" >信箱</label>
                 <input type="email" id="email">
@@ -52,12 +52,19 @@
             </div>
             <div>
                 <label for="username">使用者名稱</label>
-                <input type="text">
+                <input type="text" id="displayname">
             </div>
-            <input type="value" class="sign-btn" value="註冊"  id="signUp">
-        </form>
+            <div class="sign-btn" id="signUp">註冊</div>
+        </form> -->
+        <h3>帳號</h3>
+        <lable for="account"></lable>
+        <input id="account" type="text">
+        <h3>密碼</h3>
+        <lable for="pwd"></lable>
+        <input id="pwds" type="password">
+        <button type="submit" id="registerSmtBtn">Signup</button>
         <hr>
-        <button class="sign-btn">FACEBOOK登入</button>
+        <button id="fbLoginBtn" class="sign-btn">FB 登入</button>
     </div>
 </body>
 
@@ -75,5 +82,5 @@
   firebase.initializeApp(config);
 </script>
 <script type="text/javascript" src="js/signUp.js"></script>
-
+<script type="text/javascript" src="js/fb_login.js"></script>
 </html>
