@@ -38,18 +38,22 @@
             <!-- <a class="nav-link" href="signup.html">註冊 </a> -->
             <!-- <img src="" id="pic"> -->
             <style type="text/css">
-                #Dname{
-                    display: inline-block;
-                    width: 100%;
-                    height: 64px;
+                .nav-right{
+                    color:white;
+                    float: right;
                 }
-                #Dname>img{
+                .nav-right>img{
+                    cursor: pointer;
                     width: 40px;
-                    padding: 12px 0;
-                    margin: 0 5px;
+                    margin: 13px 5px;
+                }
+                .nav-right>span{
+                    display: inline-block;
+                    padding: 22px 5px;
                 }
             </style>
-            <a href="/user.html" id="Dname"></a>
+            <a href="/user.html" class="nav-right" id="Dname"></a>
+            <a href="/signin.html" class="nav-right" id="SignIn"></a>
         </div>
     </nav>
 
@@ -113,5 +117,5 @@
 </script>
 <script type="text/javascript" src="js/login.js"></script>
 <script type="text/javascript" src="js/fb_login.js"></script>
-<script type="text/javascript" src="js/judge.js"></script>
+<script type="text/javascript" src="js/judgeBar.js"></script>
 </html>

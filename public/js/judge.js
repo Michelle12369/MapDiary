@@ -11,11 +11,44 @@ firebase.auth().onAuthStateChanged(function(user) {
       // Dname.innerHTML = user.displayName+"您好";
       var img = document.createElement("img");
       img.src = user.photoURL;
-      console.log(img);
+      img.className += " dropclick";
+      // console.log(img);
       Dname.append(img);
 
-      profilePic.src = user.photoURL;
-      profileName.innerHTML = user.displayName;
+      if(profilePic != null){
+        profilePic.src = user.photoURL;
+        profileName.innerHTML = user.displayName;
+      }
+      firebase.database().ref('/Post/Food').once('value').then(function(snapshot) {
+        // console.log(snapshot.key.userid);
+
+        // console.log(Object.keys(snapshot.val())[0]);
+        var contents = document.getElementById('contents');
+        var key = Object.keys(snapshot.val());
+        var j = 0;
+        for(var i = 0 ; i < Object.keys(snapshot.val()).length ; i++){
+          console.log(snapshot.child(key[i]).val().userid);
+          if(snapshot.child(key[i]).val().userid == user.email){
+            
+            var userTitle = document.createElement("h1");
+            userTitle.innerHTML=snapshot.child(key[i]).val().title;
+
+            var userContent = document.createElement("p");
+            userContent.innerHTML=snapshot.child(key[i]).val().p_content;
+            
+            var userBlock = document.createElement("div");
+            userBlock.append(userTitle);
+            userBlock.append(userContent);
+
+            contents.prepend(userBlock);
+            j++;
+          }
+          if(j==0){
+            var none = document.createElement("p");
+            contents.prepend(none);
+          }
+        }
+      })
     } else {
       var i = user.email.indexOf("@");
       Dname.innerHTML = user.email.slice(0,i)+"您好";

@@ -35,21 +35,24 @@
             <input type="submit" value="搜尋" class="search" />
         </form>
         <style type="text/css">
-            #detect{
+            .nav-right{
                 color:white;
                 float: right;
             }
-            #detect>a{
+            .nav-right>img{
                 cursor: pointer;
+                width: 40px;
+                margin: 13px 5px;
+            }
+            .nav-right>span{
+                display: inline-block;
+                padding: 22px 5px;
             }
         </style>
-        <div id="detect">
-            <!-- <a class="nav-link" href="signin.html">登入</a>
-            <a class="nav-link" href="signup.html">註冊 </a>  -->
-        </div>
-        
-<!--             <a class="nav-link" href="signin.html">登入</a>
-            <a class="nav-link" href="signup.html">註冊 </a>  -->
+        <a href="/user.html" class="nav-right" id="Dname"></a>
+        <a href="/signin.html" class="nav-right" id="SignIn"></a>
+        <!-- <a class="nav-link" href="signin.html">登入</a>
+        <a class="nav-link" href="signup.html">註冊 </a>  -->
     </nav>
 
     <header>
@@ -216,6 +219,6 @@
   firebase.initializeApp(config);
 </script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script type="text/javascript" src="js/checkstate.js"></script>
+    <script type="text/javascript" src="js/judgeBar.js"></script>
     <script type="text/javascript" src="js/logout.js"></script>
 </html>
