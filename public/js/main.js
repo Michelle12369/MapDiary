@@ -4,11 +4,12 @@ if (document.querySelector('iframe') != null) {
 var triangle = document.querySelector(".triangle");
 var dropmenu = document.querySelectorAll(".dropMenu");
 var dropbtns = document.querySelectorAll(".dropbtn");
-
-triangle.addEventListener("click", function () {
-    document.querySelectorAll(".dropdown").forEach(dropdowns => dropdowns.classList.toggle("show"));
-    triangle.classList.toggle("triangle-show");
-})
+if(triangle!=null){
+    triangle.addEventListener("click", function () {
+        document.querySelectorAll(".dropdown").forEach(dropdowns => dropdowns.classList.toggle("show"));
+        triangle.classList.toggle("triangle-show");
+    })
+}
 dropbtns.forEach(dBtn => dBtn.addEventListener('click', dropdown));
 
 function dropdown() {
