@@ -107,7 +107,7 @@ submit.addEventListener('click', function () {
                 if (user) {
                     console.log("signin");
                     console.log(user.uid);
-                    uploadPost(title,category,p_content,downloadURL,user.uid);  
+                    uploadPost(title,category,p_content,downloadURL,user.email);  
                 } else {
                     user = null;
                     console.log("User is not logined yet.");
@@ -127,7 +127,7 @@ function uploadPost(title, category, p_content, downloadURL,email) {
         var month = d.getMonth()+1;
         var date = d.getFullYear()+"/"+month+"/"+d.getDate();
 
-
+        console.log(email);
         var newPost = firebase.database().ref('Post/' + category).push({
             userid: email,
             title: title,
