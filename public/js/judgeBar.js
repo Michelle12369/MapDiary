@@ -2,7 +2,6 @@
 var user;
 var Dname = document.getElementById('Dname');
 var SignIn = document.getElementById('SignIn');
-var profilePic = document.getElementById('profile-pic');
 var profileName = document.getElementById('profile-name');
 firebase.auth().onAuthStateChanged(function(user) {
   if (user) {
@@ -24,11 +23,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 
       Dname.append(toUser);
       Dname.append(triangle);
-      
-      if(profilePic != null){
-        profilePic.src = user.photoURL;
-        profileName.innerHTML = user.displayName;
-      }
+
     } else {
       var toUser = document.createElement("a");
       toUser.href = "user.html";
