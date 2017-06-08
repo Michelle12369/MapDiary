@@ -34,32 +34,43 @@
                 </select>
             <input type="submit" value="搜尋" class="search" />
         </form>
-        <div class="triangle">
-            <img src="img/triangle.png" alt="triangle">
-        </div>
+        <style type="text/css">
+            .nav-right{
+                color:black;
+                float: right;
+            }
+            .nav-right img{
+                cursor: pointer;
+                width: 40px;
+                margin-right:10px;
+            }
+            .nav-right>span{
+                vertical-align: top;
+                display: inline-block;
+                margin-top:16px;
+                cursor: pointer;
+            }
+            .dropdown{
+                /*margin:12px;*/
+            }
+            #Dname{
+                vertical-align: top;
+            }
+            .dropdown-content{
+                top:64px;
+            }
+        </style>
+        <!-- <a href="/user.html" class="nav-right" id="Dname"></a> -->
+        <!-- <a href="/signin.html" class="nav-right" id="SignIn"></a> -->
+        <!-- <a class="nav-link" href="signin.html">登入</a>
+        <a class="nav-link" href="signup.html">註冊 </a>  -->
         <div class="dropdown">
             <div class="dropbtn">
-                <style type="text/css">
-                    /*#Dname{
-                        display: inline-block;
-                        width: 100%;
-                        height: 64px;
-                    }*/
-                    #Dname img{
-                        width: 40px;
-                        /*padding: 12px 0;*/
-                        margin-right:10px;
-                    }
-                    #Dname{
-                    }
-                    #Dname>span{
-                        vertical-align: top;
-                        display: inline-block;
-                        margin-top: 20px;
-                    }
-                </style>
-                <a id="Dname"></a>
-                <!-- <img class="dropclick" src="img/shao.jpg" alt="" width="40px"> -->
+
+                <!-- <a id="Dname"></a> -->
+                <a  class="nav-right" id="Dname"></a>
+                <a href="/signin.html" class="nav-right" id="SignIn"></a>
+
             </div>
             <div class="dropdown-content dropMenu">
                 <a class="dropdown-item" href="edit.html">新增文章</a>

@@ -27,8 +27,6 @@ var postRef = firebase.database().ref('Post');
 function initMap() {
 
 
-
-
 postRef.on('value', function(snapshot) {
   
   snapshot.forEach(function(childSnapshot) {
@@ -73,6 +71,7 @@ postRef.on('value', function(snapshot) {
 
     });
   });
+
 
 
 
@@ -321,21 +320,8 @@ postRef.on('value', function(snapshot) {
 
 });
 
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -384,37 +370,19 @@ firebase.auth().onAuthStateChanged(function(user) {
 
               });
 
-         
-
-
-
-
-
-
-
-
-
-
-
-
+      
 
      } else {
                       
           user = null;
           //alert ('您尚未登入');                
             
-             }
-
+            }
 
  });
 
 
  
-
-
-
-
-
 
 
 

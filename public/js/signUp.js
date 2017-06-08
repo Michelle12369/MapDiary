@@ -7,7 +7,9 @@ registerSmtBtn.addEventListener("click", function(){
     firebase.auth().createUserWithEmailAndPassword(account.value, pwd.value).then(function(){
     	loginUser = firebase.auth().currentUser;
     	console.log("登入使用者為",loginUser);
+    	console.log(loginUser.uid);
 	    firebase.database().ref('users/' + loginUser.uid).set({
+	    	userid: loginUser.uid,
 		    email: loginUser.email,
 	        name: loginUser.displayName,
 	        // age : age.value
