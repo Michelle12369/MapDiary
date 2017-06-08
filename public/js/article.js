@@ -7,6 +7,7 @@ var image = document.querySelector('#image');
 var content = document.querySelector('#content');
 var map = document.querySelector('iframe');
 var like = document.querySelector('#like');
+var heart = document.querySelector('#heart_btn');
 var c,id,lat,lng;
 
 //Get the post ID (parameter) passed from search.html
@@ -19,20 +20,13 @@ parameters[key] = value;
 var toggle = true;
 var postRef = firebase.database().ref('Post');
 
-// var query = location.search.substring(1);
-// var parameters = {};
-// var keyValues = query.split(/&/);
-// for (var keyValue in keyValues) {
-//     var keyValuePairs = keyValue.split(/=/);
-//     var key = keyValuePairs[0];
-//     var value = keyValuePairs[1];
-//     parameters[key] = value;
-// }
 
-// alert(parameters['yourKey']);
 
-//只傳入ID
+
+
 function initMap() {
+
+
 
 
 postRef.on('value', function(snapshot) {
@@ -78,6 +72,44 @@ postRef.on('value', function(snapshot) {
         }
 
     });
+  });
+
+
+
+  firebase.auth().onAuthStateChanged(function(user) {
+
+
+
+        var likeRef2 = firebase.database().ref('Post/'+c+'/'+id);
+        likeRef2.once('value',function(snapshot){
+
+
+                 //如果有likes欄位->已經有人按讚、如果likes欄位有使用者的ID -> 已經按過讚了
+                    if(snapshot.child('like_user').exists() && snapshot.child('like_user').hasChild(user.uid)){
+
+                      heart.classList.add('likes-count');
+                      heart.classList.toggle('like-click');
+                      
+                                      
+                    }else{
+
+                                 
+                      heart.classList.add('likes-count');
+                                       
+
+
+                       }
+
+
+
+        });
+
+
+
+
+
+
+
   });
 
 
@@ -270,20 +302,22 @@ postRef.on('value', function(snapshot) {
   ]
 
        });
-var icon = {
-    url: 'img/placeholder.png', // url
-    scaledSize: new google.maps.Size(50, 50), // scaled size
-    };
+
+    var icon = {
+
+        url: 'img/placeholder.png', // url
+        scaledSize: new google.maps.Size(50, 50), // scaled size
+        };
 
     marker = new google.maps.Marker({
 
-        position: uluru,
-        map: map,
-        animation: google.maps.Animation.DROP,
-        icon: icon
+            position: uluru,
+            map: map,
+            animation: google.maps.Animation.DROP,
+            icon: icon
 
-    });
- 
+        });
+     
 
 });
 
@@ -301,79 +335,85 @@ var icon = {
 
 
 
+
+
+
+
 firebase.auth().onAuthStateChanged(function(user) {
 
-if (user) {
-          
-var userid = user.uid;     
+    if (user) {
+              
+        var userid = user.uid;  
 
-document.querySelector(".likes-count").addEventListener('click',function(e){
-   
-
-      var likes = like.innerHTML;
-      var likeRef = firebase.database().ref('Post/'+c+'/'+id);
-
-
-      likeRef.once('value',function(snapshot){
-
-            var count = snapshot.val().like_count;
+        heart.addEventListener('click',function(e){
            
-          
 
-            //如果有likes欄位->已經有人按讚、如果likes欄位有使用者的ID -> 已經按過讚了
-            if(snapshot.child('like_user').exists() && snapshot.child('like_user').hasChild(userid)){
-
-                postRef.child(c).child(id).child('like_user').child(userid).remove();
-                count--;
-                postRef.child(c).child(id).child('like_count').set(count);
-                toggle = false;
+              heart.classList.toggle('like-click');
+              var likes = like.innerHTML;
+              var likeRef = firebase.database().ref('Post/'+c+'/'+id);
 
 
-                              
-            }else{
+              likeRef.once('value',function(snapshot){
 
-                postRef.child(c).child(id).child('like_user').child(userid).set(true);
-                count++;
-                postRef.child(c).child(id).child('like_count').set(count);
-                toggle = true;
-
-               }
-
-               //改變btn上的讚數
-               like.innerHTML = count;      
-      });   
-
-
-            // if (toggle = true){
-
-
-            //    heart_btn.class = '.like-click';
-
-            //    //this.classList.toggle("like-click") ;
-
-
-            // }else{
-
-
-            //    //this.classList.toggle("like-count") ;
-
-
-            // }
-
-});
-
- 
-
- } else {
+                    var count = snapshot.val().like_count;
+                   
                   
-      user = null;
-      //alert ('您尚未登入');                
-        
-         }
+
+                    //如果有likes欄位->已經有人按讚、如果likes欄位有使用者的ID -> 已經按過讚了
+                    if(snapshot.child('like_user').exists() && snapshot.child('like_user').hasChild(userid)){
+
+                        postRef.child(c).child(id).child('like_user').child(userid).remove();
+                        count--;
+                        postRef.child(c).child(id).child('like_count').set(count);
+                        toggle = false;
+
+
+                                      
+                    }else{
+
+                        postRef.child(c).child(id).child('like_user').child(userid).set(true);
+                        count++;
+                        postRef.child(c).child(id).child('like_count').set(count);
+                        toggle = true;
+
+                       }
+
+                       //改變btn上的讚數
+                       like.innerHTML = count;      
+              });   
+
+              });
+
+         
+
+
+
+
+
+
+
+
+
+
+
+
+
+     } else {
+                      
+          user = null;
+          //alert ('您尚未登入');                
+            
+             }
+
+
  });
 
 
  
+
+
+
+
 
 
 
