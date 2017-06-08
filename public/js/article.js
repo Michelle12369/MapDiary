@@ -325,6 +325,7 @@ postRef.on('value', function(snapshot) {
 
 
 
+
 firebase.auth().onAuthStateChanged(function(user) {
 
     if (user) {
@@ -377,7 +378,7 @@ firebase.auth().onAuthStateChanged(function(user) {
           user = null;
           //alert ('您尚未登入');                
             
-            }
+             }
 
  });
 
