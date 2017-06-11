@@ -114,33 +114,21 @@
                 </div>
 
                 <!--留言-->
-                <div class="comment">
-                    <hr>
-                    <div class="comment-container">
-                        <div class="user-pic">
-                            <a href="user.html">
-                                <img id="c_image">
-                            </a>
-                        </div>
-                        <div class="user-comment">
-                            <div><a href="user.html" id="c_user">邵家怡</a></div>
-                            
-                        </div>
-                    </div>
+                <div id="commentlist" class="comment">
+                    
                 </div>
                 <div class="comment">
                     <hr>
                     <div class="comment-container">
-
                         <div class="user-pic">
                             <a id="current_user_page">
-                                <img id="current_comment_user">
+                                <img id="current_comment_user" style="visibility: hidden">
                             </a>
                         </div>
                         <div class="user-comment">
-                            <form action="">
-                                <input type="text" placeholder="留言..">
-                            </form>
+                            <!--<form method="POST" name="commentForm">-->
+                                <input id="comment_input" type="text" placeholder="留言.." style="visibility: hidden" required>
+                            <!--</form>-->
                         </div>
                     </div>
                 </div>

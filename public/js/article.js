@@ -11,6 +11,7 @@ var heart = document.querySelector('#heart_btn');
 //留言 (目前使用者)
 var current_comment_user = document.querySelector('#current_comment_user');
 var current_user_page = document.querySelector('#current_user_page');
+var comment_input = document.querySelector('#comment_input');
 var c,id,lat,lng;
 //Get the post ID (parameter) passed from search.html
 var query = location.search.substring(1);
@@ -60,8 +61,6 @@ postRef.on('value', function(snapshot) {
             //map.src = map_url+'&q='+childData2.lat+','+childData2.lng;
             image.src = childData2.p_photo;
             like.innerHTML = childData2.like_count;
-            console.log(childData2.like_count);
-
             c = category;
             id = postId;
             lat = childData2.lat;
@@ -74,8 +73,12 @@ postRef.on('value', function(snapshot) {
 
 
 
-
   firebase.auth().onAuthStateChanged(function(user) {
+
+
+        
+
+        if(user){
 
         var likeRef2 = firebase.database().ref('Post/'+c+'/'+id);
         likeRef2.once('value',function(snapshot){
@@ -90,6 +93,40 @@ postRef.on('value', function(snapshot) {
                                        
                        }
         }); 
+
+
+
+        //連接使用者留言照片、留言網頁
+        var userRef = firebase.database().ref('users/'+user.uid);
+        userRef.once('value',function(snapshot){
+
+         current_comment_user.style = 'visible';
+         comment_input.style = 'visible';
+         current_comment_user.src = snapshot.val().pic;
+         current_user_page.href = 'user.html?key='+user.uid;
+
+        });
+
+
+      }else{ }
+
+      var commentsRef = firebase.database().ref('Comment/'+id);
+      
+
+
+      commentsRef.on("child_added", function(snap) {
+
+
+        var users = firebase.database().ref('users/'+snap.val().userid);
+        users.once('value',function(snapshot){
+
+            var pic  = snapshot.val().pic;
+            document.querySelector('#commentlist').innerHTML += commentHtmlFromObject(snap.val(),pic);
+
+        });
+
+      });
+
 
   });
 
@@ -311,9 +348,18 @@ firebase.auth().onAuthStateChanged(function(user) {
 
     if (user) {
               
-        var userid = user.uid;  
+        var userid = user.uid; 
+        var username; 
+        
+        if (!user.displayName){
 
-          var user_pic ;
+          username = '匿名使用者';
+
+        }else{
+
+          username = user.displayName;
+
+        }
 
 
 
@@ -324,15 +370,11 @@ firebase.auth().onAuthStateChanged(function(user) {
               var likes = like.innerHTML;
               var likeRef = firebase.database().ref('Post/'+c+'/'+id);
 
-              alert('aaaaaaa');
-
-
               likeRef.once('value',function(snapshot){
 
                     var count = snapshot.val().like_count;
                    
                   
-
                     //如果有likes欄位->已經有人按讚、如果likes欄位有使用者的ID -> 已經按過讚了
                     if(snapshot.child('like_user').exists() && snapshot.child('like_user').hasChild(userid)){
 
@@ -359,6 +401,31 @@ firebase.auth().onAuthStateChanged(function(user) {
 
       
 
+      
+           //如果提交comment 
+           comment_input.addEventListener("keyup",function(event){
+                  
+              event.preventDefault();
+
+              if (event.keyCode == 13) {
+
+                  //Comment/PostId
+                  var commentRef = firebase.database().ref('Comment/'+id);
+                  commentRef.push({
+
+                    userid: userid,
+                    c_content: comment_input.value,
+                    username: username
+
+
+                  })
+
+                  comment_input.value = '';
+
+              }
+
+           });
+
      } else {
                       
           user = null;
@@ -368,6 +435,43 @@ firebase.auth().onAuthStateChanged(function(user) {
 
  });
 
+
+
+ function commentHtmlFromObject(commentlist,pic){
+
+       var html = '';
+        html += '<hr>';
+          html += '<div class="comment-container">';
+            html += '<a href="user.html?key='+commentlist.userid+'">';
+            html += '<img src="'+pic+'">';
+            html += '</a>';
+          html += '<div class="user-comment">';
+        html += '<div><a href="user.html?key='+commentlist.userid+'">'+commentlist.username+'</a></div>';
+        html += '<div>'+commentlist.c_content+'</div>';
+        html += '</div>';
+        html += '</div>';
+        return html;
+
+
+
+
+ }
+
+
+
+
+ // <hr>
+ //                    <div class="comment-container">
+ //                        <div class="user-pic">
+ //                            <a href="user.html">
+ //                                <img id="c_image">
+ //                            </a>
+ //                        </div>
+ //                        <div class="user-comment">
+ //                            <div><a href="user.html" id="c_user">邵家怡</a></div>
+                            
+ //                        </div>
+ //                    </div>
 
  
 
