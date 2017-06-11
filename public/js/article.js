@@ -8,8 +8,10 @@ var content = document.querySelector('#content');
 var map = document.querySelector('iframe');
 var like = document.querySelector('#like');
 var heart = document.querySelector('#heart_btn');
+//留言 (目前使用者)
+var current_comment_user = document.querySelector('#current_comment_user');
+var current_user_page = document.querySelector('#current_user_page');
 var c,id,lat,lng;
-
 //Get the post ID (parameter) passed from search.html
 var query = location.search.substring(1);
 var parameters = {};
@@ -64,8 +66,6 @@ postRef.on('value', function(snapshot) {
             id = postId;
             lat = childData2.lat;
             lng = childData2.lng;
-
-
       
         }
 
@@ -77,40 +77,21 @@ postRef.on('value', function(snapshot) {
 
   firebase.auth().onAuthStateChanged(function(user) {
 
-
-
         var likeRef2 = firebase.database().ref('Post/'+c+'/'+id);
         likeRef2.once('value',function(snapshot){
-
-
                  //如果有likes欄位->已經有人按讚、如果likes欄位有使用者的ID -> 已經按過讚了
                     if(snapshot.child('like_user').exists() && snapshot.child('like_user').hasChild(user.uid)){
-
                       heart.classList.add('likes-count');
                       heart.classList.toggle('like-click');
-                      
-                                      
+                                           
                     }else{
-
-                                 
+              
                       heart.classList.add('likes-count');
                                        
-
-
                        }
-
-
-
-        });
-
-
-
-
-
-
+        }); 
 
   });
-
 
 
       var uluru = {lat: lat, lng: lng};
@@ -325,12 +306,16 @@ postRef.on('value', function(snapshot) {
 
 
 
-
+// 點擊愛心
 firebase.auth().onAuthStateChanged(function(user) {
 
     if (user) {
               
         var userid = user.uid;  
+
+          var user_pic ;
+
+
 
         heart.addEventListener('click',function(e){
            
@@ -338,6 +323,8 @@ firebase.auth().onAuthStateChanged(function(user) {
               heart.classList.toggle('like-click');
               var likes = like.innerHTML;
               var likeRef = firebase.database().ref('Post/'+c+'/'+id);
+
+              alert('aaaaaaa');
 
 
               likeRef.once('value',function(snapshot){
@@ -353,7 +340,6 @@ firebase.auth().onAuthStateChanged(function(user) {
                         count--;
                         postRef.child(c).child(id).child('like_count').set(count);
                         toggle = false;
-
 
                                       
                     }else{
