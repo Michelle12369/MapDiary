@@ -55,6 +55,18 @@ postRef.on('value', function(snapshot) {
              author.innerHTML = childData2.username+" # ";
 
           }
+
+          firebase.auth().onAuthStateChanged(function(user) {
+
+              if (childData2.userid == user.uid){
+
+                document.querySelector('#change_post').style.visibility = 'visible';
+
+              }
+
+           });
+
+
           date.innerHTML = childData2.date+" # ";
           type.innerHTML = "關於 "+category;
             content.innerHTML = childData2.p_content;
@@ -67,7 +79,6 @@ postRef.on('value', function(snapshot) {
             id = postId;
             lat = childData2.lat;
             lng = childData2.lng;
-      
         }
 
     });
@@ -93,8 +104,6 @@ postRef.on('value', function(snapshot) {
                        }
         }); 
 
-
-
         //連接使用者留言照片、留言網頁
         var userRef = firebase.database().ref('users/'+user.uid);
         userRef.once('value',function(snapshot){
@@ -113,16 +122,10 @@ postRef.on('value', function(snapshot) {
 
          }
 
-
-
-
         });
-
 
       }else{ }
 
-
-  
       var commentsRef = firebase.database().ref('Comment/'+id);
       commentsRef.on('child_added', function(snap) {
 
@@ -130,12 +133,9 @@ postRef.on('value', function(snapshot) {
         
       });    
 
-
-
   });
 
    
-
       var uluru = {lat: lat, lng: lng};
       var map = new google.maps.Map(document.getElementById('GoogleMap'), {
         zoom: 15,
@@ -354,7 +354,6 @@ firebase.auth().onAuthStateChanged(function(user) {
               
         var userid = user.uid; 
         var username; 
-        
         if (!user.displayName){
 
           username = '匿名使用者';
@@ -364,7 +363,6 @@ firebase.auth().onAuthStateChanged(function(user) {
           username = user.displayName;
 
         }
-
 
 
         // 點擊愛心
@@ -377,85 +375,110 @@ firebase.auth().onAuthStateChanged(function(user) {
 
               likeRef.once('value',function(snapshot){
 
-                    var count = snapshot.val().like_count;
-                   
-                  
-                    //如果有likes欄位->已經有人按讚、如果likes欄位有使用者的ID -> 已經按過讚了
-                    if(snapshot.child('like_user').exists() && snapshot.child('like_user').hasChild(userid)){
+                var count = snapshot.val().like_count;
+                
+                //如果有likes欄位->已經有人按讚、如果likes欄位有使用者的ID -> 已經按過讚了
+                if(snapshot.child('like_user').exists() && snapshot.child('like_user').hasChild(userid)){
 
-                        postRef.child(c).child(id).child('like_user').child(userid).remove();
-                        count--;
-                        postRef.child(c).child(id).child('like_count').set(count);
-                        toggle = false;
+                  postRef.child(c).child(id).child('like_user').child(userid).remove();
+                  count--;
+                  postRef.child(c).child(id).child('like_count').set(count);
+                  toggle = false;
 
                                       
-                    }else{
+                }else{
 
-                        postRef.child(c).child(id).child('like_user').child(userid).set(true);
-                        count++;
-                        postRef.child(c).child(id).child('like_count').set(count);
-                        toggle = true;
+                  postRef.child(c).child(id).child('like_user').child(userid).set(true);
+                  count++;
+                  postRef.child(c).child(id).child('like_count').set(count);
+                  toggle = true;
 
-                       }
+                }
 
-                       //改變btn上的讚數
-                       like.innerHTML = count;      
+                //改變btn上的讚數
+                like.innerHTML = count; 
+
               });   
+        });
 
-              });
-
-      
-
-      
-           //如果提交comment 
-           comment_input.addEventListener("keyup",function(event){
+            
+        //提交comment 
+        comment_input.addEventListener("keyup",function(event){
                   
-              event.preventDefault();
+          event.preventDefault();
 
-              if (event.keyCode == 13) {
+          if (event.keyCode == 13) {
 
-                  var d = new Date();
-                  var date = d.toLocaleDateString()+" "+d.toLocaleTimeString();
-                  var timestamp = Math.floor(Date.now());
+            var d = new Date();
+            var date = d.toLocaleDateString()+" "+d.toLocaleTimeString();
+            var timestamp = Math.floor(Date.now());
 
-                  if (!comment_input.value){
+            //判斷留言是否為空白
+            if (!comment_input.value){
 
+              //不可提交空白留言
 
+            }else{
 
-                  }else{
+            //上傳留言到firebase
+            var commentRef = firebase.database().ref('Comment/'+id);
+            commentRef.child(timestamp).set({
 
-                  //Comment/PostId
-                  var commentRef = firebase.database().ref('Comment/'+id);
-                  commentRef.child(timestamp).set({
+              userid: userid,
+              c_content: comment_input.value,
+              username: username,
+              date: date,
+              timestamp: timestamp,
+              photo_url: current_comment_user.src
 
-                    userid: userid,
-                    c_content: comment_input.value,
-                    username: username,
-                    date: date,
-                    timestamp: timestamp,
-                    photo_url: current_comment_user.src
+            })
 
-
-                  })
-
-                  comment_input.value = '';
+              comment_input.value = '';
 
                   }
-              }
+          }
 
-           });
+        });
+
+        //刪除文章
+        document.querySelector('#delete').addEventListener('click',function(){
+
+
+              
+           // var delete_id = this.id;//delete btn1 btn2 ...
+           // var i = delete_id.split('delete')[1] - 1;//得到key1 key2 key3...
+
+          
+           // var r=confirm("確定刪除？")
+           //  if (r==true){
+           //  articleRef.child(keyArr[i]).remove();
+           //  location.reload(); //*可能需要ajax
+           //  }  
+
+
+        });
+
+
+
+
+
+
+
+
+
 
      } else {
                       
           user = null;
           //alert ('您尚未登入');                
-            
-             }
+          }
 
  });
 
 
 
+
+ //新增留言架構
  function commentHtmlFromObject(commentlist){
 
        var html = '';
@@ -473,24 +496,4 @@ firebase.auth().onAuthStateChanged(function(user) {
         html += '</div>';
         return html;
 
-
-
-
  }
- // <hr>
- //                    <div class="comment-container">
- //                        <div class="user-pic">
- //                            <a href="user.html">
- //                                <img id="c_image">
- //                            </a>
- //                        </div>
- //                        <div class="user-comment">
- //                            <div><a href="user.html" id="c_user">邵家怡</a></div>
-                            
- //                        </div>
- //                    </div>
-
- 
-
-
-
