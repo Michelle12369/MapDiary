@@ -8,6 +8,7 @@ var content = document.querySelector('#content');
 var map = document.querySelector('iframe');
 var like = document.querySelector('#like');
 var heart = document.querySelector('#heart_btn');
+var like_div = document.querySelector('.like');
 //留言 (目前使用者)
 var current_comment_user = document.querySelector('#current_comment_user');
 var current_user_page = document.querySelector('#current_user_page');
@@ -61,6 +62,7 @@ postRef.on('value', function(snapshot) {
             //map.src = map_url+'&q='+childData2.lat+','+childData2.lng;
             image.src = childData2.p_photo;
             like.innerHTML = childData2.like_count;
+            like_div.style.visibility = 'visible';
             c = category;
             id = postId;
             lat = childData2.lat;
@@ -74,9 +76,6 @@ postRef.on('value', function(snapshot) {
 
 
   firebase.auth().onAuthStateChanged(function(user) {
-
-
-        
 
         if(user){
 
@@ -102,34 +101,40 @@ postRef.on('value', function(snapshot) {
 
          current_comment_user.style = 'visible';
          comment_input.style = 'visible';
-         current_comment_user.src = snapshot.val().pic;
          current_user_page.href = 'user.html?key='+user.uid;
+
+         if(!snapshot.val().pic){
+
+          current_comment_user.src = 'img/man.png';
+
+         }else{
+
+           current_comment_user.src = snapshot.val().pic;
+
+         }
+
+
+
 
         });
 
 
       }else{ }
 
+
+  
       var commentsRef = firebase.database().ref('Comment/'+id);
-      
+      commentsRef.on('child_added', function(snap) {
 
+        document.querySelector('#commentlist').innerHTML += commentHtmlFromObject(snap.val());
+        
+      });    
 
-      commentsRef.on("child_added", function(snap) {
-
-
-        var users = firebase.database().ref('users/'+snap.val().userid);
-        users.once('value',function(snapshot){
-
-            var pic  = snapshot.val().pic;
-            document.querySelector('#commentlist').innerHTML += commentHtmlFromObject(snap.val(),pic);
-
-        });
-
-      });
 
 
   });
 
+   
 
       var uluru = {lat: lat, lng: lng};
       var map = new google.maps.Map(document.getElementById('GoogleMap'), {
@@ -343,7 +348,6 @@ postRef.on('value', function(snapshot) {
 
 
 
-// 點擊愛心
 firebase.auth().onAuthStateChanged(function(user) {
 
     if (user) {
@@ -363,6 +367,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 
 
 
+        // 點擊愛心
         heart.addEventListener('click',function(e){
            
 
@@ -409,19 +414,33 @@ firebase.auth().onAuthStateChanged(function(user) {
 
               if (event.keyCode == 13) {
 
+                  var d = new Date();
+                  var date = d.toLocaleDateString()+" "+d.toLocaleTimeString();
+                  var timestamp = Math.floor(Date.now());
+
+                  if (!comment_input.value){
+
+
+
+                  }else{
+
                   //Comment/PostId
                   var commentRef = firebase.database().ref('Comment/'+id);
-                  commentRef.push({
+                  commentRef.child(timestamp).set({
 
                     userid: userid,
                     c_content: comment_input.value,
-                    username: username
+                    username: username,
+                    date: date,
+                    timestamp: timestamp,
+                    photo_url: current_comment_user.src
 
 
                   })
 
                   comment_input.value = '';
 
+                  }
               }
 
            });
@@ -437,14 +456,16 @@ firebase.auth().onAuthStateChanged(function(user) {
 
 
 
- function commentHtmlFromObject(commentlist,pic){
+ function commentHtmlFromObject(commentlist){
 
        var html = '';
         html += '<hr>';
           html += '<div class="comment-container">';
+           html += '<div class="user-pic">';
             html += '<a href="user.html?key='+commentlist.userid+'">';
-            html += '<img src="'+pic+'">';
+            html += '<img src="'+commentlist.photo_url+'">';
             html += '</a>';
+             html += '</div>';
           html += '<div class="user-comment">';
         html += '<div><a href="user.html?key='+commentlist.userid+'">'+commentlist.username+'</a></div>';
         html += '<div>'+commentlist.c_content+'</div>';
@@ -456,10 +477,6 @@ firebase.auth().onAuthStateChanged(function(user) {
 
 
  }
-
-
-
-
  // <hr>
  //                    <div class="comment-container">
  //                        <div class="user-pic">
