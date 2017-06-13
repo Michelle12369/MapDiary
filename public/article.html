@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/article.css">
     <link rel="icon" href="img/favicon.png">
+    <script src="https://cloud.tinymce.com/stable/tinymce.min.js"></script>
 </head>
 
 <body>
@@ -109,7 +110,7 @@
                 <!--修改、刪除-->
                 <div id="change_post" style="visibility:hidden">
                      <hr>
-                     <p style="text-align:right"><span id="delete">刪除</span>  <span id="revise">修改</span></p>
+                     <p style="text-align:right"><span id="delete">刪除</span>  <span id="edit">修改</span> <span id="done" style="visibility:hidden">完成</span></p>
                 </div>
                 <!--按讚-->
                 <div class="like" style="visibility:hidden">
@@ -120,7 +121,7 @@
                 <!--留言-->
                 <div id="commentlist" class="comment">
                 </div>
-                <div class="comment">
+                <div id="commentuser" class="comment">
                     <hr>
                     <div class="comment-container">
                         <div class="user-pic">

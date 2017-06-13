@@ -459,14 +459,93 @@ firebase.auth().onAuthStateChanged(function(user) {
         });
 
 
+       
         //修改文章
-        document.querySelector('#revise').addEventListener('click',function(){
+        document.querySelector('#edit').addEventListener('click',function(){
 
-
-            title.replaceWith(input);
            
+            var title = document.querySelector('#title');
+            like_div.style.visibility = 'hidden';
+            document.querySelector('#commentlist').style.visibility = 'hidden'; //留言列表、發表留言隱藏
+            document.querySelector('#commentuser').style.visibility = 'hidden';
+            //更換title -> input
+            var input = document.createElement('input');
+            input.id = "input";
+            input.value = title.innerHTML;
+            title.parentNode.insertBefore(input, title);
+            title.parentNode.removeChild(title);
+
+            //更換content
+            var textarea = document.createElement('textarea');
+            textarea.rows = 20;
+            content.parentNode.insertBefore(textarea, content);
+            tinymce.init({selector:'textarea'});
+            textarea.innerHTML = content.innerHTML;
+            content.parentNode.removeChild(content);
+            tinyMCE.activeEditor.setContent(textarea.value);
+
+
+            //更換button
+            document.querySelector('#done').style.visibility = 'visible';
+            document.querySelector('#edit').style.visibility = 'hidden';
+ 
+
 
         });
+
+
+                   
+            document.querySelector('#done').addEventListener('click',function(){
+
+
+                    var ntitle = document.querySelector('#input').value;
+                    //category = $('#myselect option:selected').text();
+                    var ncontent = tinyMCE.activeEditor.getContent();
+
+                  //確認是否填寫完畢(不完整)、會出現bug一直重複
+                    if (!ntitle || !ncontent){
+
+                        alert("您有缺漏的部分");
+
+                    }else{
+
+                       postRef.child(c).child(id).child('title').set(ntitle);
+                       postRef.child(c).child(id).child('p_content').set(ncontent);
+
+                        //變回title
+                        var title = document.createElement('h2');
+                        var input = document.querySelector('#input');
+                        title.id = "title";
+                        title.innerHTML = input.value;
+                        input.parentNode.insertBefore(title, input);
+                        input.parentNode.removeChild(input);
+
+
+                        //變回content
+                        var textarea = document.querySelector('textarea');
+                        var content = document.createElement('div');
+                        textarea.parentNode.insertBefore(content, textarea);
+                        content.innerHTML = ncontent;
+                        textarea.parentNode.removeChild(textarea);
+                        tinymce.remove();
+                        
+
+
+                         like_div.style.visibility = 'visible';
+                         document.querySelector('#commentlist').style.visibility = 'visible'; //留言列表、發表留言隱藏
+                         document.querySelector('#commentuser').style.visibility = 'visible';
+                         document.querySelector('#done').style.visibility = 'hidden';
+                         document.querySelector('#edit').style.visibility = 'visible';
+ 
+
+
+
+                    }
+
+
+
+            });
+            
 
 
 
