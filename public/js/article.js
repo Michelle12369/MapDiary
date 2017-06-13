@@ -8,8 +8,12 @@ var content = document.querySelector('#content');
 var map = document.querySelector('iframe');
 var like = document.querySelector('#like');
 var heart = document.querySelector('#heart_btn');
+var like_div = document.querySelector('.like');
+//留言 (目前使用者)
+var current_comment_user = document.querySelector('#current_comment_user');
+var current_user_page = document.querySelector('#current_user_page');
+var comment_input = document.querySelector('#comment_input');
 var c,id,lat,lng;
-
 //Get the post ID (parameter) passed from search.html
 var query = location.search.substring(1);
 var parameters = {};
@@ -58,14 +62,11 @@ postRef.on('value', function(snapshot) {
             //map.src = map_url+'&q='+childData2.lat+','+childData2.lng;
             image.src = childData2.p_photo;
             like.innerHTML = childData2.like_count;
-            console.log(childData2.like_count);
-
+            like_div.style.visibility = 'visible';
             c = category;
             id = postId;
             lat = childData2.lat;
             lng = childData2.lng;
-
-
       
         }
 
@@ -74,44 +75,66 @@ postRef.on('value', function(snapshot) {
 
 
 
-
   firebase.auth().onAuthStateChanged(function(user) {
 
-
+        if(user){
 
         var likeRef2 = firebase.database().ref('Post/'+c+'/'+id);
         likeRef2.once('value',function(snapshot){
-
-
                  //如果有likes欄位->已經有人按讚、如果likes欄位有使用者的ID -> 已經按過讚了
                     if(snapshot.child('like_user').exists() && snapshot.child('like_user').hasChild(user.uid)){
-
                       heart.classList.add('likes-count');
                       heart.classList.toggle('like-click');
-                      
-                                      
+                                           
                     }else{
-
-                                 
+              
                       heart.classList.add('likes-count');
                                        
-
-
                        }
+        }); 
+
+
+
+        //連接使用者留言照片、留言網頁
+        var userRef = firebase.database().ref('users/'+user.uid);
+        userRef.once('value',function(snapshot){
+
+         current_comment_user.style = 'visible';
+         comment_input.style = 'visible';
+         current_user_page.href = 'user.html?key='+user.uid;
+
+         if(!snapshot.val().pic){
+
+          current_comment_user.src = 'img/man.png';
+
+         }else{
+
+           current_comment_user.src = snapshot.val().pic;
+
+         }
+
 
 
 
         });
 
 
+      }else{ }
 
 
+  
+      var commentsRef = firebase.database().ref('Comment/'+id);
+      commentsRef.on('child_added', function(snap) {
+
+        document.querySelector('#commentlist').innerHTML += commentHtmlFromObject(snap.val());
+        
+      });    
 
 
 
   });
 
-
+   
 
       var uluru = {lat: lat, lng: lng};
       var map = new google.maps.Map(document.getElementById('GoogleMap'), {
@@ -325,13 +348,26 @@ postRef.on('value', function(snapshot) {
 
 
 
-
 firebase.auth().onAuthStateChanged(function(user) {
 
     if (user) {
               
-        var userid = user.uid;  
+        var userid = user.uid; 
+        var username; 
+        
+        if (!user.displayName){
 
+          username = '匿名使用者';
+
+        }else{
+
+          username = user.displayName;
+
+        }
+
+
+
+        // 點擊愛心
         heart.addEventListener('click',function(e){
            
 
@@ -339,13 +375,11 @@ firebase.auth().onAuthStateChanged(function(user) {
               var likes = like.innerHTML;
               var likeRef = firebase.database().ref('Post/'+c+'/'+id);
 
-
               likeRef.once('value',function(snapshot){
 
                     var count = snapshot.val().like_count;
                    
                   
-
                     //如果有likes欄位->已經有人按讚、如果likes欄位有使用者的ID -> 已經按過讚了
                     if(snapshot.child('like_user').exists() && snapshot.child('like_user').hasChild(userid)){
 
@@ -353,7 +387,6 @@ firebase.auth().onAuthStateChanged(function(user) {
                         count--;
                         postRef.child(c).child(id).child('like_count').set(count);
                         toggle = false;
-
 
                                       
                     }else{
@@ -373,6 +406,45 @@ firebase.auth().onAuthStateChanged(function(user) {
 
       
 
+      
+           //如果提交comment 
+           comment_input.addEventListener("keyup",function(event){
+                  
+              event.preventDefault();
+
+              if (event.keyCode == 13) {
+
+                  var d = new Date();
+                  var date = d.toLocaleDateString()+" "+d.toLocaleTimeString();
+                  var timestamp = Math.floor(Date.now());
+
+                  if (!comment_input.value){
+
+
+
+                  }else{
+
+                  //Comment/PostId
+                  var commentRef = firebase.database().ref('Comment/'+id);
+                  commentRef.child(timestamp).set({
+
+                    userid: userid,
+                    c_content: comment_input.value,
+                    username: username,
+                    date: date,
+                    timestamp: timestamp,
+                    photo_url: current_comment_user.src
+
+
+                  })
+
+                  comment_input.value = '';
+
+                  }
+              }
+
+           });
+
      } else {
                       
           user = null;
@@ -382,6 +454,41 @@ firebase.auth().onAuthStateChanged(function(user) {
 
  });
 
+
+
+ function commentHtmlFromObject(commentlist){
+
+       var html = '';
+        html += '<hr>';
+          html += '<div class="comment-container">';
+           html += '<div class="user-pic">';
+            html += '<a href="user.html?key='+commentlist.userid+'">';
+            html += '<img src="'+commentlist.photo_url+'">';
+            html += '</a>';
+             html += '</div>';
+          html += '<div class="user-comment">';
+        html += '<div><a href="user.html?key='+commentlist.userid+'">'+commentlist.username+'</a></div>';
+        html += '<div>'+commentlist.c_content+'</div>';
+        html += '</div>';
+        html += '</div>';
+        return html;
+
+
+
+
+ }
+ // <hr>
+ //                    <div class="comment-container">
+ //                        <div class="user-pic">
+ //                            <a href="user.html">
+ //                                <img id="c_image">
+ //                            </a>
+ //                        </div>
+ //                        <div class="user-comment">
+ //                            <div><a href="user.html" id="c_user">邵家怡</a></div>
+                            
+ //                        </div>
+ //                    </div>
 
  
 
