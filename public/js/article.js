@@ -21,9 +21,9 @@ var keyValuePairs = query.split("=");
 var key = keyValuePairs[0];
 var value = keyValuePairs[1];
 parameters[key] = value;
+//
 var toggle = true;
 var postRef = firebase.database().ref('Post');
-
 
 
 
@@ -35,11 +35,11 @@ postRef.on('value', function(snapshot) {
   
   snapshot.forEach(function(childSnapshot) {
 
-    var category = childSnapshot.key;
+    category = childSnapshot.key;
 
     childSnapshot.forEach(function(postIDSnapshot){
 
-        var postId = postIDSnapshot.key;
+        postId = postIDSnapshot.key;
         var childData2 = postIDSnapshot.val();
 
         if (postId == value){
@@ -388,7 +388,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                       
                 }else{
 
-                  postRef.child(c).child(id).child('like_user').child(userid).set(true);
+                  postRef.child(c).child(id).child('like_user').child(userid).set(username);
                   count++;
                   postRef.child(c).child(id).child('like_count').set(count);
                   toggle = true;
@@ -444,26 +444,29 @@ firebase.auth().onAuthStateChanged(function(user) {
         document.querySelector('#delete').addEventListener('click',function(){
 
 
-              
-           // var delete_id = this.id;//delete btn1 btn2 ...
-           // var i = delete_id.split('delete')[1] - 1;//得到key1 key2 key3...
 
-          
-           // var r=confirm("確定刪除？")
-           //  if (r==true){
-           //  articleRef.child(keyArr[i]).remove();
-           //  location.reload(); //*可能需要ajax
-           //  }  
+            var r=confirm("確定刪除？")
+            
+            if (r==true){
+            
+             
+                postRef.child(c).child(id).remove();
+                alert('文章已刪除');
+                window.location.reload();
 
+            }  
 
         });
 
 
+        //修改文章
+        document.querySelector('#revise').addEventListener('click',function(){
 
 
+            title.replaceWith(input);
+           
 
-
-
+        });
 
 
 
