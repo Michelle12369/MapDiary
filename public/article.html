@@ -103,10 +103,25 @@
             <section class="result col-sm-6">
                 <div>
                     <h2 id="title"></h2>
-                    <p><span id="author"></span><span id="date"></span><span id="category"></span></p>
+                    <p><span id="author"></span><span id="date"></span><span id="category"></span>
+                        <div id="select" style="display:none;padding-top:20px;">
+                            <label for="category">文章分類</label>
+                            <select id="select_category" class="select-bar">
+                                <option value="Travel">旅行</option>
+                                <option value="Mood">心情</option>
+                                <option value="Friend">朋友</option>
+                                <option value="Food">美食</option>
+                                <option value="Charity">公益</option>
+                                <option value="Love">愛情</option>
+                                <option value="Family">家庭</option>
+                            </select>
+                        </div>
+                    </p>
                     <img id="image" class="article-pic">
                     <div id="content"></div>
                 </div>
+
+
                 <!--修改、刪除-->
                 <div id="change_post" style="visibility:hidden">
                      <hr>

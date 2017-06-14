@@ -9,11 +9,13 @@ var map = document.querySelector('iframe');
 var like = document.querySelector('#like');
 var heart = document.querySelector('#heart_btn');
 var like_div = document.querySelector('.like');
+var select = document.querySelector('#select');
+var select_category = document.querySelector('#select_category');
 //留言 (目前使用者)
 var current_comment_user = document.querySelector('#current_comment_user');
 var current_user_page = document.querySelector('#current_user_page');
 var comment_input = document.querySelector('#comment_input');
-var c,id,lat,lng;
+var c,id,lat,lng,uid,uphoto,uname;
 //Get the post ID (parameter) passed from search.html
 var query = location.search.substring(1);
 var parameters = {};
@@ -79,6 +81,9 @@ postRef.on('value', function(snapshot) {
             id = postId;
             lat = childData2.lat;
             lng = childData2.lng;
+            uname = childData2.username;
+            uid = childData2.userid;
+            uphoto = childData2.p_photo;
         }
 
     });
@@ -449,8 +454,10 @@ firebase.auth().onAuthStateChanged(function(user) {
             
              
                 postRef.child(c).child(id).remove();
+                var commentRef = firebase.database().ref('Comment/'+id);
+                commentRef.remove();
                 alert('文章已刪除');
-                window.location.reload();
+                window.location.replace("/user.html");
 
             }  
 
@@ -481,8 +488,14 @@ firebase.auth().onAuthStateChanged(function(user) {
             tinymce.init({selector:'textarea'});
             tinyMCE.activeEditor.setContent(content.innerHTML);
             content.parentNode.removeChild(content);
-            
 
+            //顯示 category
+            select.style.display = "";
+            type.style.display = "none";
+            author.style.display = "none";
+            date.style.display = "none";
+            select_category.value = c;
+            
             //更換button
             document.querySelector('#done').style.display = 'inline'; //完成鈕顯示
             document.querySelector('#edit').style.display = 'none';  //編輯鈕隱藏
@@ -497,8 +510,12 @@ firebase.auth().onAuthStateChanged(function(user) {
 
 
                     var ntitle = document.querySelector('#input').value;
-                    //category = $('#myselect option:selected').text();
                     var ncontent = tinyMCE.activeEditor.getContent();
+                    var category = select_category.options[select_category.options.selectedIndex].value;
+                    var d = new Date();
+                    var month = d.getMonth()+1;
+                    var date = d.getFullYear()+"/"+month+"/"+d.getDate();
+                    var timestamp = Math.floor(Date.now());
 
                   //確認是否填寫完畢(不完整)、會出現bug一直重複
                     if (!ntitle || !ncontent){
@@ -507,8 +524,40 @@ firebase.auth().onAuthStateChanged(function(user) {
 
                     }else{
 
-                        postRef.child(c).child(id).child('title').set(ntitle);
-                        postRef.child(c).child(id).child('p_content').set(ncontent);
+                        if (category!=c){
+
+                          postRef.child(c).child(id).remove();
+                          postRef.child(category).child(id).set({
+
+                               userid: uid,
+                               username: uname,
+                               title: ntitle,
+                               timestamp: timestamp,
+                               date: date,
+                               lat: lat,
+                               lng: lng,
+                               p_content: ncontent,
+                               p_photo: uphoto, 
+                               like_count: 0,
+
+                          })
+
+
+
+
+                        }else{
+
+
+                          postRef.child(c).child(id).child('title').set(ntitle);
+                          postRef.child(c).child(id).child('p_content').set(ncontent);
+                          postRef.child(c).child(id).child('date').set(date);
+                          postRef.child(c).child(id).child('timestamp').set(timestamp);
+
+
+                        }
+
+                        
+                        
 
                         //變回title
                         var title = document.createElement('h2');
@@ -529,12 +578,19 @@ firebase.auth().onAuthStateChanged(function(user) {
                         tinymce.remove();
                         
 
+                        //category變回文字
+                        select.style.display = 'none';
+                        type.style.display = '';
 
-                         like_div.style.visibility = 'visible';
-                         document.querySelector('#commentlist').style.visibility = 'visible'; //留言列表、發表留言隱藏
-                         document.querySelector('#commentuser').style.visibility = 'visible';
-                         document.querySelector('#done').style.display = 'none';
-                         document.querySelector('#edit').style.display = 'inline';
+
+
+                        like_div.style.visibility = 'visible';
+                        document.querySelector('#commentlist').style.visibility = 'visible'; //留言列表、發表留言隱藏
+                        document.querySelector('#commentuser').style.visibility = 'visible';
+                        document.querySelector('#done').style.display = 'none';
+                        document.querySelector('#edit').style.display = 'inline';
+                        
+            
  
 
 
