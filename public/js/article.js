@@ -126,12 +126,6 @@ postRef.on('value', function(snapshot) {
 
       }else{ }
 
-      var commentsRef = firebase.database().ref('Comment/'+id);
-      commentsRef.on('child_added', function(snap) {
-
-        document.querySelector('#commentlist').innerHTML += commentHtmlFromObject(snap.val());
-        
-      });    
 
   });
 
@@ -348,7 +342,10 @@ postRef.on('value', function(snapshot) {
 
 
 
+
+
 firebase.auth().onAuthStateChanged(function(user) {
+
 
     if (user) {
               
@@ -366,8 +363,9 @@ firebase.auth().onAuthStateChanged(function(user) {
 
 
         // 點擊愛心
-        heart.addEventListener('click',function(e){
-           
+        heart.addEventListener('click',function(event){
+
+              event.preventDefault();
 
               heart.classList.toggle('like-click');
               var likes = like.innerHTML;
@@ -435,7 +433,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 
               comment_input.value = '';
 
-                  }
+              }
           }
 
         });
@@ -494,7 +492,7 @@ firebase.auth().onAuthStateChanged(function(user) {
         });
 
 
-                   
+            //完成
             document.querySelector('#done').addEventListener('click',function(){
 
 
@@ -555,6 +553,15 @@ firebase.auth().onAuthStateChanged(function(user) {
           user = null;
           //alert ('您尚未登入');                
           }
+
+
+      var commentsRef = firebase.database().ref('Comment/'+value);
+      commentsRef.on('child_added', function(snap) {
+
+      document.querySelector('#commentlist').innerHTML += commentHtmlFromObject(snap.val());
+        
+      });  
+
 
  });
 
