@@ -15,7 +15,7 @@ var select_category = document.querySelector('#select_category');
 var current_comment_user = document.querySelector('#current_comment_user');
 var current_user_page = document.querySelector('#current_user_page');
 var comment_input = document.querySelector('#comment_input');
-var c,id,lat,lng,uid,uphoto,uname;
+var c,id,lat,lng,uid,uphoto,uname,ulike,userlike;
 //Get the post ID (parameter) passed from search.html
 var query = location.search.substring(1);
 var parameters = {};
@@ -84,6 +84,10 @@ postRef.on('value', function(snapshot) {
             uname = childData2.username;
             uid = childData2.userid;
             uphoto = childData2.p_photo;
+            ulike = childData2.like_count;
+            userlike = childData2.like_user;
+
+
         }
 
     });
@@ -468,11 +472,10 @@ firebase.auth().onAuthStateChanged(function(user) {
         //修改文章
         document.querySelector('#edit').addEventListener('click',function(){
 
-           
             var title = document.querySelector('#title');// <h2 id="title"></h2>
-            like_div.style.visibility = 'hidden';//按讚區塊隱藏
-            document.querySelector('#commentlist').style.visibility = 'hidden'; //留言列表
-            document.querySelector('#commentuser').style.visibility = 'hidden'; //發表留言隱藏
+            like_div.style.display = 'none';//按讚區塊隱藏
+            document.querySelector('#commentlist').style.display = 'none'; //留言列表
+            document.querySelector('#commentuser').style.display = 'none'; //發表留言隱藏
             //更換title -> input
             var input = document.createElement('input');//新增 <input>
             input.id = "input";//<input id="input">
@@ -508,13 +511,12 @@ firebase.auth().onAuthStateChanged(function(user) {
             //完成
             document.querySelector('#done').addEventListener('click',function(){
 
-
                     var ntitle = document.querySelector('#input').value;
                     var ncontent = tinyMCE.activeEditor.getContent();
                     var category = select_category.options[select_category.options.selectedIndex].value;
                     var d = new Date();
                     var month = d.getMonth()+1;
-                    var date = d.getFullYear()+"/"+month+"/"+d.getDate();
+                    var dates = d.getFullYear()+"/"+month+"/"+d.getDate();
                     var timestamp = Math.floor(Date.now());
 
                   //確認是否填寫完畢(不完整)、會出現bug一直重複
@@ -526,6 +528,14 @@ firebase.auth().onAuthStateChanged(function(user) {
 
                         if (category!=c){
 
+                          if (!userlike){
+
+
+                            userlike = null;
+
+
+                          }
+
                           postRef.child(c).child(id).remove();
                           postRef.child(category).child(id).set({
 
@@ -533,16 +543,20 @@ firebase.auth().onAuthStateChanged(function(user) {
                                username: uname,
                                title: ntitle,
                                timestamp: timestamp,
-                               date: date,
+                               date: dates,
                                lat: lat,
                                lng: lng,
                                p_content: ncontent,
                                p_photo: uphoto, 
-                               like_count: 0,
+                               like_count: ulike,
+                               like_user:  userlike 
 
                           })
 
+                          console.log(userlike);
+                          
 
+                          c = category;
 
 
                         }else{
@@ -550,14 +564,12 @@ firebase.auth().onAuthStateChanged(function(user) {
 
                           postRef.child(c).child(id).child('title').set(ntitle);
                           postRef.child(c).child(id).child('p_content').set(ncontent);
-                          postRef.child(c).child(id).child('date').set(date);
+                          postRef.child(c).child(id).child('date').set(dates);
                           postRef.child(c).child(id).child('timestamp').set(timestamp);
 
 
                         }
-
-                        
-                        
+       
 
                         //變回title
                         var title = document.createElement('h2');
@@ -581,18 +593,16 @@ firebase.auth().onAuthStateChanged(function(user) {
                         //category變回文字
                         select.style.display = 'none';
                         type.style.display = '';
+                        author.style.display = "";
+                        date.style.display = "";
 
 
 
-                        like_div.style.visibility = 'visible';
-                        document.querySelector('#commentlist').style.visibility = 'visible'; //留言列表、發表留言隱藏
-                        document.querySelector('#commentuser').style.visibility = 'visible';
+                        like_div.style.display = '';
+                        document.querySelector('#commentlist').style.display= ''; //留言列表、發表留言隱藏
+                        document.querySelector('#commentuser').style.display = '';
                         document.querySelector('#done').style.display = 'none';
                         document.querySelector('#edit').style.display = 'inline';
-                        
-            
- 
-
 
 
                     }
