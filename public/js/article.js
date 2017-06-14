@@ -464,30 +464,30 @@ firebase.auth().onAuthStateChanged(function(user) {
         document.querySelector('#edit').addEventListener('click',function(){
 
            
-            var title = document.querySelector('#title');
-            like_div.style.visibility = 'hidden';
-            document.querySelector('#commentlist').style.visibility = 'hidden'; //留言列表、發表留言隱藏
-            document.querySelector('#commentuser').style.visibility = 'hidden';
+            var title = document.querySelector('#title');// <h2 id="title"></h2>
+            like_div.style.visibility = 'hidden';//按讚區塊隱藏
+            document.querySelector('#commentlist').style.visibility = 'hidden'; //留言列表
+            document.querySelector('#commentuser').style.visibility = 'hidden'; //發表留言隱藏
             //更換title -> input
-            var input = document.createElement('input');
-            input.id = "input";
-            input.value = title.innerHTML;
-            title.parentNode.insertBefore(input, title);
-            title.parentNode.removeChild(title);
+            var input = document.createElement('input');//新增 <input>
+            input.id = "input";//<input id="input">
+            input.value = title.innerHTML;//title的文字讓他顯示在input中
+            title.parentNode.insertBefore(input, title);//插入到title之前
+            title.parentNode.removeChild(title);//刪除<h2 id="title"></h2>
 
             //更換content
-            var textarea = document.createElement('textarea');
-            textarea.rows = 20;
-            content.parentNode.insertBefore(textarea, content);
+            var content = document.querySelector('#content');
+            var textarea = document.createElement('textarea');//新增 <textarea>
+            textarea.rows = 20;//<textarea rows='20'>
+            content.parentNode.insertBefore(textarea, content);//加在content前
             tinymce.init({selector:'textarea'});
-            textarea.innerHTML = content.innerHTML;
+            tinyMCE.activeEditor.setContent(content.innerHTML);
             content.parentNode.removeChild(content);
-            tinyMCE.activeEditor.setContent(textarea.value);
-
+            
 
             //更換button
-            document.querySelector('#done').style.visibility = 'visible';
-            document.querySelector('#edit').style.visibility = 'hidden';
+            document.querySelector('#done').style.display = 'inline'; //完成鈕顯示
+            document.querySelector('#edit').style.display = 'none';  //編輯鈕隱藏
  
 
 
@@ -509,8 +509,8 @@ firebase.auth().onAuthStateChanged(function(user) {
 
                     }else{
 
-                       postRef.child(c).child(id).child('title').set(ntitle);
-                       postRef.child(c).child(id).child('p_content').set(ncontent);
+                        postRef.child(c).child(id).child('title').set(ntitle);
+                        postRef.child(c).child(id).child('p_content').set(ncontent);
 
                         //變回title
                         var title = document.createElement('h2');
@@ -524,6 +524,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                         //變回content
                         var textarea = document.querySelector('textarea');
                         var content = document.createElement('div');
+                        content.id = 'content';
                         textarea.parentNode.insertBefore(content, textarea);
                         content.innerHTML = ncontent;
                         textarea.parentNode.removeChild(textarea);
@@ -534,8 +535,8 @@ firebase.auth().onAuthStateChanged(function(user) {
                          like_div.style.visibility = 'visible';
                          document.querySelector('#commentlist').style.visibility = 'visible'; //留言列表、發表留言隱藏
                          document.querySelector('#commentuser').style.visibility = 'visible';
-                         document.querySelector('#done').style.visibility = 'hidden';
-                         document.querySelector('#edit').style.visibility = 'visible';
+                         document.querySelector('#done').style.display = 'none';
+                         document.querySelector('#edit').style.display = 'inline';
  
 
 
