@@ -15,7 +15,7 @@ var select_category = document.querySelector('#select_category');
 var current_comment_user = document.querySelector('#current_comment_user');
 var current_user_page = document.querySelector('#current_user_page');
 var comment_input = document.querySelector('#comment_input');
-var c,id,lat,lng,uid,uphoto,uname,ulike,userlike;
+var c,id,lat,lng,uid,uphoto,uname,ulike,userlike,garyid;
 //Get the post ID (parameter) passed from search.html
 var query = location.search.substring(1);
 var parameters = {};
@@ -86,6 +86,7 @@ postRef.on('value', function(snapshot) {
             uphoto = childData2.p_photo;
             ulike = childData2.like_count;
             userlike = childData2.like_user;
+            garyid = childData2.userid;
 
 
         }
@@ -373,7 +374,14 @@ firebase.auth().onAuthStateChanged(function(user) {
 
         // 點擊愛心
         heart.addEventListener('click',function(event){
-
+            //gary
+              firebase.database().ref('users/'+garyid+'/notification').push({
+                type: "like",
+                article: value,
+                reader: user.displayName,
+                read: false,
+              });
+              //gary
               event.preventDefault();
 
               heart.classList.toggle('like-click');
@@ -409,8 +417,16 @@ firebase.auth().onAuthStateChanged(function(user) {
         });
 
             
-        //提交comment 
+        //提交comment
         comment_input.addEventListener("keyup",function(event){
+            //gary
+              firebase.database().ref('users/'+garyid+'/notification').push({
+                type: "comment",
+                article: value,
+                reader: user.displayName,
+                read: false,
+              });
+              //gary
                   
           event.preventDefault();
 

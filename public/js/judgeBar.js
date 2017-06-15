@@ -3,6 +3,9 @@ var user;
 var Dname = document.getElementById('Dname');
 var SignIn = document.getElementById('SignIn');
 var profileName = document.getElementById('profile-name');
+var note = document.getElementById('note');
+var noteDetail = document.getElementById('noteDetail');
+var notekey = [""];
 firebase.auth().onAuthStateChanged(function(user) {
   if (user) {
     user = user;
@@ -39,6 +42,38 @@ firebase.auth().onAuthStateChanged(function(user) {
 
       // var i = user.email.indexOf("@");
       // Dname.innerHTML = user.email.slice(0,i)+"您好";
+//gary
+      var toNote = document.createElement('a');
+      var noteImg = document.createElement('img');
+      noteImg.src = "img/bell.png";
+      toNote.appendChild(noteImg);
+      noteImg.className += " dropclick";
+      note.appendChild(toNote);
+
+      var i = 0;
+      var noteref = firebase.database().ref('users/'+'2FMq4xAkxgerQQjRLIVardGmK2E2'+'/notification');
+      noteref.on('child_added', function(snap){
+        var article = snap.child('article').val();
+        var read = snap.child('read').val();
+        var reader = snap.child('reader').val();
+        var type = snap.child('type').val();
+        notekey[i] = snap.getKey();
+        i++;
+
+        var detail = document.createElement('a');
+        detail.className = "dropdown-item";
+        detail.href = "article.html?key="+article;
+        if(read==false){
+          detail.style.backgroundColor = "lightseagreen"; 
+        };
+        if(type=="like"){
+          detail.innerText = reader+"說你的文章讚";
+        }else{
+          detail.innerText = reader+"對你的文章留言";
+        };
+        noteDetail.append(detail);
+      });
+//gary
     }
     // user.sendEmailVerification(); 送驗證信
   } else {
@@ -63,3 +98,12 @@ signoutSmtBtn.addEventListener("click",function(){
   })
 },false);
 
+//gary
+note.addEventListener("click",function(){
+  for(var j=0;j<notekey.length;j++){
+    var noteref = firebase.database().ref('users/'+'2FMq4xAkxgerQQjRLIVardGmK2E2'+'/notification/'+notekey[j]+'/read');
+    noteref.set(
+      true
+    );
+  }
+});
