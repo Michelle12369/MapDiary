@@ -11,6 +11,13 @@ var heart = document.querySelector('#heart_btn');
 var like_div = document.querySelector('.like');
 var select = document.querySelector('#select');
 var select_category = document.querySelector('#select_category');
+//修改照片
+var uploadImage = document.querySelector('#file');
+var roundedImage = document.querySelector('#result');
+var image2 = document.querySelector('#image2');
+var button = document.querySelector('#button');
+var result = document.querySelector('#result');
+var selectedFile;
 //留言 (目前使用者)
 var current_comment_user = document.querySelector('#current_comment_user');
 var current_user_page = document.querySelector('#current_user_page');
@@ -26,7 +33,6 @@ parameters[key] = value;
 //
 var toggle = true;
 var postRef = firebase.database().ref('Post');
-
 
 
 
@@ -499,9 +505,60 @@ firebase.auth().onAuthStateChanged(function(user) {
             date.style.display = "none";
             select_category.value = c;
             
+
+
+
+            var modal = document.getElementById('myModal');
+            var btn = document.getElementById("myBtn");
+            var span = document.getElementsByClassName("close")[0]; 
+
+            uploadImage.addEventListener('change', function () {
+            selectedFile = this.files[0]; 
+
+            if (document.querySelector('.cropper-container') != null) {
+                document.querySelector('.cropper-container').remove();
+            }
+            if (this.files && this.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (ev) {
+                    var cropper = new Cropper(image2, {
+                        aspectRatio: 16 / 9,
+                    });
+                    cropper.replace(ev.target.result);
+
+                    button.onclick = function () {
+                        var croppedCanvas;
+                        // Crop
+                        croppedCanvas = cropper.getCroppedCanvas();
+                        // Show
+                        roundedImage.src = croppedCanvas.toDataURL('image/png');
+                        
+                    };
+                }
+
+                reader.readAsDataURL(this.files[0]);    
+            }
+
+        });
+
+
+          btn.onclick = function () {
+                modal.style.display = "block";
+          }
+          span.onclick = function () {
+                modal.style.display = "none";
+          }
+
+
+     
+
+
             //更換button
             document.querySelector('#done').style.display = 'inline'; //完成鈕顯示
             document.querySelector('#edit').style.display = 'none';  //編輯鈕隱藏
+
+
+
  
 
 
@@ -569,6 +626,22 @@ firebase.auth().onAuthStateChanged(function(user) {
 
 
                         }
+
+
+                        // var likeRef3 = firebase.database().ref('Post/'+c+'/'+id);
+                        // likeRef3.once('value',function(snapshot){
+                        //          //如果有likes欄位->已經有人按讚、如果likes欄位有使用者的ID -> 已經按過讚了
+                        //             if(snapshot.child('like_user').exists() && snapshot.child('like_user').hasChild(user.uid)){
+                        //               heart.classList.add('likes-count');
+                        //               heart.classList.toggle('like-click');
+                                                           
+                        //             }else{
+                              
+                        //               heart.classList.add('likes-count');
+                                                       
+                        //                }
+                        // }); 
+
        
 
                         //變回title
@@ -623,10 +696,9 @@ firebase.auth().onAuthStateChanged(function(user) {
 
       var commentsRef = firebase.database().ref('Comment/'+value);
       commentsRef.on('child_added', function(snap) {
-
-      document.querySelector('#commentlist').innerHTML += commentHtmlFromObject(snap.val());
-        
+      document.querySelector('#commentlist').innerHTML += commentHtmlFromObject(snap.val());    
       });  
+
 
 
  });
