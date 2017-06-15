@@ -6,35 +6,33 @@ var profileName = document.getElementById('profile-name');
 firebase.auth().onAuthStateChanged(function(user) {
   if (user) {
     user = user;
-     console.log(SignIn);
+     // console.log(SignIn);
     SignIn.innerHTML = "";
     if(user.photoURL != null){
 
       var toUser = document.createElement("a");
-      toUser.href = "user.html";
       var img = document.createElement("img");
       img.src = user.photoURL;
       toUser.append(img);
-      // img.className += " dropclick";
+      img.className += " dropclick";
 
       var triangle = document.createElement("span");
-      triangle.innerHTML = "▼";
-      triangle.className += " dropclick";
+      // triangle.innerHTML = "▼";
+      // triangle.className += " dropclick";
 
       Dname.append(toUser);
       Dname.append(triangle);
 
     } else {
       var toUser = document.createElement("a");
-      toUser.href = "user.html";
       var img = document.createElement("img");
       img.src = "img/man.png";
       toUser.append(img);
-      // img.className += " dropclick";
+      img.className += " dropclick";
 
       var triangle = document.createElement("span");
-      triangle.innerHTML = "▼";
-      triangle.className += " dropclick";
+      // triangle.innerHTML = "▼";
+      // triangle.className += " dropclick";
 
       Dname.append(toUser);
       Dname.append(triangle);
@@ -59,6 +57,7 @@ var signoutSmtBtn = document.getElementById("signoutSmtBtn");
 signoutSmtBtn.addEventListener("click",function(){
   firebase.auth().signOut().then(function() {
     console.log("User sign out!");
+    document.location.href='/index.html';
   }, function(error) {
     console.log("User sign out error!");
   })

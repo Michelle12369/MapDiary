@@ -32,6 +32,11 @@ fbLoginBtn.addEventListener("click",function(){
       name: loginUser.displayName,
       pic:loginUser.photoURL
     });
+
+
+    document.location.href='/index.html';
+
+
     // console.log(loginUser.photoURL);
     // firebase.storage().ref().child('users').set(loginUser.photoURL).then(function(snapshot) {
     //   console.log("pic save");

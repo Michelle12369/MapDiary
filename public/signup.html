@@ -33,8 +33,50 @@
                 </select>
             <input type="submit" value="搜尋" class="search" />
         </form>
-        <div class="right">
-            <a class="nav-link" href="signin.html">登入</a>
+
+        <style type="text/css">
+            .nav-right{
+                color:white;
+                float: right;
+            }
+            .nav-right img{
+                cursor: pointer;
+                width: 40px;
+                margin-right:10px;
+            }
+            .nav-right>span{
+                vertical-align: top;
+                display: inline-block;
+                margin-top:16px;
+                cursor: pointer;
+            }
+            .dropdown{
+                /*margin:12px;*/
+            }
+            #Dname{
+                vertical-align: top;
+            }
+            .dropdown-content{
+                top:64px;
+            }
+        </style>
+        <!-- <a href="/user.html" class="nav-right" id="Dname"></a> -->
+        <!-- <a href="/signin.html" class="nav-right" id="SignIn"></a> -->
+        <!-- <a class="nav-link" href="signin.html">登入</a>
+        <a class="nav-link" href="signup.html">註冊 </a>  -->
+        <div class="dropdown">
+            <div class="dropbtn">
+
+                <!-- <a id="Dname"></a> -->
+                <a  class="nav-right" id="Dname"></a>
+                <a href="/signin.html" class="nav-right" id="SignIn"></a>
+
+            </div>
+            <div class="dropdown-content dropMenu">
+                <a class="dropdown-item" href="edit.html">新增文章</a>
+                <a class="dropdown-item" href="user.html">個人頁面</a>
+                <a class="dropdown-item" id="signoutSmtBtn">登出</a>
+            </div>
         </div>
     </nav>
     
@@ -58,11 +100,11 @@
         </form> -->
         <h3>帳號</h3>
         <lable for="account"></lable>
-        <input id="account" type="text">
+        <input id="account" type="text" style="width: 100%;">
         <h3>密碼</h3>
         <lable for="pwd"></lable>
-        <input id="pwds" type="password">
-        <button type="submit" id="registerSmtBtn">Signup</button>
+        <input id="pwds" type="password" style="width: 100%;">
+        <button type="submit" id="registerSmtBtn" class="sign-btn">Signup</button>
         <hr>
         <button id="fbLoginBtn" class="sign-btn">FB 登入</button>
     </div>
@@ -83,4 +125,7 @@
 </script>
 <script type="text/javascript" src="js/signUp.js"></script>
 <script type="text/javascript" src="js/fb_login.js"></script>
+<script type="text/javascript" src="js/main.js"></script>
+<script type="text/javascript" src="js/judgeBar.js"></script>
+<script type="text/javascript" src="js/login.js"></script>
 </html>
