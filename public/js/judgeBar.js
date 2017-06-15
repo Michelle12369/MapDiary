@@ -42,7 +42,9 @@ firebase.auth().onAuthStateChanged(function(user) {
 
       // var i = user.email.indexOf("@");
       // Dname.innerHTML = user.email.slice(0,i)+"您好";
-//gary
+    }
+
+    //gary
       var toNote = document.createElement('a');
       var noteImg = document.createElement('img');
       noteImg.src = "img/bell.png";
@@ -51,7 +53,7 @@ firebase.auth().onAuthStateChanged(function(user) {
       note.appendChild(toNote);
 
       var i = 0;
-      var noteref = firebase.database().ref('users/'+'2FMq4xAkxgerQQjRLIVardGmK2E2'+'/notification');
+      var noteref = firebase.database().ref('users/'+user.uid+'/notification');
       noteref.on('child_added', function(snap){
         var article = snap.child('article').val();
         var read = snap.child('read').val();
@@ -74,7 +76,6 @@ firebase.auth().onAuthStateChanged(function(user) {
         noteDetail.append(detail);
       });
 //gary
-    }
     // user.sendEmailVerification(); 送驗證信
   } else {
     user = null;
@@ -101,7 +102,7 @@ signoutSmtBtn.addEventListener("click",function(){
 //gary
 note.addEventListener("click",function(){
   for(var j=0;j<notekey.length;j++){
-    var noteref = firebase.database().ref('users/'+'2FMq4xAkxgerQQjRLIVardGmK2E2'+'/notification/'+notekey[j]+'/read');
+    var noteref = firebase.database().ref('users/'+user.uid+'/notification/'+notekey[j]+'/read');
     noteref.set(
       true
     );
