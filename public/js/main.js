@@ -18,7 +18,7 @@ function dropdown() {
 
 // Close the dropdown if the user clicks outside of it
 window.onclick = function (e) {
-    if (!e.target.matches('.dropbtn>a>.dropclick')) {
+    if (!e.target.matches('.dropbtn>a>a>.dropclick')) {
         dropmenu.forEach(menu => {
             if (menu.classList.contains('show')) {
                 menu.classList.remove('show');

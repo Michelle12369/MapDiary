@@ -82,6 +82,7 @@ submit.addEventListener('click', function () {
 
             alert( "沒有填寫完整" ); 
 
+
         }else if (!selectedFile){
 
             alert("您尚未選擇圖片");
@@ -106,8 +107,8 @@ submit.addEventListener('click', function () {
             downloadURL = uploadTask.snapshot.downloadURL;
             firebase.auth().onAuthStateChanged(function(user) {
                 if (user) {
-                    console.log("signin");
-                    console.log(user);
+                    //console.log("signin");
+                    //console.log(user);
                     uploadPost(title,category,p_content,downloadURL,user.uid,user.displayName);  
 
 
@@ -129,12 +130,15 @@ function uploadPost(title, category, p_content, downloadURL,email,name) {
         var d = new Date();
         var month = d.getMonth()+1;
         var date = d.getFullYear()+"/"+month+"/"+d.getDate();
+        var timestamp = Math.floor(Date.now());
+      
 
-        console.log(email);
+       // console.log(email);
         var newPost = firebase.database().ref('Post/' + category).push({
             userid: email,
             username: name,
             title: title,
+            timestamp: timestamp,
             date: date,
             lat: lat,
             lng: lng,
