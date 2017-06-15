@@ -6,6 +6,7 @@ var profileName = document.getElementById('profile-name');
 var note = document.getElementById('note');
 var noteDetail = document.getElementById('noteDetail');
 var notekey = [""];
+var noteId = "";
 firebase.auth().onAuthStateChanged(function(user) {
   if (user) {
     user = user;
@@ -52,6 +53,7 @@ firebase.auth().onAuthStateChanged(function(user) {
       noteImg.className += " dropclick";
       note.appendChild(toNote);
 
+      noteId = user.uid;
       var i = 0;
       var noteref = firebase.database().ref('users/'+user.uid+'/notification');
       noteref.on('child_added', function(snap){
@@ -101,10 +103,9 @@ signoutSmtBtn.addEventListener("click",function(){
 
 //gary
 note.addEventListener("click",function(){
+  var updates = {};
   for(var j=0;j<notekey.length;j++){
-    var noteref = firebase.database().ref('users/'+user.uid+'/notification/'+notekey[j]+'/read');
-    noteref.set(
-      true
-    );
+    updates['users/'+noteId+'/notification/'+notekey[j]+'/read'] = true;
   }
+  firebase.database().ref().update(updates);
 });
