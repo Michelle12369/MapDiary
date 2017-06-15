@@ -91,7 +91,7 @@
         <div class="row">
 
             <!--搜尋結果-->
-            <section class="col-sm-12">
+            <section class="result col-sm-12">
                 <div class="container">
                     <h2>搜尋結果</h2>
                     <div class="row"  id="AddArticle">
@@ -124,34 +124,57 @@
     var search = decodeURIComponent(pairs[0]);
     console.log(kind, search);
 
-
     function add_col(i){
-    var Css_div = document.createElement('div');
-    Css_div.className = "col-md-6";
-    Css_div.id = i;
-    document.getElementById("AddArticle").appendChild(Css_div);
+        var Css_div = document.createElement('div');
+        Css_div.className = "col-md-6";
+        Css_div.id = i;
+        document.getElementById("AddArticle").appendChild(Css_div);
     }
 
+    if(search == ""){
+        var a = 0;
+        var ref = firebase.database().ref('Post/'+kind);
+        ref.on('child_added', function(snap){
+            a++;
+            add_col(a);
+            var url = document.createElement('a');
+            url.href = "article.html?key="+snap.getKey();
+            url.id = "url_"+a;
+            document.getElementById(a).appendChild(url);
+            var photo = document.createElement('img');
+            photo.src = snap.child('p_photo').val();
+            document.getElementById("url_"+a).appendChild(photo);
+            var user_locotion = document.createElement('h3');
+            var location_text = document.createTextNode(snap.child('title').val());
+            user_locotion.appendChild(location_text);
+            document.getElementById("url_"+a).appendChild(user_locotion);
+            var user_name = document.createElement('p');
+            var name_text = document.createTextNode(snap.child('username').val());
+            user_name.appendChild(name_text);
+            document.getElementById("url_"+a).appendChild(user_name);
+        });
+    }else{
+        var ref = firebase.database().ref('Post/'+kind);
+        ref.orderByChild('title').equalTo(search).on('child_added', function(snap){
+            add_col(1);
+            var url = document.createElement('a');
+            url.href = "article.html?key="+snap.getKey();
+            url.id = "url_1";
+            document.getElementById("1").appendChild(url);
+            var photo = document.createElement('img');
+            photo.src = snap.child('p_photo').val();
+            document.getElementById("url_1").appendChild(photo);
+            var user_locotion = document.createElement('h3');
+            var location_text = document.createTextNode(snap.child('title').val());
+            user_locotion.appendChild(location_text);
+            document.getElementById("url_1").appendChild(user_locotion);
+            var user_name = document.createElement('p');
+            var name_text = document.createTextNode(snap.child('username').val());
+            user_name.appendChild(name_text);
+            document.getElementById("url_1").appendChild(user_name);
+        });
+    }
 
-    var ref = firebase.database().ref('Post/'+kind);
-    ref.orderByChild('title').equalTo(search).on('child_added', function(snap){
-        add_col(1);
-        var url = document.createElement('a');
-        url.href = "article.html?key="+snap.getKey();
-        url.id = "url_1";
-        document.getElementById("1").appendChild(url);
-        var photo = document.createElement('img');
-        photo.src = snap.child('p_photo').val();
-        document.getElementById("url_1").appendChild(photo);
-        var user_locotion = document.createElement('h3');
-        var location_text = document.createTextNode(snap.child('title').val());
-        user_locotion.appendChild(location_text);
-        document.getElementById("url_1").appendChild(user_locotion);
-        var user_name = document.createElement('p');
-        var name_text = document.createTextNode(snap.child('username').val());
-        user_name.appendChild(name_text);
-        document.getElementById("url_1").appendChild(user_name);
-    });
     </script>
 
     <script src="js/main.js"></script>
