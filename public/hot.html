@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Mapping</title>
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/bootstrap-grid.min.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/search.css">
+    <link rel="icon" href="img/favicon.png">
+</head>
+
+<body>
+    <!--navbar 與搜尋列-->
+<nav>
+        <a href="index.html">
+            <img src="img/logo.png" alt="logo" class="logo">
+        </a>
+        <form class="">
+            <input type="text" name="search" placeholder="城市、地點" class="form-control mr-sm-2">
+            <select class="select-bar">
+                <option value="-">-</option>
+                <option value="旅行">旅行</option>
+                <option value="美食">美食</option>
+                <option value="愛情">愛情</option>
+                <option value="心情">心情</option>
+                <option value="公益">公益</option>
+                <option value="親子">親子</option>
+                <option value="朋友">朋友</option>
+            </select>
+            <input type="submit" value="搜尋" class="search" />
+        </form>
+        <div class="triangle">
+            <img src="img/triangle.png" alt="triangle">
+        </div>
+        <style type="text/css">
+            .nav-right{
+                color:black;
+                float: right;
+            }
+            .nav-right img{
+                cursor: pointer;
+                width: 40px;
+                margin-right:10px;
+            }
+            .nav-right>span{
+                vertical-align: top;
+                display: inline-block;
+                margin-top:16px;
+            }
+            .dropdown{
+                /*margin:12px;*/
+            }
+            #Dname{
+                vertical-align: top;
+            }
+            .dropdown-content{
+                top:64px;
+            }
+        </style>
+        <!-- <a href="/user.html" class="nav-right" id="Dname"></a> -->
+        <!-- <a href="/signin.html" class="nav-right" id="SignIn"></a> -->
+        <!-- <a class="nav-link" href="signin.html">登入</a>
+        <a class="nav-link" href="signup.html">註冊 </a>  -->
+        <div class="dropdown">
+            <div class="dropbtn">
+
+                <!-- <a id="Dname"></a> -->
+                <a  class="nav-right" id="Dname"></a>
+                <a href="/signin.html" class="nav-right" id="SignIn"></a>
+
+            </div>
+            <div class="dropdown-content dropMenu">
+                <a class="dropdown-item" href="edit.html">新增文章</a>
+                <a class="dropdown-item" href="user.html">個人頁面</a>
+                <a class="dropdown-item" id="signoutSmtBtn">登出</a>
+            </div>
+        </div>
+         <div class="dropdown">
+            <div class="dropbtn">
+                <img src="img/bell.png" alt="" width="40px" class="dropclick"></a>
+            </div>
+            <div class="dropdown-content dropMenu">
+                <p class="dropdown-alert">訊息</p>
+                <a class="dropdown-item" href="article.html">劉皪說你的文章讚</a>
+                <a class="dropdown-item" href="article.html">劉皪對你的文章留言</a>
+            </div>
+        </div>
+    </nav>
+
+    <article class="container">
+        <div class="row">
+
+            <!--搜尋結果-->
+            <section class="result col-sm-6">
+                <div class="container">
+                    <h2>搜尋結果</h2>
+                    <div class="row"  id="AddArticle">
+                       
+                    </div>
+                </div>
+            </section>
+
+            <!--地圖-->
+            <div class="col-sm-6 map" id="GoogleMap"  style="width:100%; height: 710px;top:10px;" >
+
+            </div>
+        </div>
+    </article>
+
+
+
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAKhb8ChbvlUFoHRmLxuC1JoUtBu2zW6T8&callback=initMap">
+    </script>
+    <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.1.1/firebase.js"></script>
+
+    <script>
+    var query = location.search.substring(1);
+    var parameters = {};
+    var keyValuePairs = query.split("=");
+    var kind = keyValuePairs[0];
+    var value = keyValuePairs[1];
+    parameters[kind] = value;
+    var toggle = true;
+
+
+
+
+
+
+    var  Css_div = document.createElement('div');
+    function add_col(i){
+    Css_div = document.createElement('div');
+    var att = document.createAttribute("class");
+    att.value = "col-md-6";
+    Css_div.setAttributeNode(att);
+    var Css_id = document.createAttribute("id");
+    Css_id.value = i
+    Css_div.setAttributeNode(Css_id);
+    document.getElementById("AddArticle").appendChild(Css_div);
+  }
+   function del_col(i){
+
+      document.getElementById("AddArticle").removeChild(Css_div);
+
+
+   }
+
+    // Initialize Firebase
+    var config = {
+    apiKey: "AIzaSyCxtNaITKHzASF0PNhcr1mU6ah0Ru7FTqc",
+    authDomain: "sna-map-4f1bb.firebaseapp.com",
+    databaseURL: "https://sna-map-4f1bb.firebaseio.com",
+    projectId: "sna-map-4f1bb",
+    storageBucket: "sna-map-4f1bb.appspot.com",
+    messagingSenderId: "1022375312771"
+    };
+    firebase.initializeApp(config);
+
+    function initMap() {
+
+
+      var uluru = {lat: 25.98551343504224, lng: 121.57895565032959};
+      var map = new google.maps.Map(document.getElementById('GoogleMap'), {
+        zoom: 15,
+        center: uluru,
+        styles:[
+      {
+          "featureType": "water",
+          "elementType": "all",
+          "stylers": [
+              {
+                  "hue": "#7fc8ed"
+              },
+              {
+                  "saturation": 55
+              },
+              {
+                  "lightness": -6
+              },
+              {
+                  "visibility": "on"
+              }
+          ]
+      },
+      {
+          "featureType": "water",
+          "elementType": "labels",
+          "stylers": [
+              {
+                  "hue": "#7fc8ed"
+              },
+              {
+                  "saturation": 55
+              },
+              {
+                  "lightness": -6
+              },
+              {
+                  "visibility": "off"
+              }
+          ]
+      },
+      {
+          "featureType": "poi.park",
+          "elementType": "geometry",
+          "stylers": [
+              {
+                  "hue": "#83cead"
+              },
+              {
+                  "saturation": 1
+              },
+              {
+                  "lightness": -15
+              },
+              {
+                  "visibility": "on"
+              }
+          ]
+      },
+      {
+          "featureType": "landscape",
+          "elementType": "geometry",
+          "stylers": [
+              {
+                  "hue": "#f3f4f4"
+              },
+              {
+                  "saturation": -84
+              },
+              {
+                  "lightness": 59
+              },
+              {
+                  "visibility": "on"
+              }
+          ]
+      },
+      {
+          "featureType": "landscape",
+          "elementType": "labels",
+          "stylers": [
+              {
+                  "hue": "#ffffff"
+              },
+              {
+                  "saturation": -100
+              },
+              {
+                  "lightness": 100
+              },
+              {
+                  "visibility": "off"
+              }
+          ]
+      },
+      {
+          "featureType": "road",
+          "elementType": "geometry",
+          "stylers": [
+              {
+                  "hue": "#ffffff"
+              },
+              {
+                  "saturation": -100
+              },
+              {
+                  "lightness": 100
+              },
+              {
+                  "visibility": "on"
+              }
+          ]
+      },
+      {
+          "featureType": "road",
+          "elementType": "labels",
+          "stylers": [
+              {
+                  "hue": "#bbbbbb"
+              },
+              {
+                  "saturation": -100
+              },
+              {
+                  "lightness": 26
+              },
+              {
+                  "visibility": "on"
+              }
+          ]
+      },
+      {
+          "featureType": "road.arterial",
+          "elementType": "geometry",
+          "stylers": [
+              {
+                  "hue": "#ffcc00"
+              },
+              {
+                  "saturation": 100
+              },
+              {
+                  "lightness": -35
+              },
+              {
+                  "visibility": "simplified"
+              }
+          ]
+      },
+      {
+          "featureType": "road.highway",
+          "elementType": "geometry",
+          "stylers": [
+              {
+                  "hue": "#ffcc00"
+              },
+              {
+                  "saturation": 100
+              },
+              {
+                  "lightness": -22
+              },
+              {
+                  "visibility": "on"
+              }
+          ]
+      },
+      {
+          "featureType": "poi.school",
+          "elementType": "all",
+          "stylers": [
+              {
+                  "hue": "#d7e4e4"
+              },
+              {
+                  "saturation": -60
+              },
+              {
+                  "lightness": 23
+              },
+              {
+                  "visibility": "on"
+              }
+          ]
+      }
+  ]
+
+       });
+       var icons = {
+           user_icon: {
+             icon: 'img/icon/user_location.png'
+           },
+           travel_icon: {
+             icon: 'img/icon/travel.png '
+           }
+         };
+      var infoWindow = new google.maps.InfoWindow({map: map});
+      var pos = {  };
+
+      if (navigator.geolocation) {
+
+
+              navigator.geolocation.getCurrentPosition(function(position) {
+                pos = {
+                  lat: position.coords.latitude,
+                  lng: position.coords.longitude
+                };
+
+
+                infoWindow.setPosition(pos);
+                infoWindow.setContent('you are here!');
+                map.setCenter(pos);
+
+                console.log(pos);
+
+
+                var infowindow1 = new google.maps.InfoWindow({
+                content: "you are here!"
+             });
+
+               var marker = new google.maps.Marker({
+                 position: pos,
+                 title: '個人位置',
+                 icon: icons['user_icon'].icon,
+                // draggable: true,
+                 map: map
+
+               });
+
+               marker.addListener('click', function() {
+                infowindow1.open(map, marker);
+             });
+
+              }, function() {
+                handleLocationError(true, infoWindow, map.getCenter());
+              });
+            } else {
+              // Browser doesn't support Geolocation
+              handleLocationError(false, infoWindow, map.getCenter());
+            }
+
+
+
+    var userid = [];
+    var title = [];
+    var Lat = [];
+    var Lng = [];
+    var locations = [];
+    var newLocations = [];
+    var a=0;
+    var article_title_array = [];
+    var article_title = 0;
+
+    var ref = firebase.database().ref('Post');
+    ref.child(value).on("child_added", function(snapshot) {
+      locations.length = 0 ;
+      userid.length = 0 ;
+      title.length = 0  ;
+      var firebase_userid = snapshot.child('username').val();
+      var firebase_title = snapshot.child('title').val();
+      var firebaseLat = snapshot.child('lat').val();
+      var firebaseLng = snapshot.child('lng').val();
+      Lat.push(firebaseLat);
+      Lng.push(firebaseLng);
+      userid.push(firebase_userid);
+      title.push(firebase_title);
+
+
+map.addListener('dragend', function(e) {
+        a += 1;
+        var bounds = map.getBounds();
+        var ne = bounds.getNorthEast();
+        var sw = bounds.getSouthWest();
+
+    if (firebaseLat>= sw.lat() && firebaseLat<=ne.lat() && firebaseLng>= sw.lat() && firebaseLng>= ne.lat()){
+          if (firebaseLat!= null){
+            console.log(sw.lat(),firebaseLat,ne.lat());
+            var article_userid = snapshot.child('username').val();
+            var article_title = snapshot.child('title').val();
+            var acticle_key = snapshot.getKey();
+            var p_photo = snapshot.child('p_photo').val();
+
+      if (acticle_key != 0) {
+           if (article_title_array.includes(article_title)==false){
+            //auto article layout
+
+            //<div class="col-md-6" >
+            add_col(a)
+            //<a href="article.html">
+            var  url  = document.createElement('a');
+            var  url_href = document.createAttribute("href");
+            url_href.value = "article.html?key="+acticle_key;
+            url.setAttributeNode(url_href);
+            //var textnode = document.createTextNode("article.html"); 
+            //url.appendChild(textnode);  
+            document.getElementById(a).appendChild(url);
+            var url_id = document.createAttribute("id");
+            url_id.value = "url_"+a
+            url.setAttributeNode(url_id)
+
+            //<img src="./img/food.jpg" alt="hot issue">
+
+              var  photo  = document.createElement('img');
+              var  url_src = document.createAttribute("src");
+              url_src.value = p_photo;
+              photo.setAttributeNode(url_src)
+              var img_alt =  document.createAttribute("alt");
+              img_alt.value = 'hot issue';
+              photo.setAttributeNode(img_alt);
+              document.getElementById("url_"+a).appendChild(photo);
+              // <h3>北村豆腐家</h3>
+              var user_locotion = document.createElement('h3');
+              var location_text = document.createTextNode(article_title); 
+              article_title_array.push(article_title)
+              user_locotion.appendChild(location_text);  
+              document.getElementById("url_"+a).appendChild(user_locotion);
+              //  <p>台北市 邵家怡</p>
+              var user_name = document.createElement('p');
+              var name_text = document.createTextNode(article_userid); 
+              user_name.appendChild(name_text);  
+              document.getElementById("url_"+a).appendChild(user_name);
+
+          }
+        }
+        }
+}
+      });
+
+
+      map.addListener('zoom_changed', function() {
+        a += 1;
+        var bounds = map.getBounds();
+        var ne = bounds.getNorthEast();
+        var sw = bounds.getSouthWest();
+
+
+    if (firebaseLat>= sw.lat() && firebaseLat<=ne.lat() && firebaseLng>= sw.lat() && firebaseLng>= ne.lat()){
+          if (firebaseLat!= null){
+            console.log(sw.lat(),firebaseLat,ne.lat());
+            var article_userid = snapshot.child('username').val();
+            var article_title = snapshot.child('title').val();
+            var acticle_key = snapshot.getKey();
+            var p_photo =  snapshot.child('p_photo').val();
+
+      if (acticle_key != 0) {
+           if (article_title_array.includes(article_title)==false){
+            //auto article layout
+
+            //<div class="col-md-6" >
+            add_col(a)
+            //<a href="article.html">
+            var  url  = document.createElement('a');
+            var  url_href = document.createAttribute("href");
+            url_href.value = "article.html?key="+acticle_key;
+            url.setAttributeNode(url_href);
+            //var textnode = document.createTextNode("article.html"); 
+            //url.appendChild(textnode);  
+            document.getElementById(a).appendChild(url);
+            var url_id = document.createAttribute("id");
+            url_id.value = "url_"+a
+            url.setAttributeNode(url_id)
+
+            //<img src="./img/food.jpg" alt="hot issue">
+
+              var  photo  = document.createElement('img');
+              var  url_src = document.createAttribute("src");
+              url_src.value = p_photo;
+              photo.setAttributeNode(url_src)
+              var img_alt =  document.createAttribute("alt");
+              img_alt.value = 'hot issue';
+              photo.setAttributeNode(img_alt);
+              document.getElementById("url_"+a).appendChild(photo);
+              // <h3>北村豆腐家</h3>
+              var user_locotion = document.createElement('h3');
+              var location_text = document.createTextNode(article_title); 
+              article_title_array.push(article_title)
+              user_locotion.appendChild(location_text);  
+              document.getElementById("url_"+a).appendChild(user_locotion);
+              //  <p>台北市 邵家怡</p>
+              var user_name = document.createElement('p');
+              var name_text = document.createTextNode(article_userid); 
+              user_name.appendChild(name_text);  
+              document.getElementById("url_"+a).appendChild(user_name);
+
+          }
+        }
+        }
+
+
+                         }
+                    });
+
+
+
+
+
+
+      for(var i=0;i<Lat.length;i++){
+        var latLng = new google.maps.LatLng(Lat[i],Lng[i]);
+        locations.push(latLng);
+      //   var marker = new google.maps.Marker({
+      //   position: latLng,
+      //   map: map
+      // });
+
+    }
+
+    // var infowindow02 = new google.maps.InfoWindow({
+    //  content: article_title
+    // });
+
+
+      var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      var markers = locations.map(function(location, i) {
+      return new google.maps.Marker({
+       position: location,
+       label: labels[i % labels.length],
+       icon: icons['travel_icon'].icon
+
+       });
+       });
+      //  marker.addListener('click', function() {
+      //   infowindow02.open(map, markers);
+      //  });
+       var markerCluster = new MarkerClusterer(map, markers,
+             {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+
+
+      console.log(a);
+
+    });
+
+
+
+
+  }
+
+
+
+
+  function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+    infoWindow.setPosition(pos);
+    infoWindow.setContent(browserHasGeolocation ?
+                          'Error: The Geolocation service failed.' :
+                          'Error: Your browser doesn\'t support geolocation.');
+  }
+
+
+
+//gary
+    if(value=="Hot"){
+        var ref = firebase.database().ref('Post/Family');
+        ref.orderByChild('like_count').limitToLast(1).on('child_added', function(snap){
+            add_col(1);
+            var url = document.createElement('a');
+            url.href = "article.html?key="+snap.getKey();
+            url.id = "url_1";
+            document.getElementById("1").appendChild(url);
+            var photo = document.createElement('img');
+            photo.src = snap.child('p_photo').val();
+            document.getElementById("url_1").appendChild(photo);
+            var user_locotion = document.createElement('h3');
+            var location_text = document.createTextNode(snap.child('title').val());
+            user_locotion.appendChild(location_text);
+            document.getElementById("url_1").appendChild(user_locotion);
+            var user_name = document.createElement('p');
+            var name_text = document.createTextNode(snap.child('username').val());
+            user_name.appendChild(name_text);
+            document.getElementById("url_1").appendChild(user_name);
+        });
+        var ref = firebase.database().ref('Post/Food');
+        ref.orderByChild('like_count').limitToLast(1).on('child_added', function(snap){
+            add_col(2);
+            var url = document.createElement('a');
+            url.href = "article.html?key="+snap.getKey();
+            url.id = "url_2";
+            document.getElementById("2").appendChild(url);
+            var photo = document.createElement('img');
+            photo.src = snap.child('p_photo').val();
+            document.getElementById("url_2").appendChild(photo);
+            var user_locotion = document.createElement('h3');
+            var location_text = document.createTextNode(snap.child('title').val());
+            user_locotion.appendChild(location_text);
+            document.getElementById("url_2").appendChild(user_locotion);
+            var user_name = document.createElement('p');
+            var name_text = document.createTextNode(snap.child('username').val());
+            user_name.appendChild(name_text);
+            document.getElementById("url_2").appendChild(user_name);
+        });
+        var ref = firebase.database().ref('Post/Friend');
+        ref.orderByChild('like_count').limitToLast(1).on('child_added', function(snap){
+            add_col(3);
+            var url = document.createElement('a');
+            url.href = "article.html?key="+snap.getKey();
+            url.id = "url_3";
+            document.getElementById("3").appendChild(url);
+            var photo = document.createElement('img');
+            photo.src = snap.child('p_photo').val();
+            document.getElementById("url_3").appendChild(photo);
+            var user_locotion = document.createElement('h3');
+            var location_text = document.createTextNode(snap.child('title').val());
+            user_locotion.appendChild(location_text);
+            document.getElementById("url_3").appendChild(user_locotion);
+            var user_name = document.createElement('p');
+            var name_text = document.createTextNode(snap.child('username').val());
+            user_name.appendChild(name_text);
+            document.getElementById("url_3").appendChild(user_name);
+        });
+        var ref = firebase.database().ref('Post/Love');
+        ref.orderByChild('like_count').limitToLast(1).on('child_added', function(snap){
+            add_col(4);
+            var url = document.createElement('a');
+            url.href = "article.html?key="+snap.getKey();
+            url.id = "url_4";
+            document.getElementById("4").appendChild(url);
+            var photo = document.createElement('img');
+            photo.src = snap.child('p_photo').val();
+            document.getElementById("url_4").appendChild(photo);
+            var user_locotion = document.createElement('h3');
+            var location_text = document.createTextNode(snap.child('title').val());
+            user_locotion.appendChild(location_text);
+            document.getElementById("url_4").appendChild(user_locotion);
+            var user_name = document.createElement('p');
+            var name_text = document.createTextNode(snap.child('username').val());
+            user_name.appendChild(name_text);
+            document.getElementById("url_4").appendChild(user_name);
+        });
+        var ref = firebase.database().ref('Post/Mood');
+        ref.orderByChild('like_count').limitToLast(1).on('child_added', function(snap){
+            add_col(5);
+            var url = document.createElement('a');
+            url.href = "article.html?key="+snap.getKey();
+            url.id = "url_5";
+            document.getElementById("5").appendChild(url);
+            var photo = document.createElement('img');
+            photo.src = snap.child('p_photo').val();
+            document.getElementById("url_5").appendChild(photo);
+            var user_locotion = document.createElement('h3');
+            var location_text = document.createTextNode(snap.child('title').val());
+            user_locotion.appendChild(location_text);
+            document.getElementById("url_5").appendChild(user_locotion);
+            var user_name = document.createElement('p');
+            var name_text = document.createTextNode(snap.child('username').val());
+            user_name.appendChild(name_text);
+            document.getElementById("url_5").appendChild(user_name);
+        });
+        var ref = firebase.database().ref('Post/Travel');
+        ref.orderByChild('like_count').limitToLast(1).on('child_added', function(snap){
+            add_col(6);
+            var url = document.createElement('a');
+            url.href = "article.html?key="+snap.getKey();
+            url.id = "url_6";
+            document.getElementById("6").appendChild(url);
+            var photo = document.createElement('img');
+            photo.src = snap.child('p_photo').val();
+            document.getElementById("url_6").appendChild(photo);
+            var user_locotion = document.createElement('h3');
+            var location_text = document.createTextNode(snap.child('title').val());
+            user_locotion.appendChild(location_text);
+            document.getElementById("url_6").appendChild(user_locotion);
+            var user_name = document.createElement('p');
+            var name_text = document.createTextNode(snap.child('username').val());
+            user_name.appendChild(name_text);
+            document.getElementById("url_6").appendChild(user_name);
+        });
+    }
+//gary
+
+
+    </script>
+
+    <script src="js/main.js"></script>
+</body>
+    <script type="text/javascript" src="js/judgeBar.js"></script>
+</html>

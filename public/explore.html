@@ -480,7 +480,10 @@ if (navigator.geolocation)
 
       var ref = firebase.database().ref('Post');
     //child 要改成 value 然後解決search頁要取全部值的問題
-      ref.child(value).on("child_added", function(snapshot) {
+
+      ref.on("child_added", function(childSnapshot) {
+        childSnapshot.forEach(function(snapshot) {
+
           locations.length = 0 ;
           userid.length = 0 ;
           title.length = 0  ;
@@ -770,8 +773,9 @@ if (navigator.geolocation)
       var open_url = "article.html?key="+acticle_key
 
       var content_button = '<button'+" "+"onClick="+Open_Web(open_url)+">";
-
-      var icon_type = value+'_icon';
+      var title_icon =  snapshot.child('type').val();
+      console.log(title_icon);
+      var icon_type =  title_icon+'_icon';
       var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
       var infoWin = new google.maps.InfoWindow({
         content: article_title
@@ -784,6 +788,7 @@ if (navigator.geolocation)
       // The map() method here has nothing to do with the Google Maps API.
       var markers = locations.map(function(location, i)
       {
+
           var marker = new google.maps.Marker(
             {
              position: location,
@@ -807,6 +812,7 @@ if (navigator.geolocation)
              {
                imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'
              });
+      });
       });
 
   }

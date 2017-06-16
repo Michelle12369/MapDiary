@@ -25,14 +25,18 @@ fbLoginBtn.addEventListener("click",function(){
     console.log(FBUser);
     console.log(FBUser.displayName);
     loginUser = firebase.auth().currentUser;
-	console.log("登入使用者為",loginUser);
+	  console.log("登入使用者為",loginUser);
     firebase.database().ref('users/' + loginUser.uid).set({
+      userid: loginUser.uid,
 	    email: loginUser.email,
       name: loginUser.displayName,
       pic:loginUser.photoURL
-        // age : age.value
-    	// "資料"
     });
+
+
+    document.location.href='/index.html';
+
+
     // console.log(loginUser.photoURL);
     // firebase.storage().ref().child('users').set(loginUser.photoURL).then(function(snapshot) {
     //   console.log("pic save");
