@@ -263,7 +263,7 @@ postRef.on('value', function(snapshot) {
             content.innerHTML = childData2.p_content;
             //未來: 經緯度轉換成地址
             //map.src = map_url+'&q='+childData2.lat+','+childData2.lng;
-            aimage.src = childData2.p_photo;
+           
             like.innerHTML = childData2.like_count;
             like_div.style.visibility = 'visible';
             c = category;
@@ -275,6 +275,21 @@ postRef.on('value', function(snapshot) {
             uphoto = childData2.p_photo;
             ulike = childData2.like_count;
             userlike = childData2.like_user;
+
+            if (!childData2.link){
+
+               aimage.src = childData2.p_photo;
+
+            }else{
+
+               title.innerHTML = '<a href="'+childData2.link+'">'+childData2.title+'</a>';
+          
+
+            }
+
+
+
+           
 
 
         }
