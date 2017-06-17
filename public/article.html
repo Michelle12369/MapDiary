@@ -11,8 +11,9 @@
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/article.css">
     <link rel="icon" href="img/favicon.png">
-    <script src="https://cloud.tinymce.com/stable/tinymce.min.js"></script>
+    <link rel="stylesheet" href="css/edit.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/0.8.1/cropper.min.css" rel="stylesheet">
+    <script src="https://cloud.tinymce.com/stable/tinymce.min.js"></script>
 </head>
 
 <body>
@@ -118,10 +119,11 @@
                             </select>
                         </div>
                     </p>
-                    <div style="display:none">
+                    <div id="edit_btn" style="display:none;padding-top:20px">
                         <label for="photo">封面照片上傳</label>
                         <span id="myBtn">編輯圖片</span>
-                        <div id="myModal" class="modal">
+                    </div>
+                     <div id="myModal" class="modal">
                             <!-- Modal content -->
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -133,19 +135,22 @@
                                     <input id="file" type="file" accept='image/*'>
                                     <p>Step2. 裁切圖片</p>
                                     <div id="crop-img">
-                                        <img id="image2">
+                                        <img id="image">
                                     </div>
-                                    <button type="button" id="button">Crop</button>
+                                    <button type="crop_btn" id="button">Crop</button>
                                     <p>Step3. 圖片結果</p>
                                     <img id="result">
                                 </div>
                              </div>
-                        </div>
-                     </div>
+                    </div>
 
-                    <img id="image" class="article-pic">
+                    <img id="aimage" class="article-pic">
                     <div id="content"></div>
                 </div>
+
+
+                
+
 
 
                 <!--修改、刪除-->
@@ -182,12 +187,14 @@
             <!--地圖-->
             
                  <div class="col-sm-6 map" id="GoogleMap"  style="width:100%; height: 710px;top:10px;" >
+                 <input id="pac-input" class="controls" type="text" placeholder="地址" style="visibility:hidden">
+                 <img src="img/gps.png" id="gps" style="visibility:hidden">
             
         </div>
     </article>
     <script src="https://www.gstatic.com/firebasejs/4.1.1/firebase.js"></script>
     <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAKhb8ChbvlUFoHRmLxuC1JoUtBu2zW6T8&callback=initMap">
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAKhb8ChbvlUFoHRmLxuC1JoUtBu2zW6T8&libraries=places&callback=initMap">
 
     </script>
     <script>
@@ -205,6 +212,7 @@
     <script src="js/main.js"></script>
     <script src="js/article.js"></script>
     <script type="text/javascript" src="js/judgeBar.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/0.8.1/cropper.min.js"></script>
     </body>
 
 </html>

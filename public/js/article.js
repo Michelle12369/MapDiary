@@ -3,7 +3,7 @@ var title = document.querySelector('#title');
 var author = document.querySelector('#author');
 var date = document.querySelector('#date');
 var type = document.querySelector('#category');
-var image = document.querySelector('#image');
+var aimage = document.querySelector('#aimage');
 var content = document.querySelector('#content');
 var map = document.querySelector('iframe');
 var like = document.querySelector('#like');
@@ -11,12 +11,13 @@ var heart = document.querySelector('#heart_btn');
 var like_div = document.querySelector('.like');
 var select = document.querySelector('#select');
 var select_category = document.querySelector('#select_category');
+var input = document.querySelector('#pac-input');
+var gps = document.querySelector('#gps');
+
 //修改照片
-var uploadImage = document.querySelector('#file');
-var roundedImage = document.querySelector('#result');
-var image2 = document.querySelector('#image2');
-var button = document.querySelector('#button');
-var result = document.querySelector('#result');
+var modal = document.querySelector('#myModal');
+var btn = document.querySelector("#myBtn");
+var span = document.getElementsByClassName("close")[0]; 
 var selectedFile;
 //留言 (目前使用者)
 var current_comment_user = document.querySelector('#current_comment_user');
@@ -33,123 +34,8 @@ parameters[key] = value;
 //
 var toggle = true;
 var postRef = firebase.database().ref('Post');
-
-
-
-function initMap() {
-
-
-postRef.on('value', function(snapshot) {
-  
-  snapshot.forEach(function(childSnapshot) {
-
-    category = childSnapshot.key;
-
-    childSnapshot.forEach(function(postIDSnapshot){
-
-        postId = postIDSnapshot.key;
-        var childData2 = postIDSnapshot.val();
-
-        if (postId == value){
-      
-          title.innerHTML = childData2.title;
-
-          if (!childData2.username){
-
-             author.innerHTML = '匿名使用者'+" # ";
-
-          }else{
-
-             author.innerHTML = childData2.username+" # ";
-
-          }
-
-          firebase.auth().onAuthStateChanged(function(user) {
-
-              if (childData2.userid == user.uid){
-
-                document.querySelector('#change_post').style.visibility = 'visible';
-
-              }
-
-           });
-
-
-          date.innerHTML = childData2.date+" # ";
-          type.innerHTML = "關於 "+category;
-            content.innerHTML = childData2.p_content;
-            //未來: 經緯度轉換成地址
-            //map.src = map_url+'&q='+childData2.lat+','+childData2.lng;
-            image.src = childData2.p_photo;
-            like.innerHTML = childData2.like_count;
-            like_div.style.visibility = 'visible';
-            c = category;
-            id = postId;
-            lat = childData2.lat;
-            lng = childData2.lng;
-            uname = childData2.username;
-            uid = childData2.userid;
-            uphoto = childData2.p_photo;
-            ulike = childData2.like_count;
-            userlike = childData2.like_user;
-
-
-        }
-
-    });
-  });
-
-
-
-  firebase.auth().onAuthStateChanged(function(user) {
-
-        if(user){
-
-        var likeRef2 = firebase.database().ref('Post/'+c+'/'+id);
-        likeRef2.once('value',function(snapshot){
-                 //如果有likes欄位->已經有人按讚、如果likes欄位有使用者的ID -> 已經按過讚了
-                    if(snapshot.child('like_user').exists() && snapshot.child('like_user').hasChild(user.uid)){
-                      heart.classList.add('likes-count');
-                      heart.classList.toggle('like-click');
-                                           
-                    }else{
-              
-                      heart.classList.add('likes-count');
-                                       
-                       }
-        }); 
-
-        //連接使用者留言照片、留言網頁
-        var userRef = firebase.database().ref('users/'+user.uid);
-        userRef.once('value',function(snapshot){
-
-         current_comment_user.style = 'visible';
-         comment_input.style = 'visible';
-         current_user_page.href = 'user.html?key='+user.uid;
-
-         if(!snapshot.val().pic){
-
-          current_comment_user.src = 'img/man.png';
-
-         }else{
-
-           current_comment_user.src = snapshot.val().pic;
-
-         }
-
-        });
-
-      }else{ }
-
-
-  });
-
-   
-      var uluru = {lat: lat, lng: lng};
-      var map = new google.maps.Map(document.getElementById('GoogleMap'), {
-        zoom: 15,
-        center: uluru,
-        styles:[
+//
+var style = [
       {
           "featureType": "water",
           "elementType": "all",
@@ -332,6 +218,128 @@ postRef.on('value', function(snapshot) {
       }
   ]
 
+
+
+function initMap() {
+
+postRef.on('value', function(snapshot) {
+  
+  snapshot.forEach(function(childSnapshot) {
+
+    category = childSnapshot.key;
+
+    childSnapshot.forEach(function(postIDSnapshot){
+
+        postId = postIDSnapshot.key;
+        var childData2 = postIDSnapshot.val();
+
+        if (postId == value){
+      
+          title.innerHTML = childData2.title;
+
+          if (!childData2.username){
+
+             author.innerHTML = '匿名使用者'+" # ";
+
+          }else{
+
+             author.innerHTML = childData2.username+" # ";
+
+          }
+
+          firebase.auth().onAuthStateChanged(function(user) {
+
+              if (childData2.userid == user.uid){
+
+                document.querySelector('#change_post').style.visibility = 'visible';
+
+              }
+
+           });
+
+
+          date.innerHTML = childData2.date+" # ";
+          type.innerHTML = "關於 "+category;
+            content.innerHTML = childData2.p_content;
+            //未來: 經緯度轉換成地址
+            //map.src = map_url+'&q='+childData2.lat+','+childData2.lng;
+            aimage.src = childData2.p_photo;
+            like.innerHTML = childData2.like_count;
+            like_div.style.visibility = 'visible';
+            c = category;
+            id = postId;
+            lat = childData2.lat;
+            lng = childData2.lng;
+            uname = childData2.username;
+            uid = childData2.userid;
+            uphoto = childData2.p_photo;
+            ulike = childData2.like_count;
+            userlike = childData2.like_user;
+
+
+        }
+
+    });
+  });
+
+
+
+  firebase.auth().onAuthStateChanged(function(user) {
+
+        if(user){
+
+
+        var likeRef2 = firebase.database().ref('Post/'+c+'/'+id);
+        likeRef2.once('value',function(snapshot){
+
+          //如果有likes欄位->已經有人按讚、如果likes欄位有使用者的ID -> 已經按過讚了
+          if(snapshot.child('like_user').exists() && snapshot.child('like_user').hasChild(user.uid)){
+              heart.classList.add('likes-count');
+              heart.classList.toggle('like-click');
+                                           
+          }else{
+              
+              heart.classList.add('likes-count');
+                                       
+          }
+        }); 
+
+
+
+    
+
+        //連接使用者留言照片、留言網頁
+        var userRef = firebase.database().ref('users/'+user.uid);
+        userRef.once('value',function(snapshot){
+
+         current_comment_user.style = 'visible';
+         comment_input.style = 'visible';
+         current_user_page.href = 'user.html?key='+user.uid;
+
+         if(!snapshot.val().pic){
+
+          current_comment_user.src = 'img/man.png';
+
+         }else{
+
+           current_comment_user.src = snapshot.val().pic;
+
+         }
+
+        });
+
+      }else{ }
+
+
+  });
+
+   
+      var uluru = {lat: lat, lng: lng};
+      var map = new google.maps.Map(document.getElementById('GoogleMap'), {
+        zoom: 18,
+        center: uluru,
+        styles: style
+
        });
 
     var icon = {
@@ -375,6 +383,10 @@ firebase.auth().onAuthStateChanged(function(user) {
           username = user.displayName;
 
         }
+
+
+  
+
 
 
         // 點擊愛心
@@ -478,6 +490,9 @@ firebase.auth().onAuthStateChanged(function(user) {
         //修改文章
         document.querySelector('#edit').addEventListener('click',function(){
 
+
+            initMap2();
+
             var title = document.querySelector('#title');// <h2 id="title"></h2>
             like_div.style.display = 'none';//按讚區塊隱藏
             document.querySelector('#commentlist').style.display = 'none'; //留言列表
@@ -504,15 +519,37 @@ firebase.auth().onAuthStateChanged(function(user) {
             author.style.display = "none";
             date.style.display = "none";
             select_category.value = c;
-            
+               
+
+            //顯示編輯照片
+            document.querySelector('#edit_btn').style.display = '';
 
 
+            //更換button
+            document.querySelector('#done').style.display = 'inline'; //完成鈕顯示
+            document.querySelector('#edit').style.display = 'none';  //編輯鈕隱藏
 
-            var modal = document.getElementById('myModal');
-            var btn = document.getElementById("myBtn");
-            var span = document.getElementsByClassName("close")[0]; 
+        });
 
-            uploadImage.addEventListener('change', function () {
+
+          var uploadImage = document.querySelector('#file');
+          var roundedImage = document.querySelector('#result');
+          var cropimage = document.querySelector('#image');
+          var button = document.querySelector('#button');
+          var result = document.querySelector('#result');
+  
+
+
+          btn.addEventListener('click',function(){
+                modal.style.display = "block";
+          });
+          span.onclick = function () {
+                modal.style.display = "none";
+          }
+          
+
+
+          uploadImage.addEventListener('change', function () {
             selectedFile = this.files[0]; 
 
             if (document.querySelector('.cropper-container') != null) {
@@ -521,7 +558,7 @@ firebase.auth().onAuthStateChanged(function(user) {
             if (this.files && this.files[0]) {
                 var reader = new FileReader();
                 reader.onload = function (ev) {
-                    var cropper = new Cropper(image2, {
+                    var cropper = new Cropper(cropimage, {
                         aspectRatio: 16 / 9,
                     });
                     cropper.replace(ev.target.result);
@@ -532,6 +569,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                         croppedCanvas = cropper.getCroppedCanvas();
                         // Show
                         roundedImage.src = croppedCanvas.toDataURL('image/png');
+                        aimage.src = croppedCanvas.toDataURL('image/png');
                         
                     };
                 }
@@ -542,31 +580,13 @@ firebase.auth().onAuthStateChanged(function(user) {
         });
 
 
-          btn.onclick = function () {
-                modal.style.display = "block";
-          }
-          span.onclick = function () {
-                modal.style.display = "none";
-          }
 
 
-     
-
-
-            //更換button
-            document.querySelector('#done').style.display = 'inline'; //完成鈕顯示
-            document.querySelector('#edit').style.display = 'none';  //編輯鈕隱藏
-
-
-
- 
-
-
-        });
 
 
             //完成
             document.querySelector('#done').addEventListener('click',function(){
+
 
                     var ntitle = document.querySelector('#input').value;
                     var ncontent = tinyMCE.activeEditor.getContent();
@@ -581,66 +601,153 @@ firebase.auth().onAuthStateChanged(function(user) {
 
                         alert("您有缺漏的部分");
 
+                    }else if (!roundedImage){
+
+                        alert("您尚未裁切圖片");
+
                     }else{
 
-                        if (category!=c){
-
-                          if (!userlike){
 
 
-                            userlike = null;
+                        var a = lat;
+                        var b = lng;
 
 
-                          }
+                       if(!selectedFile){
 
-                          postRef.child(c).child(id).remove();
-                          postRef.child(category).child(id).set({
+                              if (category!=c){
 
-                               userid: uid,
-                               username: uname,
-                               title: ntitle,
-                               timestamp: timestamp,
-                               date: dates,
-                               lat: lat,
-                               lng: lng,
-                               p_content: ncontent,
-                               p_photo: uphoto, 
-                               like_count: ulike,
-                               like_user:  userlike 
+                                if (!userlike){
 
-                          })
+                                  userlike = null;
 
-                          console.log(userlike);
-                          
+                                }
 
-                          c = category;
+                                postRef.child(c).child(id).remove();
+                                postRef.child(category).child(id).set({
 
+                                     userid: uid,
+                                     username: uname,
+                                     title: ntitle,
+                                     timestamp: timestamp,
+                                     date: dates,
+                                     lat: a,
+                                     lng: b,
+                                     p_content: ncontent, 
+                                     p_photo:uphoto,
+                                     like_count: ulike,
+                                     like_user:  userlike,
+                                     type: category
 
-                        }else{
+                                })
+                                
 
-
-                          postRef.child(c).child(id).child('title').set(ntitle);
-                          postRef.child(c).child(id).child('p_content').set(ncontent);
-                          postRef.child(c).child(id).child('date').set(dates);
-                          postRef.child(c).child(id).child('timestamp').set(timestamp);
+                                c = category;
 
 
-                        }
+                              }else{
+
+
+                                postRef.child(c).child(id).child('title').set(ntitle);
+                                postRef.child(c).child(id).child('lat').set(a);
+                                postRef.child(c).child(id).child('lng').set(b);
+                                postRef.child(c).child(id).child('p_content').set(ncontent);
+                                postRef.child(c).child(id).child('date').set(dates);
+                                postRef.child(c).child(id).child('timestamp').set(timestamp);
+                                postRef.child(c).child(id).child('type').set(c);
+                               
+         
+
+                              }
+
+                                                        
+
+                       }else{
+
+
+
+
+                        var storageRef = firebase.storage().ref();    
+                        var ranNum = Math.floor(Math.random() * 999999999);  
+                        var uploadTask = storageRef.child('images/'+ ranNum +selectedFile.name).putString(roundedImage.src,'data_url');
+                        uploadTask.on('state_changed', function(snapshot){
+                     
+                          }, function(error) {
+
+                              alert('照片上傳失敗');
+
+                          }, function() {
+
+                              downloadURL = uploadTask.snapshot.downloadURL;
+
+                              if (category!=c){
+
+                                if (!userlike){
+
+                                  userlike = null;
+
+                                }
+
+                                postRef.child(c).child(id).remove();
+                                postRef.child(category).child(id).set({
+
+                                     userid: uid,
+                                     username: uname,
+                                     title: ntitle,
+                                     timestamp: timestamp,
+                                     date: dates,
+                                     lat: a,
+                                     lng: b,
+                                     p_content: ncontent,
+                                     p_photo: downloadURL, 
+                                     like_count: ulike,
+                                     like_user:  userlike,
+                                     type: category
+
+                                })
+                                
+
+                                c = category;
+
+
+                              }else{
+
+
+                                postRef.child(c).child(id).child('title').set(ntitle);
+                                postRef.child(c).child(id).child('p_content').set(ncontent);
+                                postRef.child(c).child(id).child('date').set(dates);
+                                postRef.child(c).child(id).child('timestamp').set(timestamp);
+                                postRef.child(c).child(id).child('type').set(c);
+                                postRef.child(c).child(id).child('p_photo').set(downloadURL);
+                                postRef.child(c).child(id).child('lat').set(a);
+                                postRef.child(c).child(id).child('lng').set(b);
+
+
+
+                              }
+
+                                                          
+                          });
+
+
+                       }
 
 
                         // var likeRef3 = firebase.database().ref('Post/'+c+'/'+id);
                         // likeRef3.once('value',function(snapshot){
-                        //          //如果有likes欄位->已經有人按讚、如果likes欄位有使用者的ID -> 已經按過讚了
-                        //             if(snapshot.child('like_user').exists() && snapshot.child('like_user').hasChild(user.uid)){
-                        //               heart.classList.add('likes-count');
-                        //               heart.classList.toggle('like-click');
-                                                           
-                        //             }else{
-                              
-                        //               heart.classList.add('likes-count');
-                                                       
-                        //                }
+                        // //如果有likes欄位->已經有人按讚、如果likes欄位有使用者的ID -> 已經按過讚了
+                        // if(snapshot.child('like_user').exists() && snapshot.child('like_user').hasChild(user.uid)){
+                        //             heart.classList.add('likes-count');
+                        //             heart.classList.toggle('like-click');
+                                                                   
+                        // }else{
+                                      
+                        //             heart.classList.add('likes-count');
+                                                               
+                        //       }
                         // }); 
+
+
 
        
 
@@ -670,6 +777,9 @@ firebase.auth().onAuthStateChanged(function(user) {
                         date.style.display = "";
 
 
+                        //edit button選擇圖片消失
+                        edit_btn.style.display = 'none';
+
 
                         like_div.style.display = '';
                         document.querySelector('#commentlist').style.display= ''; //留言列表、發表留言隱藏
@@ -691,7 +801,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                       
           user = null;
           //alert ('您尚未登入');                
-          }
+      }
 
 
       var commentsRef = firebase.database().ref('Comment/'+value);
@@ -725,3 +835,144 @@ firebase.auth().onAuthStateChanged(function(user) {
         return html;
 
  }
+
+
+
+
+
+
+
+
+
+ function initMap2() {
+
+    myLatlng = new google.maps.LatLng(lat,lng);
+    var map = new google.maps.Map(document.getElementById('GoogleMap'), {
+        zoom: 15,
+        center: myLatlng,
+        styles: style
+        // zoomControl: false,
+        // mapTypeControl: false,
+        // streetViewControl: false
+
+    });
+
+    map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(gps);
+    map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+    //marker icon resize
+    var icon = {
+    url: 'img/placeholder.png', // url
+    scaledSize: new google.maps.Size(50, 50), // scaled size
+    };
+
+    marker = new google.maps.Marker({
+
+        position: myLatlng,
+        map: map,
+        animation: google.maps.Animation.DROP,
+        icon: icon
+
+    });
+
+    lat = myLatlng.lat();
+    lng = myLatlng.lng();
+
+
+    map.setOptions({
+        minZoom: 3,
+        maxZoom: 20
+    });
+
+    map.addListener('click', function (e) {
+        placeMarker(e.latLng, map);
+    });
+
+
+    //Bias the search result to Taiwan
+    var defaultBounds = new google.maps.LatLngBounds(
+
+        new google.maps.LatLng(22, 120.13),
+        new google.maps.LatLng(25.1, 121.45));
+
+    var options = {
+        bounds: defaultBounds
+    };
+
+
+    //Create autocomplete object 
+    var autocomplete = new google.maps.places.Autocomplete(input, options);
+
+    //Keycode 
+    google.maps.event.addDomListener(input, 'keydown', function (e) {
+        console.log(e.triggered)
+        if (e.keyCode === 13 && !e.triggered) {
+            google.maps.event.trigger(this, 'keydown', {
+                keyCode: 40
+            })
+            google.maps.event.trigger(this, 'keydown', {
+                keyCode: 13,
+                triggered: true
+            })
+        }
+    });
+
+    google.maps.event.addListener(autocomplete, 'place_changed', function () {
+        place = autocomplete.getPlace();
+
+        if (!place.geometry) {
+
+            alert("請填寫正確位址");
+
+        } else {
+
+            center = new google.maps.LatLng(place.geometry.location.lat(), place.geometry.location.lng());
+            map.panTo(center);
+            map.setZoom(18);
+            placeMarker(center, map);
+
+        }
+
+    });
+
+
+    gps.onclick = function () {
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                console.log(pos);
+                map.setCenter(pos);
+                map.setZoom(18);
+                placeMarker(pos, map);
+            }, function () {
+                handleLocationError(true, map.getCenter());
+            });
+        } else {
+            // Browser doesn't support Geolocation
+            handleLocationError(false, map.getCenter());
+        }
+    }
+}
+
+
+
+//更換Marker位置
+function placeMarker(latLng, map) {
+
+    marker.setPosition(latLng);
+    lat = latLng.lat();
+    lng = latLng.lng();
+    
+
+}
+
+
+function handleLocationError(browserHasGeolocation, pos) {
+    // infoWindow.setPosition(pos);
+    // infoWindow.setContent(browserHasGeolocation ?
+    //                     'Error: The Geolocation service failed.' :
+    //                      'Error: Your browser doesn\'t support geolocation.');
+
+}
+
