@@ -25,12 +25,17 @@ fbLoginBtn.addEventListener("click",function(){
     console.log(FBUser);
     console.log(FBUser.displayName);
     loginUser = firebase.auth().currentUser;
-	  console.log("登入使用者為",loginUser);
+	  // console.log("登入使用者為",loginUser);
+    var fbuid = loginUser.providerData[0].uid;
+    var photoUrl = "https://graph.facebook.com/" + fbuid +"/picture?height=500";
+    console.log(photoUrl);
+
     firebase.database().ref('users/' + loginUser.uid).set({
       userid: loginUser.uid,
 	    email: loginUser.email,
       name: loginUser.displayName,
-      pic:loginUser.photoURL
+      pic: photoUrl,
+      fb: fbuid
     });
 
 

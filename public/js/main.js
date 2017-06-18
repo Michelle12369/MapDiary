@@ -1,3 +1,8 @@
+window.onload=function(){
+    document.querySelector('body').classList.add('loaded');
+}
+
+
 if (document.querySelector('iframe') != null) {
     document.querySelector('iframe').height = window.innerHeight - 64;
 }

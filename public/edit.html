@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
- 
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,51 +13,55 @@
     <link rel="icon" href="img/favicon.png">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/0.8.1/cropper.min.css" rel="stylesheet">
 </head>
- 
+
 <body>
     <!--navbar 與搜尋列-->
     <nav>
         <a href="index.html">
             <img src="img/logo.png" alt="logo" class="logo">
         </a>
-        <form class="">
+        <form class="" action="find.html">
             <input type="text" name="search" placeholder="城市、地點" class="form-control mr-sm-2">
-            <select class="select-bar">
-                    <option value="-">-</option>
-                    <option value="旅行">旅行</option>
-                    <option value="美食">美食</option>
-                    <option value="愛情">愛情</option>
-                    <option value="心情">心情</option>
-                    <option value="公益">公益</option>
-                    <option value="親子">親子</option>
-                    <option value="朋友">朋友</option>
+            <select class="select-bar" name="kind">
+                    <option value="Travel">旅行</option>
+                    <option value="Food">美食</option>
+                    <option value="Love">愛情</option>
+                    <option value="Mood">心情</option>
+                    <option value="Charity">公益</option>
+                    <option value="Family">親子</option>
+                    <option value="Friend">朋友</option>
                 </select>
-            <input type="submit" value="搜尋" class="search" />
+            <input type="submit" value="搜尋" class="search"/>
         </form>
         <style type="text/css">
-            .nav-right{
-                color:black;
+            .nav-right {
+                color: black;
                 float: right;
             }
-            .nav-right img{
+
+            .nav-right img {
                 cursor: pointer;
                 width: 40px;
-                margin-right:10px;
+                margin-right: 10px;
             }
-            .nav-right>span{
+
+            .nav-right>span {
                 vertical-align: top;
                 display: inline-block;
-                margin-top:16px;
+                margin-top: 16px;
                 cursor: pointer;
             }
-            .dropdown{
+
+            .dropdown {
                 /*margin:12px;*/
             }
-            #Dname{
+
+            #Dname {
                 vertical-align: top;
             }
-            .dropdown-content{
-                top:64px;
+
+            .dropdown-content {
+                top: 64px;
             }
         </style>
         <!-- <a href="/user.html" class="nav-right" id="Dname"></a> -->
@@ -68,7 +72,7 @@
             <div class="dropbtn">
 
                 <!-- <a id="Dname"></a> -->
-                <a  class="nav-right" id="Dname"></a>
+                <a class="nav-right" id="Dname"></a>
                 <a href="/signin.html" class="nav-right" id="SignIn"></a>
 
             </div>
@@ -80,19 +84,25 @@
         </div>
         <div class="dropdown">
             <div class="dropbtn">
-                <img src="img/bell.png" alt="" width="40px" class="dropclick"></a>
+                <a class="nav-right" id="note"></a>
             </div>
-            <div class="dropdown-content dropMenu">
-                <p class="dropdown-alert">訊息</p>
-                <a class="dropdown-item" href="article.html">劉皪說你的文章讚</a>
-                <a class="dropdown-item" href="article.html">劉皪對你的文章留言</a>
+            <div class="dropdown-content dropMenu" id="noteDetail">
+                <p class="dropdown-alert">通知</p>
+                <!--<a class="dropdown-item" href="article.html">劉皪說你的文章讚</a>
+                <a class="dropdown-item" href="article.html">劉皪對你的文章留言</a>-->
             </div>
         </div>
     </nav>
- 
+    <div id="loader-wrapper">
+        <div id="loader"></div>
+
+        <div class="loader-section section-left"></div>
+        <div class="loader-section section-right"></div>
+
+    </div>
     <article class="container article">
         <div class="row">
- 
+
             <!--文章編輯-->
             <section class="result col-sm-6">
                 <div>
@@ -123,67 +133,84 @@
                             <label for="photo">封面照片上傳</label>
                             <span id="myBtn">編輯圖片</span>
                             <div id="myModal" class="modal">
- 
+
                                 <!-- Modal content -->
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <span class="close">&times;</span>
+                                        <span class="close" style="padding-right: 15px; font-size: 16pt;">&times;</span>
                                         <h2>編輯封面照片</h2>
                                     </div>
                                     <div class="modal-body">
                                         <p>Step1. 選擇圖片</p>
                                         <input id="file" type="file" accept='image/*'>
-                                        <p>Step2. 裁切圖片</p>
-                                        <div id="crop-img">
-                                            <img id="image">
+                                        <div class="row" style="margin:0;">
+                                        <div class="col-sm-6">
+                                            <p>Step2. 裁切圖片</p>
+                                            <div id="crop-img">
+                                                <img id="image">
+                                            </div>
+                                            <button type="button" id="button">Crop</button>
                                         </div>
-                                        <button type="button" id="button">Crop</button>
+                                        <div class="col-sm-6">
                                         <p>Step3. 圖片結果</p>
                                         <img id="result">
+                                        </div>
+                                        <div class="col-xs-12 col-sm-12">
+                                            <span class="close modal-confirm">確認</span>
+                                        </div>
+                                        </div>
+                                        
                                     </div>
+                                    
                                 </div>
                             </div>
- 
+
                             <div>
                                 <label for="location">地圖標示</label>
                                 <span>請直接點選地圖上的地點</span>
                             </div>
-                            <button id="submit" type="button" value="上傳" class="upload">上傳</button>       
+                            <button id="submit" type="button" value="上傳" class="upload">上傳</button>
                     </form>
                     </div>
- 
+
             </section>
- 
+
             <!--地圖-->
-            <div class="col-sm-6 map">
-                <div id="pickmap" style="width:100%; height:100%"></div>
-                <input id="pac-input" class="controls" type="text" placeholder="地址" style="visibility:hidden">
-                <img src="img/gps.png" id="gps" style="visibility:hidden">
-            </div>
- 
+            <!-- <div  class="mapFixed"> -->
+                <div class="map mapFixed">
+                    <div id="pickmap" style="width:100%; height:710px"></div>
+                    <input id="pac-input" class="controls" type="text" placeholder="地址" style="visibility:hidden">
+                    <img src="img/gps.png" id="gps" style="visibility:hidden">
+                </div>
+            <!-- </div> -->
         </div>
     </article>
     <script src="https://www.gstatic.com/firebasejs/4.1.1/firebase.js"></script>
     <script>
         // Initialize Firebase
-          var config = {
+        var config = {
             apiKey: "AIzaSyCxtNaITKHzASF0PNhcr1mU6ah0Ru7FTqc",
             authDomain: "sna-map-4f1bb.firebaseapp.com",
             databaseURL: "https://sna-map-4f1bb.firebaseio.com",
             projectId: "sna-map-4f1bb",
             storageBucket: "sna-map-4f1bb.appspot.com",
             messagingSenderId: "1022375312771"
-          };
-          firebase.initializeApp(config);
+        };
+        firebase.initializeApp(config);
     </script>
     <script src="js/edit.js"></script>
     <script src="js/main.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/0.8.1/cropper.min.js"></script>
     <script src="https://cloud.tinymce.com/stable/tinymce.min.js"></script>
-    <script>tinymce.init({ selector:'textarea' });</script>
+    <script>
+        tinymce.init({
+            selector: 'textarea'
+        });
+    </script>
     <script sync defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCxtNaITKHzASF0PNhcr1mU6ah0Ru7FTqc&libraries=places&callback=initMap">
     </script>
 </body>
 
 <script type="text/javascript" src="js/judgeBar.js"></script>
+
 </html>

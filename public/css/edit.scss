@@ -41,6 +41,13 @@ form {
     border-radius: 0.2rem;
 }
 
+.mapFixed{
+    position:fixed !important;
+    right: 0;
+    bottom:0;
+    width: 50%;
+}
+
 //crop
 #image {
     max-width: 100%;
@@ -48,7 +55,7 @@ form {
 
 #crop-img,
 #result {
-    width: 50%;
+    width: 100%;
 }
 
 //modal
@@ -88,20 +95,33 @@ form {
 }
 
 
+
 /* The Close Button */
 
 .close {
     color: #aaaaaa;
     float: right;
-    font-size: 28px;
+    font-size: 16px;
     font-weight: bold;
 }
 
 .close:hover,
 .close:focus {
-    color: #000;
+    // color: #000;
     text-decoration: none;
     cursor: pointer;
+}
+.modal-confirm{
+    display: inline-block;
+    text-align: right;
+    background-color:#0abab5;
+    color: white;
+    border-radius:0.2rem;
+    padding:5px 10px;
+}
+.modal-confirm:hover{
+    background-color:#60DFE5;
+    color: white;
 }
 
 //shao

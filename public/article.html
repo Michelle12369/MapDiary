@@ -22,19 +22,18 @@
         <a href="index.html">
             <img src="img/logo.png" alt="logo" class="logo">
         </a>
-        <form class="">
+        <form class="" action="find.html">
             <input type="text" name="search" placeholder="城市、地點" class="form-control mr-sm-2">
-            <select class="select-bar">
-                    <option value="-">-</option>
-                    <option value="旅行">旅行</option>
-                    <option value="美食">美食</option>
-                    <option value="愛情">愛情</option>
-                    <option value="心情">心情</option>
-                    <option value="公益">公益</option>
-                    <option value="親子">親子</option>
-                    <option value="朋友">朋友</option>
+            <select class="select-bar" name="kind">
+                    <option value="Travel">旅行</option>
+                    <option value="Food">美食</option>
+                    <option value="Love">愛情</option>
+                    <option value="Mood">心情</option>
+                    <option value="Charity">公益</option>
+                    <option value="Family">親子</option>
+                    <option value="Friend">朋友</option>
                 </select>
-            <input type="submit" value="搜尋" class="search" />
+            <input type="submit" value="搜尋" class="search"/>
         </form>
         <div class="triangle">
             <img src="img/triangle.png" alt="triangle">
@@ -42,28 +41,33 @@
 
 
         <style type="text/css">
-            .nav-right{
-                color:black;
+            .nav-right {
+                color: black;
                 float: right;
             }
-            .nav-right img{
+
+            .nav-right img {
                 cursor: pointer;
                 width: 40px;
-                margin-right:10px;
+                margin-right: 10px;
             }
-            .nav-right>span{
+
+            .nav-right>span {
                 vertical-align: top;
                 display: inline-block;
-                margin-top:16px;
+                margin-top: 16px;
             }
-            .dropdown{
+
+            .dropdown {
                 /*margin:12px;*/
             }
-            #Dname{
+
+            #Dname {
                 vertical-align: top;
             }
-            .dropdown-content{
-                top:64px;
+
+            .dropdown-content {
+                top: 64px;
             }
         </style>
         <!-- <a href="/user.html" class="nav-right" id="Dname"></a> -->
@@ -74,7 +78,7 @@
             <div class="dropbtn">
 
                 <!-- <a id="Dname"></a> -->
-                <a  class="nav-right" id="Dname"></a>
+                <a class="nav-right" id="Dname"></a>
                 <a href="/signin.html" class="nav-right" id="SignIn"></a>
 
             </div>
@@ -88,18 +92,24 @@
 
         <div class="dropdown">
             <div class="dropbtn">
-                <img src="img/bell.png" alt="" width="40px" class="dropclick">
-                <a href="/user.html" id="Dname"></a>
+                <a class="nav-right" id="note"></a>
             </div>
-            <div class="dropdown-content dropMenu">
-                <p class="dropdown-alert">訊息</p>
-                <a class="dropdown-item" href="article.html">劉皪說你的文章讚</a>
-                <a class="dropdown-item" href="article.html">劉皪對你的文章留言</a>
+            <div class="dropdown-content dropMenu" id="noteDetail">
+                <p class="dropdown-alert">通知</p>
+                <!--<a class="dropdown-item" href="article.html">劉皪說你的文章讚</a>
+                <a class="dropdown-item" href="article.html">劉皪對你的文章留言</a>-->
             </div>
         </div>
     </nav>
 
-    <article class="container article">
+    <div id="loader-wrapper">
+        <div id="loader"></div>
+
+        <div class="loader-section section-left"></div>
+        <div class="loader-section section-right"></div>
+
+    </div>
+    <article class="container article" style="width: 100%;">
         <div class="row">
             <!--文章內容-->
             <section class="result col-sm-6">
@@ -155,13 +165,14 @@
 
                 <!--修改、刪除-->
                 <div id="change_post" style="visibility:hidden">
-                     <hr>
-                     <p style="text-align:right"><span id="delete">刪除</span>  <span id="edit">修改</span> <span id="done" style="display:none">完成</span></p>
+                    <hr>
+                    <p style="text-align:right"><span id="delete">刪除</span> <span id="edit">修改</span> <span id="done" style="display:none">完成</span></p>
                 </div>
                 <!--按讚-->
                 <div class="like" style="visibility:hidden">
                     <hr>
-                    <div><div id="heart_btn"></div> <span id="like"></span> 個喜歡</div>
+                    <div>
+                        <div id="heart_btn"></div> <span id="like"></span> 個喜歡</div>
                 </div>
 
                 <!--留言-->
@@ -177,7 +188,7 @@
                         </div>
                         <div class="user-comment">
                             <!--<form method="POST" name="commentForm">-->
-                                <input id="comment_input" type="text" placeholder="留言.." style="visibility: hidden" required>
+                            <input id="comment_input" type="text" placeholder="留言.." style="visibility: hidden" required>
                             <!--</form>-->
                         </div>
                     </div>
@@ -185,29 +196,28 @@
             </section>
 
             <!--地圖-->
-            
-                 <div class="col-sm-6 map" id="GoogleMap"  style="width:100%; height: 710px;top:10px;" >
-                 <input id="pac-input" class="controls" type="text" placeholder="地址" style="visibility:hidden">
-                 <img src="img/gps.png" id="gps" style="visibility:hidden">
-            
+            <div class="mapFixed">
+                <div class="map" id="GoogleMap"  style="width:100%; height: 710px;" >
+                <input id="pac-input" class="controls" type="text" placeholder="地址" style="visibility:hidden">
+                <img src="img/gps.png" id="gps" style="visibility:hidden">
+                </div>
+            </div>
         </div>
     </article>
     <script src="https://www.gstatic.com/firebasejs/4.1.1/firebase.js"></script>
-    <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAKhb8ChbvlUFoHRmLxuC1JoUtBu2zW6T8&libraries=places&callback=initMap">
-
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAKhb8ChbvlUFoHRmLxuC1JoUtBu2zW6T8&callback=initMap">
     </script>
     <script>
         // Initialize Firebase
-          var config = {
+        var config = {
             apiKey: "AIzaSyCxtNaITKHzASF0PNhcr1mU6ah0Ru7FTqc",
             authDomain: "sna-map-4f1bb.firebaseapp.com",
             databaseURL: "https://sna-map-4f1bb.firebaseio.com",
             projectId: "sna-map-4f1bb",
             storageBucket: "sna-map-4f1bb.appspot.com",
             messagingSenderId: "1022375312771"
-          };
-          firebase.initializeApp(config);
+        };
+        firebase.initializeApp(config);
     </script>
     <script src="js/main.js"></script>
     <script src="js/article.js"></script>

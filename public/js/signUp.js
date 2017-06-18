@@ -1,6 +1,8 @@
 //Email/Pwd註冊
 var account = document.getElementById("account");
 var pwd = document.getElementById("pwds");
+var name = document.getElementById("displayname");
+
 var registerSmtBtn = document.getElementById("registerSmtBtn");
 registerSmtBtn.addEventListener("click", function(){
     console.log(account.value);
@@ -11,7 +13,8 @@ registerSmtBtn.addEventListener("click", function(){
 	    firebase.database().ref('users/' + loginUser.uid).set({
 	    	userid: loginUser.uid,
 		    email: loginUser.email,
-	        name: loginUser.displayName,
+
+	        name: name,
 	        // age : age.value
 	    	// "資料"
 	    });

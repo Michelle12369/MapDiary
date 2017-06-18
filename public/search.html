@@ -19,19 +19,18 @@
         <a href="index.html">
             <img src="img/logo.png" alt="logo" class="logo">
         </a>
-        <form class="">
+        <form class="" action="find.html">
             <input type="text" name="search" placeholder="城市、地點" class="form-control mr-sm-2">
-            <select class="select-bar">
-                <option value="-">-</option>
-                <option value="旅行">旅行</option>
-                <option value="美食">美食</option>
-                <option value="愛情">愛情</option>
-                <option value="心情">心情</option>
-                <option value="公益">公益</option>
-                <option value="親子">親子</option>
-                <option value="朋友">朋友</option>
-            </select>
-            <input type="submit" value="搜尋" class="search" />
+            <select class="select-bar" name="kind">
+                    <option value="Travel">旅行</option>
+                    <option value="Food">美食</option>
+                    <option value="Love">愛情</option>
+                    <option value="Mood">心情</option>
+                    <option value="Charity">公益</option>
+                    <option value="Family">親子</option>
+                    <option value="Friend">朋友</option>
+                </select>
+            <input type="submit" value="搜尋" class="search"/>
         </form>
         <div class="triangle">
             <img src="img/triangle.png" alt="triangle">
@@ -81,16 +80,22 @@
         </div>
          <div class="dropdown">
             <div class="dropbtn">
-                <img src="img/bell.png" alt="" width="40px" class="dropclick"></a>
+                <a class="nav-right" id="note"></a>
             </div>
-            <div class="dropdown-content dropMenu">
-                <p class="dropdown-alert">訊息</p>
-                <a class="dropdown-item" href="article.html">劉皪說你的文章讚</a>
-                <a class="dropdown-item" href="article.html">劉皪對你的文章留言</a>
+            <div class="dropdown-content dropMenu" id="noteDetail">
+                <p class="dropdown-alert">通知</p>
+                <!--<a class="dropdown-item" href="article.html">劉皪說你的文章讚</a>
+                <a class="dropdown-item" href="article.html">劉皪對你的文章留言</a>-->
             </div>
         </div>
     </nav>
+    <div id="loader-wrapper">
+        <div id="loader"></div>
 
+        <div class="loader-section section-left"></div>
+        <div class="loader-section section-right"></div>
+
+    </div>
     <article class="container">
         <div class="row">
 

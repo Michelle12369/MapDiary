@@ -49,6 +49,6 @@ if(chgPwdBtn != null){
 
 firebase.auth().onAuthStateChanged(function(user) {
   if(user !=null){
-    document.location.href='/index.html';
+    // document.location.href='/index.html';
   }
 });
