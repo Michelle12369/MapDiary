@@ -19,13 +19,11 @@ var posts = [];
 var key;
 var userBlock;
 firebase.auth().onAuthStateChanged(function(user) {
-  if (user) {
+  console.log(user);
+  // if (user != null) {
     user = user;
-    if( user.uid == userValue || userValue ==null){
+    if( user!=null && ( user.uid == userValue || userValue ==null)){
       if(user.photoURL != null && profilePic != null){
-        // profilePic.src = user.photoURL;
-        console.log(user.providerData[0].providerId );
-
         if(user.providerData[0].providerId == "facebook.com"){
           profilePic.src = "https://graph.facebook.com/" + user.providerData[0].uid +"/picture?height=500";
         }else{
@@ -91,10 +89,10 @@ firebase.auth().onAuthStateChanged(function(user) {
       });
     }
     // user.sendEmailVerification(); 送驗證信
-  } else {
-    user = null;
-    console.log("User is not logined yet.");
-  }
+  // } else {
+    // user = null;
+    // console.log("User is not logined yet.");
+  // }
 });
 
 // 放上文章
@@ -144,7 +142,6 @@ function addSelfBlock(){
     var userTitle = document.createElement("h2");
     userTitle.innerHTML=content.id.title;
 
-    console.log(content.id.date);
     var userKind = document.createElement("h3");
     userKind.innerHTML="種類："+content.kind+"&emsp;&emsp;日期："+content.id.date;
 
