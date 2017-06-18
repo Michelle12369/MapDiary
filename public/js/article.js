@@ -275,6 +275,7 @@ postRef.on('value', function(snapshot) {
             uphoto = childData2.p_photo;
             ulike = childData2.like_count;
             userlike = childData2.like_user;
+            garyid = childData2.userid;
 
             if (!childData2.link){
 
