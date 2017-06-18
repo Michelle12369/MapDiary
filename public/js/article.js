@@ -311,8 +311,8 @@ postRef.on('value', function(snapshot) {
 
           //如果有likes欄位->已經有人按讚、如果likes欄位有使用者的ID -> 已經按過讚了
           if(snapshot.child('like_user').exists() && snapshot.child('like_user').hasChild(user.uid)){
-              heart.classList.add('likes-count');
-              heart.classList.toggle('like-click');
+              heart.classList.add('likes-count'); //空心
+              heart.classList.toggle('like-click'); //加上實心
                                            
           }else{
               
@@ -766,19 +766,47 @@ firebase.auth().onAuthStateChanged(function(user) {
                        }
 
 
+
+                        // heart.classList.remove('like-count'); //空心
+
                         // var likeRef3 = firebase.database().ref('Post/'+c+'/'+id);
                         // likeRef3.once('value',function(snapshot){
-                        // //如果有likes欄位->已經有人按讚、如果likes欄位有使用者的ID -> 已經按過讚了
-                        // if(snapshot.child('like_user').exists() && snapshot.child('like_user').hasChild(user.uid)){
-                        //             heart.classList.add('likes-count');
-                        //             heart.classList.toggle('like-click');
-                                                                   
-                        // }else{
-                                      
-                        //             heart.classList.add('likes-count');
-                                                               
-                        //       }
+
+                        //   //如果有likes欄位->已經有人按讚、如果likes欄位有使用者的ID -> 已經按過讚了
+                        //   if(snapshot.child('like_user').exists() && snapshot.child('like_user').hasChild(user.uid)){
+                        //       heart.classList.add('likes-count'); //空心
+                        //       heart.classList.toggle('like-click'); //加上實心
+                                                           
+                        //   }else{
+                              
+                        //       heart.classList.add('likes-count');
+                                                       
+                        //   }
                         // }); 
+
+
+                        // heart.classList.add('likes-count'); //空心
+                        // heart.classList.toggle('like-click'); //加上實心
+
+
+                        console.log(heart.classList.contains('like-click'));
+
+                        //代表有按過讚 -> 要顯示實心的
+                        if (heart.classList.contains('like-click')){
+
+
+                            heart.classList.toggle('like-click');
+
+
+
+                        }else{
+
+
+
+                             heart.classList.add('likes-count');
+
+                        }
+
 
 
 
