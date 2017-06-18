@@ -456,6 +456,14 @@ firebase.auth().onAuthStateChanged(function(user) {
           event.preventDefault();
 
           if (event.keyCode == 13) {
+            //gary
+              firebase.database().ref('users/'+garyid+'/notification').push({
+                type: "comment",
+                article: value,
+                reader: user.displayName,
+                read: false,
+              });
+            //gary
 
             var d = new Date();
             var date = d.toLocaleDateString()+" "+d.toLocaleTimeString();
@@ -467,15 +475,6 @@ firebase.auth().onAuthStateChanged(function(user) {
               //不可提交空白留言
 
             }else{
-            //gary
-              firebase.database().ref('users/'+garyid+'/notification').push({
-                type: "comment",
-                article: value,
-                reader: user.displayName,
-                read: false,
-              });
-            //gary
-
 
             //上傳留言到firebase
             var commentRef = firebase.database().ref('Comment/'+id);
