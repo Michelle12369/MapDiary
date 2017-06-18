@@ -5,7 +5,7 @@ var SignIn = document.getElementById('SignIn');
 var profileName = document.getElementById('profile-name');
 var note = document.getElementById('note');
 var noteDetail = document.getElementById('noteDetail');
-var notekey = [""];
+var notekey = [];
 var noteId = "";
 firebase.auth().onAuthStateChanged(function(user) {
   if (user) {
@@ -110,12 +110,13 @@ signoutSmtBtn.addEventListener("click",function(){
 },false);
 
 //gary
-if(note!=null){
-  note.addEventListener("click",function(){
+console.log(notekey);
+note.addEventListener("click",function(){
+  if(notekey[0] != null){
     var updates = {};
     for(var j=0;j<notekey.length;j++){
-      updates['users/'+noteId+'/notification/'+notekey[j]+'/read'] = true;
+        updates['users/'+noteId+'/notification/'+notekey[j]+'/read'] = true;
     }
     firebase.database().ref().update(updates);
-  });
-}
+  }
+});
