@@ -774,8 +774,10 @@ if (navigator.geolocation)
 
       var content_button = '<button'+" "+"onClick="+Open_Web(open_url)+">";
       var title_icon =  snapshot.child('type').val();
+
       console.log(title_icon);
       var icon_type =  title_icon+'_icon';
+      console.log(icon_type);
       var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
       var infoWin = new google.maps.InfoWindow({
         content: article_title
@@ -825,7 +827,7 @@ if (navigator.geolocation)
                             'Error: Your browser doesn\'t support geolocation.');
    }
    function Open_Web(open_url){
-            window.open(open_url);
+            return open_url;
 
    }
 
