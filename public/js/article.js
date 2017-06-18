@@ -276,7 +276,7 @@ postRef.on('value', function(snapshot) {
             ulike = childData2.like_count;
             userlike = childData2.like_user;
             garyid = childData2.userid;
-
+            console.log(garyid);
             if (!childData2.link){
 
                aimage.src = childData2.p_photo;
@@ -452,14 +452,6 @@ firebase.auth().onAuthStateChanged(function(user) {
             
         //提交comment
         comment_input.addEventListener("keyup",function(event){
-            //gary
-              firebase.database().ref('users/'+garyid+'/notification').push({
-                type: "comment",
-                article: value,
-                reader: user.displayName,
-                read: false,
-              });
-              //gary
                   
           event.preventDefault();
 
@@ -475,6 +467,15 @@ firebase.auth().onAuthStateChanged(function(user) {
               //不可提交空白留言
 
             }else{
+            //gary
+              firebase.database().ref('users/'+garyid+'/notification').push({
+                type: "comment",
+                article: value,
+                reader: user.displayName,
+                read: false,
+              });
+            //gary
+
 
             //上傳留言到firebase
             var commentRef = firebase.database().ref('Comment/'+id);
