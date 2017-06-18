@@ -20,19 +20,18 @@
         <a href="index.html">
             <img src="img/logo.png" alt="logo" class="logo">
         </a>
-        <form class="">
+        <form class="" action="find.html">
             <input type="text" name="search" placeholder="城市、地點" class="form-control mr-sm-2">
-            <select class="select-bar">
-                    <option value="-">-</option>
-                    <option value="旅行">旅行</option>
-                    <option value="美食">美食</option>
-                    <option value="愛情">愛情</option>
-                    <option value="心情">心情</option>
-                    <option value="公益">公益</option>
-                    <option value="親子">親子</option>
-                    <option value="朋友">朋友</option>
+            <select class="select-bar" name="kind">
+                    <option value="Travel">旅行</option>
+                    <option value="Food">美食</option>
+                    <option value="Love">愛情</option>
+                    <option value="Mood">心情</option>
+                    <option value="Charity">公益</option>
+                    <option value="Family">親子</option>
+                    <option value="Friend">朋友</option>
                 </select>
-            <input type="submit" value="搜尋" class="search" />
+            <input type="submit" value="搜尋" class="search"/>
         </form>
         <style type="text/css">
             .nav-right {
@@ -85,12 +84,12 @@
         </div>
         <div class="dropdown">
             <div class="dropbtn">
-                <img src="img/bell.png" alt="" width="40px" class="dropclick"></a>
+                <a class="nav-right" id="note"></a>
             </div>
-            <div class="dropdown-content dropMenu">
-                <p class="dropdown-alert">訊息</p>
-                <a class="dropdown-item" href="article.html">劉皪說你的文章讚</a>
-                <a class="dropdown-item" href="article.html">劉皪對你的文章留言</a>
+            <div class="dropdown-content dropMenu" id="noteDetail">
+                <p class="dropdown-alert">通知</p>
+                <!--<a class="dropdown-item" href="article.html">劉皪說你的文章讚</a>
+                <a class="dropdown-item" href="article.html">劉皪對你的文章留言</a>-->
             </div>
         </div>
     </nav>
@@ -138,20 +137,31 @@
                                 <!-- Modal content -->
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <span class="close">&times;</span>
+                                        <span class="close" style="padding-right: 15px; font-size: 16pt;">&times;</span>
                                         <h2>編輯封面照片</h2>
                                     </div>
                                     <div class="modal-body">
                                         <p>Step1. 選擇圖片</p>
                                         <input id="file" type="file" accept='image/*'>
-                                        <p>Step2. 裁切圖片</p>
-                                        <div id="crop-img">
-                                            <img id="image">
+                                        <div class="row" style="margin:0;">
+                                        <div class="col-sm-6">
+                                            <p>Step2. 裁切圖片</p>
+                                            <div id="crop-img">
+                                                <img id="image">
+                                            </div>
+                                            <button type="button" id="button">Crop</button>
                                         </div>
-                                        <button type="button" id="button">Crop</button>
+                                        <div class="col-sm-6">
                                         <p>Step3. 圖片結果</p>
                                         <img id="result">
+                                        </div>
+                                        <div class="col-xs-12 col-sm-12">
+                                            <span class="close modal-confirm">確認</span>
+                                        </div>
+                                        </div>
+                                        
                                     </div>
+                                    
                                 </div>
                             </div>
 
@@ -166,13 +176,14 @@
             </section>
 
             <!--地圖-->
-            <div class="col-sm-6 map">
-                <div id="pickmap" style="width:100%; height:100%"></div>
-                <input id="pac-input" class="controls" type="text" placeholder="地址" style="visibility:hidden">
-                <img src="img/gps.png" id="gps" style="visibility:hidden">
-            </div>
-
-            </div>
+            <!-- <div  class="mapFixed"> -->
+                <div class="map mapFixed">
+                    <div id="pickmap" style="width:100%; height:710px"></div>
+                    <input id="pac-input" class="controls" type="text" placeholder="地址" style="visibility:hidden">
+                    <img src="img/gps.png" id="gps" style="visibility:hidden">
+                </div>
+            <!-- </div> -->
+        </div>
     </article>
     <script src="https://www.gstatic.com/firebasejs/4.1.1/firebase.js"></script>
     <script>

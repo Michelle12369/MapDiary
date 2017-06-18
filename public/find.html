@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Mapping</title>
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/bootstrap-grid.min.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/search.css">
+    <link rel="icon" href="img/favicon.png">
+</head>
+
+<body>
+    <!--navbar 與搜尋列-->
+<nav>
+        <a href="index.html">
+            <img src="img/logo.png" alt="logo" class="logo">
+        </a>
+        <form class="" action="find.html">
+            <input type="text" name="search" placeholder="城市、地點" class="form-control mr-sm-2">
+            <select class="select-bar" name="kind">
+                <option value="-">-</option>
+                <option value="Travel">旅行</option>
+                <option value="Food">美食</option>
+                <option value="Love">愛情</option>
+                <option value="Mood">心情</option>
+                <option value="Charity">公益</option>
+                <option value="Family">親子</option>
+                <option value="Friend">朋友</option>
+            </select>
+            <input type="submit" value="搜尋" class="search" />
+        </form>
+        <div class="triangle">
+            <img src="img/triangle.png" alt="triangle">
+        </div>
+        <style type="text/css">
+            .nav-right{
+                color:black;
+                float: right;
+            }
+            .nav-right img{
+                cursor: pointer;
+                width: 40px;
+                margin-right:10px;
+            }
+            .nav-right>span{
+                vertical-align: top;
+                display: inline-block;
+                margin-top:16px;
+            }
+            .dropdown{
+                /*margin:12px;*/
+            }
+            #Dname{
+                vertical-align: top;
+            }
+            .dropdown-content{
+                top:64px;
+            }
+        </style>
+        <div class="dropdown">
+            <div class="dropbtn">
+
+                <!-- <a id="Dname"></a> -->
+                <a  class="nav-right" id="Dname"></a>
+                <a href="/signin.html" class="nav-right" id="SignIn"></a>
+
+            </div>
+            <div class="dropdown-content dropMenu">
+                <a class="dropdown-item" href="edit.html">新增文章</a>
+                <a class="dropdown-item" href="user.html">個人頁面</a>
+                <a class="dropdown-item" id="signoutSmtBtn">登出</a>
+            </div>
+        </div>
+         <div class="dropdown">
+            <div class="dropbtn">
+                <a class="nav-right" id="note"></a>
+            </div>
+            <div class="dropdown-content dropMenu" id="noteDetail">
+                <p class="dropdown-alert">通知</p>
+                <!--<a class="dropdown-item" href="article.html">劉皪說你的文章讚</a>
+                <a class="dropdown-item" href="article.html">劉皪對你的文章留言</a>-->
+            </div>
+        </div>
+    </nav>
+
+    <article class="container">
+        <div class="row">
+
+            <!--搜尋結果-->
+            <section class="result col-sm-12">
+                <div class="container">
+                    <h2>搜尋結果</h2>
+                    <div class="row"  id="AddArticle">
+                       
+                    </div>
+                </div>
+            </section>
+        </div>
+    </article>
+
+    <script src="https://www.gstatic.com/firebasejs/4.1.2/firebase.js"></script>
+    <script>
+    // Initialize Firebase
+    var config = {
+    apiKey: "AIzaSyCxtNaITKHzASF0PNhcr1mU6ah0Ru7FTqc",
+    authDomain: "sna-map-4f1bb.firebaseapp.com",
+    databaseURL: "https://sna-map-4f1bb.firebaseio.com",
+    projectId: "sna-map-4f1bb",
+    storageBucket: "sna-map-4f1bb.appspot.com",
+    messagingSenderId: "1022375312771"
+    };
+    firebase.initializeApp(config);
+    </script>
+
+    <script>
+    var query = location.search.substring(1);
+    var keyValuePairs = query.split("=");
+    var kind = keyValuePairs[2];
+    var pairs = keyValuePairs[1].split("&");
+    var search = decodeURIComponent(pairs[0]);
+    console.log(kind, search);
+
+    function add_col(i){
+        var Css_div = document.createElement('div');
+        Css_div.className = "col-md-6";
+        Css_div.id = i;
+        document.getElementById("AddArticle").appendChild(Css_div);
+    }
+
+    if(search == ""){
+        var a = 0;
+        var ref = firebase.database().ref('Post/'+kind);
+        ref.on('child_added', function(snap){
+            a++;
+            add_col(a);
+            var url = document.createElement('a');
+            url.href = "article.html?key="+snap.getKey();
+            url.id = "url_"+a;
+            document.getElementById(a).appendChild(url);
+            var photo = document.createElement('img');
+            photo.src = snap.child('p_photo').val();
+            document.getElementById("url_"+a).appendChild(photo);
+            var user_locotion = document.createElement('h3');
+            var location_text = document.createTextNode(snap.child('title').val());
+            user_locotion.appendChild(location_text);
+            document.getElementById("url_"+a).appendChild(user_locotion);
+            var user_name = document.createElement('p');
+            var name_text = document.createTextNode(snap.child('username').val());
+            user_name.appendChild(name_text);
+            document.getElementById("url_"+a).appendChild(user_name);
+        });
+    }else{
+        var ref = firebase.database().ref('Post/'+kind);
+        ref.orderByChild('title').equalTo(search).on('child_added', function(snap){
+            add_col(1);
+            var url = document.createElement('a');
+            url.href = "article.html?key="+snap.getKey();
+            url.id = "url_1";
+            document.getElementById("1").appendChild(url);
+            var photo = document.createElement('img');
+            photo.src = snap.child('p_photo').val();
+            document.getElementById("url_1").appendChild(photo);
+            var user_locotion = document.createElement('h3');
+            var location_text = document.createTextNode(snap.child('title').val());
+            user_locotion.appendChild(location_text);
+            document.getElementById("url_1").appendChild(user_locotion);
+            var user_name = document.createElement('p');
+            var name_text = document.createTextNode(snap.child('username').val());
+            user_name.appendChild(name_text);
+            document.getElementById("url_1").appendChild(user_name);
+        });
+    }
+
+    </script>
+
+    <script src="js/main.js"></script>
+</body>
+    <script type="text/javascript" src="js/judgeBar.js"></script>
+</html>

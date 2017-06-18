@@ -20,19 +20,18 @@
         <a href="index.html">
             <img src="img/logo-light.png" alt="logo" class="logo">
         </a>
-        <form class="">
+        <form class="" action="find.html">
             <input type="text" name="search" placeholder="城市、地點" class="form-control mr-sm-2">
-            <select class="select-bar">
-                    <option value="-">-</option>
-                    <option value="旅行">旅行</option>
-                    <option value="美食">美食</option>
-                    <option value="愛情">愛情</option>
-                    <option value="心情">心情</option>
-                    <option value="公益">公益</option>
-                    <option value="親子">親子</option>
-                    <option value="朋友">朋友</option>
+            <select class="select-bar" name="kind">
+                    <option value="Travel">旅行</option>
+                    <option value="Food">美食</option>
+                    <option value="Love">愛情</option>
+                    <option value="Mood">心情</option>
+                    <option value="Charity">公益</option>
+                    <option value="Family">親子</option>
+                    <option value="Friend">朋友</option>
                 </select>
-            <input type="submit" value="搜尋" class="search" />
+            <input type="submit" value="搜尋" class="search"/>
         </form>
         <style type="text/css">
             .nav-right{
@@ -76,6 +75,16 @@
                 <a class="dropdown-item" href="edit.html">新增文章</a>
                 <a class="dropdown-item" href="user.html">個人頁面</a>
                 <a class="dropdown-item" id="signoutSmtBtn">登出</a>
+            </div>
+        </div>
+        <div class="dropdown">
+            <div class="dropbtn">
+                <a class="nav-right" id="note"></a>
+            </div>
+            <div class="dropdown-content dropMenu" id="noteDetail">
+                <p class="dropdown-alert">通知</p>
+                <!--<a class="dropdown-item" href="article.html">劉皪說你的文章讚</a>
+                <a class="dropdown-item" href="article.html">劉皪對你的文章留言</a>-->
             </div>
         </div>
     </nav>
@@ -126,8 +135,8 @@
                             <p class="small-text">台北市 </p><p class="small-text" id='hotId1'>邵家怡</p>
                         </a>
                     </div>
-                    <div id="2" class="col-sm-6 col-md-4">
-                        <a href="article.html">
+                    <div class="col-sm-6 col-md-4">
+                        <a id="2" href="article.html">
                             <img id='hotImg2' src="./img/food.jpg" alt="hot issue">
                             <h3 id='hotTitle2'>北村豆腐家</h3>
                             <p class="small-text">台北市 </p><p class="small-text" id='hotId2'>邵家怡</p>
@@ -251,91 +260,57 @@
     <script type="text/javascript" src="js/logout.js"></script>
     <!--gary-->
     <script>
-        var username = ["", "", "", "", "", ""];
-        var title = ["", "", "", "", "", ""];
-        var photo = ["", "", "", "", "", ""];
-        var key = ["", "", "", "", "", ""];
-        var i = 0;
-        var j = 0;
-        var k = 0;
+        var ref = firebase.database().ref('Post/Family');
+        ref.orderByChild('like_count').limitToLast(1).on('child_added', function(snap){
+            document.getElementById("hotId1").innerText = snap.child('username').val();
+            document.getElementById("hotTitle1").innerText = snap.child('title').val();
+            document.getElementById("hotImg1").src = snap.child('p_photo').val();
+            document.getElementById("1").href = "article.html?key="+snap.getKey();
+            //console.log(username, title);
+            //最後執行
+        });
         var ref = firebase.database().ref('Post/Food');
         ref.orderByChild('like_count').limitToLast(1).on('child_added', function(snap){
-            username[i] = snap.child('username').val();
-            title[j] = snap.child('title').val();
-            photo[k] = snap.child('p_photo').val();
-            key = snap.getKey();
-            i++;
-            j++;
-            k++;
-            document.getElementById("hotId1").innerText = username[0];
-            document.getElementById("hotTitle1").innerText = title[0];
-            document.getElementById("hotImg1").src = photo[0];
-            document.getElementById("1").href = "article.html?key="+key;
-           
+            document.getElementById("hotId2").innerText = snap.child('username').val();
+            document.getElementById("hotTitle2").innerText = snap.child('title').val();
+            document.getElementById("hotImg2").src = snap.child('p_photo').val();
+            document.getElementById("2").href = "article.html?key="+snap.getKey();
             //console.log(username, title);
             //最後執行
         });
         var ref = firebase.database().ref('Post/Friend');
-        ref.orderByChild('like_count').limitToLast(2).on('child_added', function(snap){
-            username[i] = snap.child('username').val();
-            title[j] = snap.child('title').val();
-            photo[k] = snap.child('p_photo').val();
-            var key_k = snap.getKey();
-            var key = [];
-            key.push(key_k);
-
-            i++;
-            j++;
-            k++;
-            document.getElementById("hotId2").innerText = username[1];
-            document.getElementById("hotTitle2").innerText = title[1];
-            document.getElementById("hotImg2").src = photo[1];
-            document.getElementById("hotId3").innerText = username[2];
-            document.getElementById("hotTitle3").innerText = title[2];
-            document.getElementById("hotImg3").src = photo[2];
-            
-            document.getElementById("2").href = "article.html?key="+key[0];
-             document.getElementById("3").href = "article.html?key="+key[1];
-
+        ref.orderByChild('like_count').limitToLast(1).on('child_added', function(snap){
+            document.getElementById("hotId3").innerText = snap.child('username').val();
+            document.getElementById("hotTitle3").innerText = snap.child('title').val();
+            document.getElementById("hotImg3").src = snap.child('p_photo').val();
+            document.getElementById("3").href = "article.html?key="+snap.getKey();
+            //console.log(username, title);
+            //最後執行
+        });
+        var ref = firebase.database().ref('Post/Love');
+        ref.orderByChild('like_count').limitToLast(1).on('child_added', function(snap){
+            document.getElementById("hotId4").innerText = snap.child('username').val();
+            document.getElementById("hotTitle4").innerText = snap.child('title').val();
+            document.getElementById("hotImg4").src = snap.child('p_photo').val();
+            document.getElementById("4").href = "article.html?key="+snap.getKey();
             //console.log(username, title);
             //最後執行
         });
         var ref = firebase.database().ref('Post/Mood');
         ref.orderByChild('like_count').limitToLast(1).on('child_added', function(snap){
-            username[i] = snap.child('username').val();
-            title[j] = snap.child('title').val();
-            photo[k] = snap.child('p_photo').val();
-            var key = snap.getKey();
-            i++;
-            j++;
-            k++;
-            document.getElementById("hotId4").innerText = username[3];
-            document.getElementById("hotTitle4").innerText = title[3];
-            document.getElementById("hotImg4").src = photo[3];
-            document.getElementById("4").href = "article.html?key="+key;
+            document.getElementById("hotId5").innerText = snap.child('username').val();
+            document.getElementById("hotTitle5").innerText = snap.child('title').val();
+            document.getElementById("hotImg5").src = snap.child('p_photo').val();
+            document.getElementById("5").href = "article.html?key="+snap.getKey();
             //console.log(username, title);
             //最後執行
         });
         var ref = firebase.database().ref('Post/Travel');
-        ref.orderByChild('like_count').limitToLast(2).on('child_added', function(snap){
-            username[i] = snap.child('username').val();
-            title[j] = snap.child('title').val();
-            photo[k] = snap.child('p_photo').val();
-            var key_k = snap.getKey();
-            var key = [];
-            key.push(key_k);
-            console.log(key);
-            i++;
-            j++;
-            k++;
-            document.getElementById("hotId5").innerText = username[4];
-            document.getElementById("hotTitle5").innerText = title[4];
-            document.getElementById("hotImg5").src = photo[4];
-            document.getElementById("hotId6").innerText = username[5];
-            document.getElementById("hotTitle6").innerText = title[5];
-            document.getElementById("hotImg6").src = photo[5];
-            document.getElementById("5").href = "article.html?key=-Km2uf4jiNoEQGXXPyb3";
-            document.getElementById("6").href = "article.html?key="+key[0];
+        ref.orderByChild('like_count').limitToLast(1).on('child_added', function(snap){
+            document.getElementById("hotId6").innerText = snap.child('username').val();
+            document.getElementById("hotTitle6").innerText = snap.child('title').val();
+            document.getElementById("hotImg6").src = snap.child('p_photo').val();
+            document.getElementById("6").href = "article.html?key="+snap.getKey();
             //console.log(username, title);
             //最後執行
         });
