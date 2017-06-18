@@ -373,7 +373,7 @@ postRef.on('value', function(snapshot) {
 
         });
      
-
+    document.querySelector('body').classList.add('loaded');
 });
 
 

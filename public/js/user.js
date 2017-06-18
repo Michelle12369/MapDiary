@@ -21,6 +21,7 @@ var userBlock;
 firebase.auth().onAuthStateChanged(function(user) {
   if (user) {
     user = user;
+    
     if( user.uid == userValue || userValue ==null){
       if(user.photoURL != null && profilePic != null){
         // profilePic.src = user.photoURL;
@@ -82,9 +83,11 @@ firebase.auth().onAuthStateChanged(function(user) {
               });
               // 照時間排序
               posts.sort(compare);
+              
             };
             if(value=="Zoo"){
               addBlock();
+              
             }
           });
         });
@@ -95,6 +98,7 @@ firebase.auth().onAuthStateChanged(function(user) {
     user = null;
     console.log("User is not logined yet.");
   }
+  
 });
 
 // 放上文章
@@ -135,6 +139,8 @@ function addBlock(){
     userBlock.append(keepReading);
 
     contents.append(userBlock);
+
+    
   });
 };
 
@@ -187,6 +193,7 @@ function addSelfBlock(){
     // userBlock.append(deleteBtn);
 
     contents.append(userBlock);
+    document.querySelector('body').classList.add('loaded');
   });
 };
 
