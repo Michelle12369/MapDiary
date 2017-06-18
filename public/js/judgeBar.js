@@ -16,7 +16,12 @@ firebase.auth().onAuthStateChanged(function(user) {
 
       var toUser = document.createElement("a");
       var img = document.createElement("img");
-      img.src = "https://graph.facebook.com/" + user.providerData[0].uid +"/picture?height=500";
+
+      if(user.providerData[0].providerId == "facebook.com"){
+        img.src = "https://graph.facebook.com/" + user.providerData[0].uid +"/picture?height=500";
+      }else{
+        img.src = user.photoURL;
+      }
       toUser.append(img);
       img.className += " dropclick";
 
@@ -51,8 +56,9 @@ firebase.auth().onAuthStateChanged(function(user) {
       noteImg.src = "img/bell.png";
       toNote.appendChild(noteImg);
       noteImg.className += " dropclick";
-      note.appendChild(toNote);
-
+      if(note!=null){
+        note.appendChild(toNote);
+      }
       noteId = user.uid;
       var i = 0;
       var noteref = firebase.database().ref('users/'+user.uid+'/notification');
@@ -75,7 +81,9 @@ firebase.auth().onAuthStateChanged(function(user) {
         }else{
           detail.innerText = reader+"對你的文章留言";
         };
-        noteDetail.append(detail);
+        if(noteDetail!=null){
+          noteDetail.append(detail);
+        }
       });
 //gary
     // user.sendEmailVerification(); 送驗證信
@@ -102,10 +110,12 @@ signoutSmtBtn.addEventListener("click",function(){
 },false);
 
 //gary
-note.addEventListener("click",function(){
-  var updates = {};
-  for(var j=0;j<notekey.length;j++){
-    updates['users/'+noteId+'/notification/'+notekey[j]+'/read'] = true;
-  }
-  firebase.database().ref().update(updates);
-});
+if(note!=null){
+  note.addEventListener("click",function(){
+    var updates = {};
+    for(var j=0;j<notekey.length;j++){
+      updates['users/'+noteId+'/notification/'+notekey[j]+'/read'] = true;
+    }
+    firebase.database().ref().update(updates);
+  });
+}

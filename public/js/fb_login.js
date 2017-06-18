@@ -16,6 +16,7 @@ provider.setCustomParameters({
 
 //使用Popup註冊FB方式
 var fbLoginBtn = document.getElementById("fbLoginBtn");
+
 fbLoginBtn.addEventListener("click",function(){
   firebase.auth().signInWithPopup(provider).then(function(result) {
     // 取得FB Token，可以使用於FB API中
