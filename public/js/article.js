@@ -374,7 +374,7 @@ postRef.on('value', function(snapshot) {
 
         });
      
-
+    document.querySelector('body').classList.add('loaded');
 });
 
 
@@ -457,6 +457,15 @@ firebase.auth().onAuthStateChanged(function(user) {
           event.preventDefault();
 
           if (event.keyCode == 13) {
+            //gary
+              firebase.database().ref('users/'+garyid+'/notification').push({
+                type: "comment",
+                article: value,
+                reader: user.displayName,
+                read: false,
+              });
+            //gary
+
 
             var d = new Date();
             var date = d.toLocaleDateString()+" "+d.toLocaleTimeString();

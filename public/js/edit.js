@@ -303,6 +303,11 @@ function initMap() {
 
     });
 
+    google.maps.event.addListenerOnce(map, 'idle', function(){
+    // do something only the first time the map is loaded
+        document.querySelector('body').classList.add('loaded');
+    });
+
 
     gps.onclick = function () {
 
