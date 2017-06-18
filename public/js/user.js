@@ -133,8 +133,11 @@ function addSelfBlock(){
 
     var userContent = document.createElement("p");
     // content.id.p_content.split("\n");
-    userContent.innerHTML= content.id.p_content.split("\n")[0]+content.id.p_content.split("\n")[1]+"...";
-
+    if(content.id.p_content.split("\n")[1] != undefined){
+      userContent.innerHTML= content.id.p_content.split("\n")[0]+content.id.p_content.split("\n")[1]+"...";
+    }else{
+      userContent.innerHTML= content.id.p_content.split("\n")[0];
+    }
     var userPic = document.createElement("img");
     userPic.src = content.id.p_photo;
     userPic.style.width = "100%";

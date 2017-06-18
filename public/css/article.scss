@@ -1,6 +1,12 @@
+body{
+    margin: 0;
+}
 article {
     margin-top: 64px;
     line-height: 1.8;
+    width: 100%;
+    margin-left:0;
+    margin-right:0;
 }
 
 iframe {
@@ -59,6 +65,15 @@ iframe {
             border: 1px solid #0abab5;
         }
     }
+}
+.result{
+    padding:30px;
+}
+.mapFixed{
+    position:fixed !important;
+    right: 0;
+    bottom:0;
+    width: 50%;
 }
 
 @media (max-width: 576px) {
