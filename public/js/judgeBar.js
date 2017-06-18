@@ -16,7 +16,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 
       var toUser = document.createElement("a");
       var img = document.createElement("img");
-      img.src = user.photoURL;
+      img.src = "https://graph.facebook.com/" + user.providerData[0].uid +"/picture?height=500";
       toUser.append(img);
       img.className += " dropclick";
 

@@ -21,12 +21,12 @@ var userBlock;
 firebase.auth().onAuthStateChanged(function(user) {
   if (user) {
     user = user;
-    if(user.uid == userValue || userValue ==null){
+    if( user.uid == userValue || userValue ==null){
       if(user.photoURL != null && profilePic != null){
-        profilePic.src = user.photoURL;
+        // profilePic.src = user.photoURL;
+        profilePic.src = "https://graph.facebook.com/" + user.providerData[0].uid +"/picture?height=500";
         profileName.innerHTML = user.displayName;
       } else {
-        console.log(profilePic);
         profilePic.src = "img/man.png";
       }
       kind.forEach(function(value,index){
@@ -54,6 +54,8 @@ firebase.auth().onAuthStateChanged(function(user) {
       firebase.database().ref('/users/'+userValue).once('value').then(function(snapshot){
         if(snapshot.val().pic != null && profilePic != null){
           profilePic.src = snapshot.val().pic;
+          // console.log(snapshot.val().fb);
+          // "https://graph.facebook.com/" + fbuid +"/picture?height=500"
           profileName.innerHTML = snapshot.val().name;
         } else {
           profilePic.src = "img/man.png";
@@ -123,30 +125,39 @@ function addBlock(){
 // 放上個人文章
 function addSelfBlock(){
   posts.forEach(function(content){
-    var userTitle = document.createElement("h1");
+    var userTitle = document.createElement("h2");
     userTitle.innerHTML=content.id.title;
 
     var userKind = document.createElement("h3");
     userKind.innerHTML="種類："+content.kind;
 
     var userContent = document.createElement("p");
-    userContent.innerHTML=content.id.p_content;
-
+    // content.id.p_content.split("\n");
+    if(content.id.p_content.split("\n")[1] != undefined){
+      userContent.innerHTML= content.id.p_content.split("\n")[0]+content.id.p_content.split("\n")[1]+"...";
+    }else{
+      userContent.innerHTML= content.id.p_content.split("\n")[0];
+    }
     var userPic = document.createElement("img");
     userPic.src = content.id.p_photo;
     userPic.style.width = "100%";
 
-    var deleteBtn = document.createElement("button");
-    deleteBtn.innerHTML="刪除文章";
-    deleteBtn.onclick = function(){
-      alert("確認刪除文章?");
-      console.log(content.key);
-      // firebase.database().ref('/Post/'+content.kind+"/"+content.key).remove();
-      this.parentNode.remove();
-    };
+    var keepReading = document.createElement("a");
+    keepReading.innerHTML = "繼續閱讀";
+    keepReading.className += "keepRead";
+    keepReading.href = "/article.html?key=" + content.key;
+
+    // 刪除文章的按鈕
+    // var deleteBtn = document.createElement("button");
+    // deleteBtn.innerHTML="刪除文章";
+    // deleteBtn.onclick = function(){
+    //   alert("確認刪除文章?");
+    //   console.log(content.key);
+    //   firebase.database().ref('/Post/'+content.kind+"/"+content.key).remove();
+    //   this.parentNode.remove();
+    // };
 
     var aTag = document.createElement("a");
-    aTag.href = "/article.html?key=" + content.key;
     aTag.prepend(userPic);
     aTag.append(userTitle);
     aTag.append(userKind);
@@ -155,7 +166,8 @@ function addSelfBlock(){
 
     userBlock = document.createElement("div");
     userBlock.append(aTag);
-    userBlock.append(deleteBtn);
+    userBlock.append(keepReading);
+    // userBlock.append(deleteBtn);
 
     contents.append(userBlock);
   });

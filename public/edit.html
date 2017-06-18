@@ -126,20 +126,31 @@
                                 <!-- Modal content -->
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <span class="close">&times;</span>
+                                        <span class="close" style="padding-right: 15px; font-size: 16pt;">&times;</span>
                                         <h2>編輯封面照片</h2>
                                     </div>
                                     <div class="modal-body">
                                         <p>Step1. 選擇圖片</p>
                                         <input id="file" type="file" accept='image/*'>
-                                        <p>Step2. 裁切圖片</p>
-                                        <div id="crop-img">
-                                            <img id="image">
+                                        <div class="row" style="margin:0;">
+                                        <div class="col-sm-6">
+                                            <p>Step2. 裁切圖片</p>
+                                            <div id="crop-img">
+                                                <img id="image">
+                                            </div>
+                                            <button type="button" id="button">Crop</button>
                                         </div>
-                                        <button type="button" id="button">Crop</button>
+                                        <div class="col-sm-6">
                                         <p>Step3. 圖片結果</p>
                                         <img id="result">
+                                        </div>
+                                        <div class="col-xs-12 col-sm-12">
+                                            <span class="close modal-confirm">確認</span>
+                                        </div>
+                                        </div>
+                                        
                                     </div>
+                                    
                                 </div>
                             </div>
  
@@ -154,12 +165,13 @@
             </section>
  
             <!--地圖-->
-            <div class="col-sm-6 map">
-                <div id="pickmap" style="width:100%; height:100%"></div>
-                <input id="pac-input" class="controls" type="text" placeholder="地址" style="visibility:hidden">
-                <img src="img/gps.png" id="gps" style="visibility:hidden">
-            </div>
- 
+            <!-- <div  class="mapFixed"> -->
+                <div class="map mapFixed">
+                    <div id="pickmap" style="width:100%; height:710px"></div>
+                    <input id="pac-input" class="controls" type="text" placeholder="地址" style="visibility:hidden">
+                    <img src="img/gps.png" id="gps" style="visibility:hidden">
+                </div>
+            <!-- </div> -->
         </div>
     </article>
     <script src="https://www.gstatic.com/firebasejs/4.1.1/firebase.js"></script>

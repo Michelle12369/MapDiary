@@ -95,7 +95,7 @@
         </div>
     </nav>
 
-    <article class="container article">
+    <article class="container article" style="width: 100%;">
         <div class="row">
             <!--文章內容-->
             <section class="result col-sm-6">
@@ -152,9 +152,10 @@
             </section>
 
             <!--地圖-->
-            
-                 <div class="col-sm-6 map" id="GoogleMap"  style="width:100%; height: 710px;top:10px;" >
-            
+            <div class="mapFixed">
+                <div class="map" id="GoogleMap"  style="width:100%; height: 710px;" >
+                </div>
+            </div>
         </div>
     </article>
     <script src="https://www.gstatic.com/firebasejs/4.1.1/firebase.js"></script>
