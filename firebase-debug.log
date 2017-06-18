@@ -222,3 +222,17 @@
 [info] Public Directory: public
 [info] 
 [info] Server listening at: http://localhost:5000
+[debug] ----------------------------------------------------------------------
+[debug] Command:      /Users/michelle/.nvm/versions/node/v7.9.0/bin/node /usr/local/bin/firebase serve
+[debug] CLI Version:  3.5.0
+[debug] Platform:     darwin
+[debug] Node Version: v7.9.0
+[debug] Time:         Thu Jun 15 2017 11:19:55 GMT+0800 (CST)
+[debug] ----------------------------------------------------------------------
+[debug] 
+[info] Starting Firebase development server...
+[info] 
+[info] Project Directory: /Users/michelle/Desktop/mapping
+[info] Public Directory: public
+[info] 
+[info] Server listening at: http://localhost:5000
