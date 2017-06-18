@@ -91,11 +91,11 @@ submit.addEventListener('click', function () {
 
             alert("您尚未選擇圖片");
 
-        }else if (!roundedImage)
+        }else if (!roundedImage){
 
             alert("您尚未裁切圖片");
 
-        else{
+        }else{
 
             var storageRef = firebase.storage().ref();    
             var ranNum = Math.floor(Math.random() * 999999999);  
@@ -149,6 +149,7 @@ function uploadPost(title, category, p_content, downloadURL,email,name) {
             p_content: p_content,
             p_photo: downloadURL, 
             like_count: 0,
+            type: category
         });
 
         var postId = newPost.getKey();
@@ -169,6 +170,7 @@ function initMap() {
         zoomControl: false,
         mapTypeControl: false,
         streetViewControl: false
+
     });
 
     map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(gps);
@@ -191,6 +193,8 @@ function initMap() {
 
     lat = myLatlng.lat();
     lng = myLatlng.lng();
+
+
 
     // var input = document.createElement("input");
     // input.id = "pac-input";
