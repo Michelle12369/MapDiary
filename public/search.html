@@ -91,7 +91,13 @@
             </div>
         </div>
     </nav>
+    <div id="loader-wrapper">
+        <div id="loader"></div>
 
+        <div class="loader-section section-left"></div>
+        <div class="loader-section section-right"></div>
+
+    </div>
     <article class="container">
         <div class="row">
 
@@ -560,7 +566,10 @@ if (navigator.geolocation)
 
 }
 
-
+google.maps.event.addListenerOnce(map, 'idle', function(){
+    // do something only the first time the map is loaded
+        document.querySelector('body').classList.add('loaded');
+    });
 
   map.addListener('dragend', function(e)
           {

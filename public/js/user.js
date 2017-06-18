@@ -137,7 +137,7 @@ function addBlock(){
     userBlock = document.createElement("div");
     userBlock.append(aTag);
     userBlock.append(keepReading);
-
+    document.querySelector('body').classList.add('loaded');
     contents.append(userBlock);
 
     
@@ -191,9 +191,9 @@ function addSelfBlock(){
     userBlock.append(aTag);
     userBlock.append(keepReading);
     // userBlock.append(deleteBtn);
-
-    contents.append(userBlock);
     document.querySelector('body').classList.add('loaded');
+    contents.append(userBlock);
+    
   });
 };
 
