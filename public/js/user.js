@@ -3,8 +3,8 @@ var user;
 var Dname = document.getElementById('Dname');
 var profilePic = document.getElementById('profile-pic');
 var profileName = document.getElementById('profile-name');
-var kind = ['Charity','Family','Food','Friend','Love','Mood','Travel','Zoo'];
-var kind_chinese = ['公益','家庭','美食','朋友','愛情','心情','旅遊'];
+// var kind = ['Charity','Family','Food','Friend','Love','Mood','Travel','Zoo'];
+// var kind_chinese = ['公益','家庭','美食','朋友','愛情','心情','旅遊'];
 
 var query = location.search.substring(1);
 var parameters = {};
@@ -14,19 +14,14 @@ var userValue = keyValuePairs[1];
 parameters[key] = userValue;
 var toggle = true;
 
-var story = [];
-var posts = [];
-var key;
-var userBlock;
+var key,userBlock;
+
 firebase.auth().onAuthStateChanged(function(user) {
   if (user) {
     user = user;
-    
+    document.querySelector('body').classList.add('loaded');
     if( user.uid == userValue || userValue ==null){
       if(user.photoURL != null && profilePic != null){
-        // profilePic.src = user.photoURL;
-        console.log(user.providerData[0].providerId );
-
         if(user.providerData[0].providerId == "facebook.com"){
           profilePic.src = "https://graph.facebook.com/" + user.providerData[0].uid +"/picture?height=500";
         }else{
@@ -36,29 +31,9 @@ firebase.auth().onAuthStateChanged(function(user) {
       } else {
         profilePic.src = "img/man.png";
       }
-      kind.forEach(function(value,index){
-        firebase.database().ref('/Post/'+value).once('value').then(function(snapshot) {
-          var contents = document.getElementById('contents');
-          // var key = Object.keys(snapshot.val());
-          snapshot.forEach(function(userSnapshot) {
-            if(userSnapshot.val().userid == user.uid){
-              var id = userSnapshot.key;
-              posts.push({
-                id : userSnapshot.val(),
-                key: userSnapshot.key,
-                kind: value
-              });
-              // 照時間排序
-              posts.sort(compare);
-            };
-            if(value=="Zoo"){
-              addSelfBlock();
-            }
-          });
-        });
-      });
+      addArticle(user.uid);
     } else{
-      console.log(userValue);
+
       firebase.database().ref('/users/'+userValue).once('value').then(function(snapshot){
         if(snapshot.val().pic != null && profilePic != null){
           profilePic.src = snapshot.val().pic;
@@ -68,30 +43,7 @@ firebase.auth().onAuthStateChanged(function(user) {
           profileName.innerHTML = "♕ 使用者 ♕"; 
         }
       });
-
-      kind.forEach(function(value,index){
-        firebase.database().ref('/Post/'+value).once('value').then(function(snapshot) {
-          var contents = document.getElementById('contents');
-          var key = Object.keys(snapshot.val());
-          snapshot.forEach(function(userSnapshot) {
-            if(userSnapshot.val().userid == userValue){
-              var id = userSnapshot.key;
-              posts.push({
-                id : userSnapshot.val(),
-                key: userSnapshot.key,
-                kind: value
-              });
-              // 照時間排序
-              posts.sort(compare);
-              
-            };
-            if(value=="Zoo"){
-              addBlock();
-              
-            }
-          });
-        });
-      });
+      addArticle(userValue);
     }
     // user.sendEmailVerification(); 送驗證信
   } else {
@@ -101,113 +53,56 @@ firebase.auth().onAuthStateChanged(function(user) {
   
 });
 
+
+
 // 放上文章
-function addBlock(){
-  posts.forEach(function(content){
-    var userTitle = document.createElement("h2");
-    userTitle.innerHTML=content.id.title;
+function addArticle(user){
+  firebase.database().ref('/users/'+user+'/post').once('value',function(snapshot){
+    snapshot.forEach(function(childSnapshot) {
+      var content = childSnapshot.val();
+      console.log(content);
 
-    var userKind = document.createElement("h3");
-    userKind.innerHTML="種類："+content.kind+"&emsp;&emsp;日期："+content.id.date;;
+      var userTitle = document.createElement("h2");
+      userTitle.innerHTML=content.title;
 
-    var userContent = document.createElement("p");
-    if(content.id.p_content.split("\n")[1] != undefined){
-      userContent.innerHTML= content.id.p_content.split("\n")[0]+content.id.p_content.split("\n")[1]+"...";
-    }else{
-      userContent.innerHTML= content.id.p_content.split("\n")[0];
-    }
+      var userKind = document.createElement("h3");
+      userKind.innerHTML="關於："+content.type+"&emsp;&emsp;日期："+content.date;;
 
-    var userPic = document.createElement("img");
-    userPic.src = content.id.p_photo;
-    userPic.style.width = "100%";
+      var userContent = document.createElement("p");
+      if(content.p_content.split("\n")[1] != undefined){
+        userContent.innerHTML= content.p_content.split("\n")[0]+content.p_content.split("\n")[1]+"...";
+      }else{
+        userContent.innerHTML= content.p_content.split("\n")[0];
+      }
 
-    var keepReading = document.createElement("a");
-    keepReading.innerHTML = "繼續閱讀";
-    keepReading.className += "keepRead";
-    keepReading.href = "/article.html?key=" + content.key;
+      var userPic = document.createElement("img");
+      userPic.src = content.p_photo;
+      userPic.style.width = "100%";
 
+      var keepReading = document.createElement("a");
+      keepReading.innerHTML = "繼續閱讀";
+      keepReading.className += "keepRead";
+      keepReading.href = "/article.html?key=" + content.article_key;
 
+      // 刪除文章的按鈕
+      // var deleteBtn = document.createElement("button");
+      // deleteBtn.innerHTML="刪除文章";
+      // deleteBtn.onclick = function(){
+      //   alert("確認刪除文章?");
+      //   console.log(content.key);
+      //   firebase.database().ref('/Post/'+content.kind+"/"+content.key).remove();
+      //   this.parentNode.remove();
+      // };
 
-    var aTag = document.createElement("a");
-    aTag.prepend(userPic);
-    aTag.append(userTitle);
-    aTag.append(userKind);
-    aTag.append(userContent);
-
-    userBlock = document.createElement("div");
-    userBlock.append(aTag);
-    userBlock.append(keepReading);
-    document.querySelector('body').classList.add('loaded');
-    contents.append(userBlock);
-
-    
+      userBlock = document.createElement("div");
+      userBlock.prepend(userPic);
+      userBlock.append(userTitle);
+      userBlock.append(userKind);
+      userBlock.append(userContent);
+      userBlock.append(keepReading);
+      document.querySelector('body').classList.add('loaded');
+      contents.prepend(userBlock);
+    });
   });
-};
-
-// 放上個人文章
-function addSelfBlock(){
-  posts.forEach(function(content){
-    var userTitle = document.createElement("h2");
-    userTitle.innerHTML=content.id.title;
-
-    console.log(content.id.date);
-    var userKind = document.createElement("h3");
-    userKind.innerHTML="種類："+content.kind+"&emsp;&emsp;日期："+content.id.date;
-
-    var userContent = document.createElement("p");
-    // content.id.p_content.split("\n");
-    if(content.id.p_content.split("\n")[1] != undefined){
-      userContent.innerHTML= content.id.p_content.split("\n")[0]+content.id.p_content.split("\n")[1]+"...";
-    }else{
-      userContent.innerHTML= content.id.p_content.split("\n")[0];
-    }
-    var userPic = document.createElement("img");
-    userPic.src = content.id.p_photo;
-    userPic.style.width = "100%";
-
-    var keepReading = document.createElement("a");
-    keepReading.innerHTML = "繼續閱讀";
-    keepReading.className += "keepRead";
-    keepReading.href = "/article.html?key=" + content.key;
-
-    // 刪除文章的按鈕
-    // var deleteBtn = document.createElement("button");
-    // deleteBtn.innerHTML="刪除文章";
-    // deleteBtn.onclick = function(){
-    //   alert("確認刪除文章?");
-    //   console.log(content.key);
-    //   firebase.database().ref('/Post/'+content.kind+"/"+content.key).remove();
-    //   this.parentNode.remove();
-    // };
-
-    var aTag = document.createElement("a");
-    aTag.prepend(userPic);
-    aTag.append(userTitle);
-    aTag.append(userKind);
-    aTag.append(userContent);
-
-
-    userBlock = document.createElement("div");
-    userBlock.append(aTag);
-    userBlock.append(keepReading);
-    // userBlock.append(deleteBtn);
-    document.querySelector('body').classList.add('loaded');
-    contents.append(userBlock);
-    
-  });
-};
-
-var deleteF;
-
-
-
-// 按發文排序
-function compare(a,b) {
-  if (a.id.timestamp > b.id.timestamp)
-    return -1;
-  if (a.id.timestamp < b.id.timestamp)
-    return 1;
-  return 0;
 }
-
 
