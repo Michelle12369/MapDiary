@@ -153,9 +153,27 @@ function uploadPost(title, category, p_content, downloadURL,email,name) {
         });
 
         var postId = newPost.getKey();
+        var post_page = "/article.html?key="+postId;
+        window.location.replace(post_page);
 
-        alert('上傳成功');
-        window.location.reload();
+
+        var userPost = firebase.database().ref('users/'+email+'/post/'+postId).set({
+            userid: email,
+            username: name,
+            title: title,
+            timestamp: timestamp,
+            date: date,
+            lat: lat,
+            lng: lng,
+            p_content: p_content,
+            p_photo: downloadURL, 
+            like_count: 0,
+            type: category,
+            article_key: postId
+        });
+
+
+
 }
 
 
@@ -284,6 +302,11 @@ function initMap() {
 
         }
 
+    });
+
+    google.maps.event.addListenerOnce(map, 'idle', function(){
+    // do something only the first time the map is loaded
+        document.querySelector('body').classList.add('loaded');
     });
 
 

@@ -1,5 +1,5 @@
 window.onload=function(){
-    document.querySelector('body').classList.add('loaded');
+        // document.querySelector('body').classList.add('loaded');
 }
 
 

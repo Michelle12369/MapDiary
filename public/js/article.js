@@ -266,6 +266,7 @@ postRef.on('value', function(snapshot) {
            
             like.innerHTML = childData2.like_count;
             like_div.style.visibility = 'visible';
+            document.querySelector('#comment-hr').style.visibility = 'visible';
             c = category;
             id = postId;
             lat = childData2.lat;
@@ -276,7 +277,7 @@ postRef.on('value', function(snapshot) {
             ulike = childData2.like_count;
             userlike = childData2.like_user;
             garyid = childData2.userid;
-
+            console.log(garyid);
             if (!childData2.link){
 
                aimage.src = childData2.p_photo;
@@ -310,8 +311,8 @@ postRef.on('value', function(snapshot) {
 
           //如果有likes欄位->已經有人按讚、如果likes欄位有使用者的ID -> 已經按過讚了
           if(snapshot.child('like_user').exists() && snapshot.child('like_user').hasChild(user.uid)){
-              heart.classList.add('likes-count');
-              heart.classList.toggle('like-click');
+              heart.classList.add('likes-count'); //空心
+              heart.classList.toggle('like-click'); //加上實心
                                            
           }else{
               
@@ -373,7 +374,7 @@ postRef.on('value', function(snapshot) {
 
         });
      
-
+    document.querySelector('body').classList.add('loaded');
 });
 
 
@@ -452,6 +453,10 @@ firebase.auth().onAuthStateChanged(function(user) {
             
         //提交comment
         comment_input.addEventListener("keyup",function(event){
+                  
+          event.preventDefault();
+
+          if (event.keyCode == 13) {
             //gary
               firebase.database().ref('users/'+garyid+'/notification').push({
                 type: "comment",
@@ -459,11 +464,8 @@ firebase.auth().onAuthStateChanged(function(user) {
                 reader: user.displayName,
                 read: false,
               });
-              //gary
-                  
-          event.preventDefault();
+            //gary
 
-          if (event.keyCode == 13) {
 
             var d = new Date();
             var date = d.toLocaleDateString()+" "+d.toLocaleTimeString();
@@ -475,6 +477,15 @@ firebase.auth().onAuthStateChanged(function(user) {
               //不可提交空白留言
 
             }else{
+            //gary
+              firebase.database().ref('users/'+garyid+'/notification').push({
+                type: "comment",
+                article: value,
+                reader: user.displayName,
+                read: false,
+              });
+            //gary
+
 
             //上傳留言到firebase
             var commentRef = firebase.database().ref('Comment/'+id);
@@ -764,19 +775,47 @@ firebase.auth().onAuthStateChanged(function(user) {
                        }
 
 
+
+                        // heart.classList.remove('like-count'); //空心
+
                         // var likeRef3 = firebase.database().ref('Post/'+c+'/'+id);
                         // likeRef3.once('value',function(snapshot){
-                        // //如果有likes欄位->已經有人按讚、如果likes欄位有使用者的ID -> 已經按過讚了
-                        // if(snapshot.child('like_user').exists() && snapshot.child('like_user').hasChild(user.uid)){
-                        //             heart.classList.add('likes-count');
-                        //             heart.classList.toggle('like-click');
-                                                                   
-                        // }else{
-                                      
-                        //             heart.classList.add('likes-count');
-                                                               
-                        //       }
+
+                        //   //如果有likes欄位->已經有人按讚、如果likes欄位有使用者的ID -> 已經按過讚了
+                        //   if(snapshot.child('like_user').exists() && snapshot.child('like_user').hasChild(user.uid)){
+                        //       heart.classList.add('likes-count'); //空心
+                        //       heart.classList.toggle('like-click'); //加上實心
+                                                           
+                        //   }else{
+                              
+                        //       heart.classList.add('likes-count');
+                                                       
+                        //   }
                         // }); 
+
+
+                        // heart.classList.add('likes-count'); //空心
+                        // heart.classList.toggle('like-click'); //加上實心
+
+
+                        console.log(heart.classList.contains('like-click'));
+
+                        //代表有按過讚 -> 要顯示實心的
+                        if (heart.classList.contains('like-click')){
+
+
+                            heart.classList.toggle('like-click');
+
+
+
+                        }else{
+
+
+
+                             heart.classList.add('likes-count');
+
+                        }
+
 
 
 
@@ -1006,4 +1045,3 @@ function handleLocationError(browserHasGeolocation, pos) {
     //                      'Error: Your browser doesn\'t support geolocation.');
 
 }
-

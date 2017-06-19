@@ -21,7 +21,6 @@
         <a href="index.html">
             <img src="img/logo.png" alt="logo" class="logo">
         </a>
-        <form class="">
            <form class="" action="find.html">
             <input type="text" name="search" placeholder="城市、地點" class="form-control mr-sm-2">
                  <select class="select-bar" name="kind">
@@ -92,7 +91,13 @@
             </div>
         </div>
     </nav>
+    <div id="loader-wrapper">
+        <div id="loader"></div>
 
+        <div class="loader-section section-left"></div>
+        <div class="loader-section section-right"></div>
+
+    </div>
     <article class="container">
         <div class="row">
 
@@ -561,7 +566,10 @@ if (navigator.geolocation)
 
 }
 
-
+google.maps.event.addListenerOnce(map, 'idle', function(){
+    // do something only the first time the map is loaded
+        document.querySelector('body').classList.add('loaded');
+    });
 
   map.addListener('dragend', function(e)
           {
