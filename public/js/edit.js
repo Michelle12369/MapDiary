@@ -168,7 +168,8 @@ function uploadPost(title, category, p_content, downloadURL,email,name) {
             p_content: p_content,
             p_photo: downloadURL, 
             like_count: 0,
-            type: category
+            type: category,
+            article_key: postId
         });
 
 
