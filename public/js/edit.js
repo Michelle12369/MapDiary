@@ -157,7 +157,7 @@ function uploadPost(title, category, p_content, downloadURL,email,name) {
         window.location.replace(post_page);
 
 
-        var userPost = firebase.database().ref('users/'+email+'/post').push({
+        var userPost = firebase.database().ref('users/'+email+'/post/'+postId).set({
             userid: email,
             username: name,
             title: title,
@@ -168,7 +168,8 @@ function uploadPost(title, category, p_content, downloadURL,email,name) {
             p_content: p_content,
             p_photo: downloadURL, 
             like_count: 0,
-            type: category
+            type: category,
+            article_key: postId
         });
 
 
