@@ -34,6 +34,7 @@ parameters[key] = value;
 //
 var toggle = true;
 var postRef = firebase.database().ref('Post');
+var userRef = firebase.database().ref('users');
 //
 var style = [
       {
@@ -326,8 +327,7 @@ postRef.on('value', function(snapshot) {
     
 
         //連接使用者留言照片、留言網頁
-        var userRef = firebase.database().ref('users/'+user.uid);
-        userRef.once('value',function(snapshot){
+        userRef.child(user.uid).once('value',function(snapshot){
 
          current_comment_user.style = 'visible';
          comment_input.style = 'visible';
@@ -520,6 +520,11 @@ firebase.auth().onAuthStateChanged(function(user) {
                 postRef.child(c).child(id).remove();
                 var commentRef = firebase.database().ref('Comment/'+id);
                 commentRef.remove();
+
+
+
+
+
                 alert('文章已刪除');
                 window.location.replace("/user.html");
 
