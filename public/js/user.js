@@ -21,12 +21,9 @@ firebase.auth().onAuthStateChanged(function(user) {
     user = user;
 
     if( user!=null && ( user.uid == userValue || userValue ==null)){
+
       if(user.photoURL != null && profilePic != null){
-        if(user.providerData[0].providerId == "facebook.com"){
-          profilePic.src = "https://graph.facebook.com/" + user.providerData[0].uid +"/picture?height=500";
-        }else{
-          profilePic.src = user.photoURL;
-        }
+        profilePic.src = user.photoURL;
         profileName.innerHTML = user.displayName;
       } else {
         profilePic.src = "img/man.png";
@@ -53,7 +50,6 @@ function addArticle(user){
   firebase.database().ref('/users/'+user+'/post').once('value',function(snapshot){
     snapshot.forEach(function(childSnapshot) {
       var content = childSnapshot.val();
-      console.log(content);
 
       var userTitle = document.createElement("h2");
       userTitle.innerHTML=content.title;
@@ -77,24 +73,14 @@ function addArticle(user){
       keepReading.className += "keepRead";
       keepReading.href = "/article.html?key=" + content.article_key;
 
-      // 刪除文章的按鈕
-      // var deleteBtn = document.createElement("button");
-      // deleteBtn.innerHTML="刪除文章";
-      // deleteBtn.onclick = function(){
-      //   alert("確認刪除文章?");
-      //   console.log(content.key);
-      //   firebase.database().ref('/Post/'+content.kind+"/"+content.key).remove();
-      //   this.parentNode.remove();
-      // };
-
       userBlock = document.createElement("div");
       userBlock.prepend(userPic);
       userBlock.append(userTitle);
       userBlock.append(userKind);
       userBlock.append(userContent);
       userBlock.append(keepReading);
-      document.querySelector('body').classList.add('loaded');
-      document.querySelector('body').classList.add('loaded');
+
+      // document.querySelector('body').classList.add('loaded');
       contents.prepend(userBlock);
     });
   });
