@@ -266,16 +266,35 @@ submit.addEventListener('click', function () {
 
         if (!title || !p_content) { 
 
-            alert( "沒有填寫完整" ); 
+             swal({
 
+                title: "標題 / 文章填寫不完整",
+                text: "請再檢查一次",
+                confirmButtonColor: "#0abab5",
+                confirmButtonText: '知道了'
+                          
+
+                });
 
         }else if (!selectedFile){
 
-            alert("您尚未選擇圖片");
+              swal({
+
+                title: "你還沒選擇圖片",
+                confirmButtonColor: "#0abab5",
+                confirmButtonText: '知道了'
+
+                });
 
         }else if (!roundedImage){
 
-            alert("您尚未裁切圖片");
+             swal({
+
+                title: "照片還沒裁切",
+                confirmButtonColor: "#0abab5",
+                confirmButtonText: '知道了'
+
+                });
 
         }else{
 
@@ -458,7 +477,7 @@ if (navigator.geolocation) {
 
         if (!place.geometry) {
 
-            alert("請填寫正確位址");
+            //alert("請填寫正確位址");
 
         } else {
 

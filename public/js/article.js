@@ -533,21 +533,53 @@ firebase.auth().onAuthStateChanged(function(user) {
 
 
 
-            var r=confirm("確定刪除？")
-            
-            if (r==true){
+            // var r = confirm("確定刪除？");
+
+            // if (r==true){
             
              
-                postRef.child(c).child(id).remove();
-                userRef.child(userid).child('post').child(id).remove();
-                var commentRef = firebase.database().ref('Comment/'+id);
-                commentRef.remove();
+                // postRef.child(c).child(id).remove();
+                // userRef.child(userid).child('post').child(id).remove();
+                // var commentRef = firebase.database().ref('Comment/'+id);
+                // commentRef.remove();
 
 
-                alert('文章已刪除');
-                window.location.replace("/user.html");
+            //     alert('文章已刪除');
+            //     window.location.replace("/user.html");
 
-            }  
+            // }  
+
+            swal({   
+
+              title: "確定刪除文章?",   
+              text: "文章刪除後無法復原",   
+              type: "warning",   
+              showCancelButton: true,   
+              confirmButtonColor: "#DD6B55",   
+              confirmButtonText: "好..刪好刪滿",   
+              cancelButtonText: "不..讓我想想",   
+              closeOnConfirm: false,   closeOnCancel: false }, 
+              function(isConfirm){   
+                if (isConfirm) {     
+                  swal({
+                    title:"刪除完成!", 
+                    text: "您的文章已被刪除", 
+                    type: "success",
+                    confirmButtonColor: "#0abab5" });   
+                  postRef.child(c).child(id).remove();
+                  userRef.child(userid).child('post').child(id).remove();
+                  var commentRef = firebase.database().ref('Comment/'+id);
+                  commentRef.remove();
+                  window.location.replace("/user.html");
+                } else {     
+                  swal({
+                    title: "取消刪除!", 
+                    text: "您的文章安全了", 
+                    type: "error",
+                    confirmButtonColor: "#0abab5"
+                  });   
+                } });
+
 
         });
 
@@ -671,11 +703,27 @@ firebase.auth().onAuthStateChanged(function(user) {
                   //確認是否填寫完畢(不完整)、會出現bug一直重複
                     if (!ntitle || !ncontent){
 
-                        alert("您有缺漏的部分");
+                        swal({
+
+                          title: "標題 / 文章填寫不完整",
+                          text: "請再檢查一次",
+                          confirmButtonColor: "#0abab5",
+                          confirmButtonText: '知道了'
+                          
+
+                        });
 
                     }else if (!roundedImage){
 
-                        alert("您尚未裁切圖片");
+                        swal({
+
+                          title: "照片還沒裁切",
+                          confirmButtonColor: "#0abab5",
+                          confirmButtonText: '知道了'
+
+                        });
+
+                        
 
                     }else{
 
@@ -1085,7 +1133,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 
         if (!place.geometry) {
 
-            alert("請填寫正確位址");
+          //alert
 
         } else {
 
