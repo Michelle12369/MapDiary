@@ -76,6 +76,7 @@ function addArticle(user){
       keepReading.innerHTML = "繼續閱讀";
       keepReading.className += "keepRead";
       keepReading.href = "/article.html?key=" + content.article_key;
+      //console.log(content.article_key);
 
       // 刪除文章的按鈕
       // var deleteBtn = document.createElement("button");

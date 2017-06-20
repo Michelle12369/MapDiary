@@ -13,7 +13,6 @@ var select = document.querySelector('#select');
 var select_category = document.querySelector('#select_category');
 var input = document.querySelector('#pac-input');
 var gps = document.querySelector('#gps');
-
 //修改照片
 var modal = document.querySelector('#myModal');
 var btn = document.querySelector("#myBtn");
@@ -522,9 +521,6 @@ firebase.auth().onAuthStateChanged(function(user) {
                 commentRef.remove();
 
 
-
-
-
                 alert('文章已刪除');
                 window.location.replace("/user.html");
 
@@ -933,7 +929,7 @@ firebase.auth().onAuthStateChanged(function(user) {
     });
 
     map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(gps);
-    map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(input);
+    map.controls[google.maps.ControlPosition.RIGHT_TOP].push(input);
 
 
 
