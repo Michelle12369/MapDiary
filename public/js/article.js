@@ -330,7 +330,7 @@ postRef.on('value', function(snapshot) {
           //如果有likes欄位->已經有人按讚、如果likes欄位有使用者的ID -> 已經按過讚了
           if(snapshot.child('like_user').exists() && snapshot.child('like_user').hasChild(user.uid)){
               heart.classList.add('likes-count'); //空心
-              heart.classList.toggle('like-click'); //加上實心
+              heart.classList.add('like-click'); //加上實心
                                            
           }else{
               
@@ -563,6 +563,7 @@ firebase.auth().onAuthStateChanged(function(user) {
             like_div.style.display = 'none';//按讚區塊隱藏
             document.querySelector('#commentlist').style.display = 'none'; //留言列表
             document.querySelector('#commentuser').style.display = 'none'; //發表留言隱藏
+            document.querySelector('#circle').style.display = 'none';
             //更換title -> input
             var input = document.createElement('input');//新增 <input>
             input.id = "input";//<input id="input">
@@ -888,23 +889,23 @@ firebase.auth().onAuthStateChanged(function(user) {
                         // heart.classList.toggle('like-click'); //加上實心
 
 
-                        console.log(heart.classList.contains('like-click'));
+                        // console.log(heart.classList.contains('like-click'));
 
-                        //代表有按過讚 -> 要顯示實心的
-                        if (heart.classList.contains('like-click')){
-
-
-                            heart.classList.toggle('like-click');
+                        // //代表有按過讚 -> 要顯示實心的
+                        // if (heart.classList.contains('like-click')){
 
 
-
-                        }else{
+                        //     heart.classList.toggle('like-click');
 
 
 
-                             heart.classList.add('likes-count');
+                        // }else{
 
-                        }
+
+
+                        //      heart.classList.add('likes-count');
+
+                        // }
 
 
 
@@ -944,6 +945,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                         like_div.style.display = '';
                         document.querySelector('#commentlist').style.display= ''; //留言列表、發表留言隱藏
                         document.querySelector('#commentuser').style.display = '';
+                        document.querySelector('#circle').style.display = '';
                         document.querySelector('#done').style.display = 'none';
                         document.querySelector('#edit').style.display = 'inline';
 
@@ -954,7 +956,6 @@ firebase.auth().onAuthStateChanged(function(user) {
 
             });
             
-
 
 
      } else {
