@@ -31,7 +31,7 @@ fbLoginBtn.addEventListener("click",function(){
     var photoUrl = "https://graph.facebook.com/" + fbuid +"/picture?height=500";
     console.log(photoUrl);
 
-    firebase.database().ref('users/' + loginUser.uid).set({
+    firebase.database().ref('users/' + loginUser.uid).update({
       userid: loginUser.uid,
 	    email: loginUser.email,
       name: loginUser.displayName,
