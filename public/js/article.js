@@ -243,9 +243,27 @@ postRef.on('value', function(snapshot) {
 
           }else{
 
-             author.innerHTML = childData2.username+" # ";
+             var n = childData2.username+" # ";
+             author.innerHTML = '<a href="/user.html?key='+childData2.userid+'" target="_blank">'+n+'</a>';
+
 
           }
+
+
+          userRef.child(childData2.userid).on('value',function(snapshot){
+
+
+            if(snapshot.val().pic){
+
+              document.querySelector('.img-circle').src = snapshot.val().pic;
+              document.querySelector('#circle').href = '/user.html?key='+childData2.userid;
+
+            }
+
+
+
+          });
+
 
           firebase.auth().onAuthStateChanged(function(user) {
 
@@ -258,8 +276,8 @@ postRef.on('value', function(snapshot) {
            });
 
 
-          date.innerHTML = childData2.date+" # ";
-          type.innerHTML = "關於 "+category;
+            date.innerHTML = childData2.date+" # ";
+            type.innerHTML = "關於 "+category;
             content.innerHTML = childData2.p_content;
             //未來: 經緯度轉換成地址
             //map.src = map_url+'&q='+childData2.lat+','+childData2.lng;
@@ -284,7 +302,7 @@ postRef.on('value', function(snapshot) {
 
             }else{
 
-               title.innerHTML = '<a href="'+childData2.link+'">'+childData2.title+'</a>';
+               title.innerHTML = '<a href="'+childData2.link+'" target="_blank">'+childData2.title+'</a>';
           
 
             }
