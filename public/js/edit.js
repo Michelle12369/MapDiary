@@ -192,7 +192,7 @@ function initMap() {
     });
 
     map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(gps);
-    map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+    map.controls[google.maps.ControlPosition.TOP_RIGHT].push(input);
 
     //marker icon resize
     var icon = {

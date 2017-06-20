@@ -429,16 +429,20 @@ firebase.auth().onAuthStateChanged(function(user) {
                 if(snapshot.child('like_user').exists() && snapshot.child('like_user').hasChild(userid)){
 
                   postRef.child(c).child(id).child('like_user').child(userid).remove();
+                  userRef.child(userid).child('post').child(id).child('like_user').child(userid).remove();
                   count--;
                   postRef.child(c).child(id).child('like_count').set(count);
+                  userRef.child(userid).child('post').child(id).child('like_count').set(count);
                   toggle = false;
 
                                       
                 }else{
 
                   postRef.child(c).child(id).child('like_user').child(userid).set(username);
+                  userRef.child(userid).child('post').child(id).child('like_user').child(userid).set(username);
                   count++;
                   postRef.child(c).child(id).child('like_count').set(count);
+                  userRef.child(userid).child('post').child(id).child('like_count').set(count);
                   toggle = true;
 
                 }
@@ -517,6 +521,7 @@ firebase.auth().onAuthStateChanged(function(user) {
             
              
                 postRef.child(c).child(id).remove();
+                userRef.child(userid).child('post').child(id).remove();
                 var commentRef = firebase.database().ref('Comment/'+id);
                 commentRef.remove();
 
@@ -534,7 +539,7 @@ firebase.auth().onAuthStateChanged(function(user) {
         document.querySelector('#edit').addEventListener('click',function(){
 
 
-            initMap2();
+            initMap2(lat,lng);
 
             var title = document.querySelector('#title');// <h2 id="title"></h2>
             like_div.style.display = 'none';//按讚區塊隱藏
@@ -664,7 +669,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 
                                   userlike = null;
 
-                                }
+                                } 
 
                                 postRef.child(c).child(id).remove();
                                 postRef.child(category).child(id).set({
@@ -682,7 +687,31 @@ firebase.auth().onAuthStateChanged(function(user) {
                                      like_user:  userlike,
                                      type: category
 
-                                })
+                                });
+
+                                if (!userlike){
+
+                                  userlike = null;
+
+                                } 
+
+                                userRef.child(userid).child('post').child(id).set({
+
+                                     userid: uid,
+                                     username: uname,
+                                     title: ntitle,
+                                     timestamp: timestamp,
+                                     date: dates,
+                                     lat: a,
+                                     lng: b,
+                                     p_content: ncontent, 
+                                     p_photo:uphoto,
+                                     like_count: ulike,
+                                     like_user:  userlike,
+                                     type: category
+
+
+                                });
                                 
 
                                 c = category;
@@ -699,7 +728,13 @@ firebase.auth().onAuthStateChanged(function(user) {
                                 postRef.child(c).child(id).child('timestamp').set(timestamp);
                                 postRef.child(c).child(id).child('type').set(c);
                                
-         
+                                userRef.child(userid).child('post').child(id).child('title').set(ntitle);
+                                userRef.child(userid).child('post').child(id).child('lat').set(a);
+                                userRef.child(userid).child('post').child(id).child('lng').set(b);
+                                userRef.child(userid).child('post').child(id).child('p_content').set(ncontent);
+                                userRef.child(userid).child('post').child(id).child('date').set(dates);
+                                userRef.child(userid).child('post').child(id).child('timestamp').set(timestamp);
+                                userRef.child(userid).child('post').child(id).child('type').set(c);
 
                               }
 
@@ -747,8 +782,31 @@ firebase.auth().onAuthStateChanged(function(user) {
                                      like_user:  userlike,
                                      type: category
 
-                                })
+                                });
                                 
+                                if (!userlike){
+
+                                  userlike = null;
+
+                                } 
+
+                                 userRef.child(userid).child('post').child(id).set({
+
+                                     userid: uid,
+                                     username: uname,
+                                     title: ntitle,
+                                     timestamp: timestamp,
+                                     date: dates,
+                                     lat: a,
+                                     lng: b,
+                                     p_content: ncontent, 
+                                     p_photo:uphoto,
+                                     like_count: ulike,
+                                     like_user:  userlike,
+                                     type: category
+
+
+                                });
 
                                 c = category;
 
@@ -765,6 +823,14 @@ firebase.auth().onAuthStateChanged(function(user) {
                                 postRef.child(c).child(id).child('lat').set(a);
                                 postRef.child(c).child(id).child('lng').set(b);
 
+                                userRef.child(userid).child('post').child(id).child('title').set(ntitle);
+                                userRef.child(userid).child('post').child(id).child('lat').set(a);
+                                userRef.child(userid).child('post').child(id).child('lng').set(b);
+                                userRef.child(userid).child('post').child(id).child('p_content').set(ncontent);
+                                userRef.child(userid).child('post').child(id).child('date').set(dates);
+                                userRef.child(userid).child('post').child(id).child('timestamp').set(timestamp);
+                                userRef.child(userid).child('post').child(id).child('type').set(c);
+                                userRef.child(userid).child('post').child(id).child('p_photo').set(downloadURL)
 
 
                               }
@@ -915,7 +981,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 
 
 
- function initMap2() {
+ function initMap2(lat,lng) {
 
     myLatlng = new google.maps.LatLng(lat,lng);
     var map = new google.maps.Map(document.getElementById('GoogleMap'), {
@@ -929,7 +995,7 @@ firebase.auth().onAuthStateChanged(function(user) {
     });
 
     map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(gps);
-    map.controls[google.maps.ControlPosition.RIGHT_TOP].push(input);
+    map.controls[google.maps.ControlPosition.TOP_RIGHT].push(input);
 
 
 
