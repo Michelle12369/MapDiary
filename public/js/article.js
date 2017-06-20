@@ -575,7 +575,12 @@ firebase.auth().onAuthStateChanged(function(user) {
             var textarea = document.createElement('textarea');//新增 <textarea>
             textarea.rows = 20;//<textarea rows='20'>
             content.parentNode.insertBefore(textarea, content);//加在content前
-            tinymce.init({selector:'textarea'});
+            tinymce.init({
+              selector: 'textarea',
+              plugins: "textcolor",
+              branding: false,
+              toolbar: " undo redo | forecolor | backcolor | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent |"
+            });
             tinyMCE.activeEditor.setContent(content.innerHTML);
             content.parentNode.removeChild(content);
 
