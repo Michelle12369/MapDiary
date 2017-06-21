@@ -315,6 +315,12 @@ nav {
     }
 }
 
+@media (max-width: 576px) {
+ .mapFixed{
+    position:relative;
+ }
+}
+
 .show {
     display: block !important;
 }
