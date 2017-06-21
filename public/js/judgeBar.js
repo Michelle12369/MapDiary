@@ -5,6 +5,7 @@ var SignIn = document.getElementById('SignIn');
 var profileName = document.getElementById('profile-name');
 var note = document.getElementById('note');
 var noteDetail = document.getElementById('noteDetail');
+var noteContent = document.getElementById('noteContent');
 var notekey = [];
 var noteId = "";
 var x = 0;
@@ -87,8 +88,8 @@ firebase.auth().onAuthStateChanged(function(user) {
         }else{
           detail.innerText = reader+"對你的文章留言";
         };
-        if(noteDetail!=null){
-          noteDetail.append(detail);
+        if(noteContent!=null){
+          noteContent.prepend(detail);
         }
 
       });
@@ -130,3 +131,7 @@ note.addEventListener("click",function(){
 
   }
 });
+
+
+
+
