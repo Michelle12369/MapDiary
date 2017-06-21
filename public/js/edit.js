@@ -399,7 +399,8 @@ if (navigator.geolocation) {
     });
 
     map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(gps);
-    map.controls[google.maps.ControlPosition.TOP_RIGHT].push(input);
+    map.controls[google.maps.ControlPosition.LEFT_TOP].push(input);
+    
 
     //marker icon resize
     var icon = {

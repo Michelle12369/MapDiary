@@ -349,6 +349,7 @@ postRef.on('value', function(snapshot) {
          current_comment_user.style = 'visible';
          comment_input.style = 'visible';
          current_user_page.href = 'user.html?key='+user.uid;
+         current_user_page.target="_blank";
 
          if(!snapshot.val().pic){
 
@@ -425,14 +426,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 
         // 點擊愛心
         heart.addEventListener('click',function(event){
-            //gary
-              firebase.database().ref('users/'+garyid+'/notification').push({
-                type: "like",
-                article: value,
-                reader: user.displayName,
-                read: false,
-              });
-              //gary
+          
               event.preventDefault();
 
               heart.classList.toggle('like-click');
@@ -447,21 +441,29 @@ firebase.auth().onAuthStateChanged(function(user) {
                 if(snapshot.child('like_user').exists() && snapshot.child('like_user').hasChild(userid)){
 
                   postRef.child(c).child(id).child('like_user').child(userid).remove();
-                  userRef.child(userid).child('post').child(id).child('like_user').child(userid).remove();
+                  userRef.child(garyid).child('post').child(id).child('like_user').child(userid).remove();
                   count--;
                   postRef.child(c).child(id).child('like_count').set(count);
-                  userRef.child(userid).child('post').child(id).child('like_count').set(count);
+                  userRef.child(garyid).child('post').child(id).child('like_count').set(count);
                   toggle = false;
 
                                       
                 }else{
 
                   postRef.child(c).child(id).child('like_user').child(userid).set(username);
-                  userRef.child(userid).child('post').child(id).child('like_user').child(userid).set(username);
+                  userRef.child(garyid).child('post').child(id).child('like_user').child(userid).set(username);
                   count++;
                   postRef.child(c).child(id).child('like_count').set(count);
-                  userRef.child(userid).child('post').child(id).child('like_count').set(count);
+                  userRef.child(garyid).child('post').child(id).child('like_count').set(count);
                   toggle = true;
+                  //gary
+                  firebase.database().ref('users/'+garyid+'/notification').push({
+                    type: "like",
+                    article: value,
+                    reader: user.displayName,
+                    read: false,
+                  });
+                  //gary
 
                 }
 
@@ -478,15 +480,6 @@ firebase.auth().onAuthStateChanged(function(user) {
           event.preventDefault();
 
           if (event.keyCode == 13) {
-            //gary
-              firebase.database().ref('users/'+garyid+'/notification').push({
-                type: "comment",
-                article: value,
-                reader: user.displayName,
-                read: false,
-              });
-            //gary
-
 
             var d = new Date();
             var date = d.toLocaleDateString()+" "+d.toLocaleTimeString();
@@ -561,11 +554,11 @@ firebase.auth().onAuthStateChanged(function(user) {
               closeOnConfirm: false,   closeOnCancel: false }, 
               function(isConfirm){   
                 if (isConfirm) {     
-                  swal({
-                    title:"刪除完成!", 
-                    text: "您的文章已被刪除", 
-                    type: "success",
-                    confirmButtonColor: "#0abab5" });   
+                  // swal({
+                  //   title:"刪除完成!", 
+                  //   text: "您的文章已被刪除", 
+                  //   type: "success",
+                  //   confirmButtonColor: "#0abab5" });   
                   postRef.child(c).child(id).remove();
                   userRef.child(userid).child('post').child(id).remove();
                   var commentRef = firebase.database().ref('Comment/'+id);
@@ -1025,6 +1018,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 
 
 
+
  //新增留言架構
  function commentHtmlFromObject(commentlist){
 
@@ -1032,18 +1026,20 @@ firebase.auth().onAuthStateChanged(function(user) {
         html += '<hr>';
           html += '<div class="comment-container">';
            html += '<div class="user-pic">';
-            html += '<a href="user.html?key='+commentlist.userid+'">';
+            html += '<a href="user.html?key='+commentlist.userid+'" target="_blank">';
             html += '<img src="'+commentlist.photo_url+'">';
             html += '</a>';
              html += '</div>';
           html += '<div class="user-comment">';
-        html += '<div><a href="user.html?key='+commentlist.userid+'">'+commentlist.username+'</a></div>';
+        html += '<div><a href="user.html?key='+commentlist.userid+'"  target="_blank">'+commentlist.username+'</a></div>';
         html += '<div>'+commentlist.c_content+'</div>';
+        html += '<div><p align="right">'+commentlist.date+'</p></div>';
         html += '</div>';
         html += '</div>';
         return html;
 
  }
+
 
 
 
@@ -1067,9 +1063,7 @@ firebase.auth().onAuthStateChanged(function(user) {
     });
 
     map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(gps);
-    map.controls[google.maps.ControlPosition.TOP_RIGHT].push(input);
-
-
+    map.controls[google.maps.ControlPosition.LEFT_TOP].push(input);
 
     //marker icon resize
     var icon = {
@@ -1164,6 +1158,7 @@ firebase.auth().onAuthStateChanged(function(user) {
             handleLocationError(false, map.getCenter());
         }
     }
+
 }
 
 
