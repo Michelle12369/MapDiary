@@ -156,7 +156,7 @@
             a++;
             add_col(a);
             var url = document.createElement('a');
-            url.href = "article.html?key="+snap.getKey();
+            url.href = "article.html?key="+snap.getKey()+"&Type="+kind;
             url.id = "url_"+a;
             document.getElementById(a).appendChild(url);
             var photo = document.createElement('img');
@@ -176,7 +176,7 @@
         ref.orderByChild('title').equalTo(search).on('child_added', function(snap){
             add_col(1);
             var url = document.createElement('a');
-            url.href = "article.html?key="+snap.getKey();
+            url.href = "article.html?key="+snap.getKey()+"&Type="+kind;
             url.id = "url_1";
             document.getElementById("1").appendChild(url);
             var photo = document.createElement('img');

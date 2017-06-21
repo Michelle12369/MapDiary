@@ -74,9 +74,6 @@ firebase.auth().onAuthStateChanged(function(user) {
         i++;
 
        
-
-
-
         var detail = document.createElement('a');
         detail.className = "dropdown-item";
         detail.id = i;
