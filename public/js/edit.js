@@ -6,6 +6,188 @@ var result = document.querySelector('#result');
 var gps = document.querySelector('#gps');
 var input = document.querySelector('#pac-input');
 var selectedFile;
+var style = [
+      {
+          "featureType": "water",
+          "elementType": "all",
+          "stylers": [
+              {
+                  "hue": "#7fc8ed"
+              },
+              {
+                  "saturation": 55
+              },
+              {
+                  "lightness": -6
+              },
+              {
+                  "visibility": "on"
+              }
+          ]
+      },
+      {
+          "featureType": "water",
+          "elementType": "labels",
+          "stylers": [
+              {
+                  "hue": "#7fc8ed"
+              },
+              {
+                  "saturation": 55
+              },
+              {
+                  "lightness": -6
+              },
+              {
+                  "visibility": "off"
+              }
+          ]
+      },
+      {
+          "featureType": "poi.park",
+          "elementType": "geometry",
+          "stylers": [
+              {
+                  "hue": "#83cead"
+              },
+              {
+                  "saturation": 1
+              },
+              {
+                  "lightness": -15
+              },
+              {
+                  "visibility": "on"
+              }
+          ]
+      },
+      {
+          "featureType": "landscape",
+          "elementType": "geometry",
+          "stylers": [
+              {
+                  "hue": "#f3f4f4"
+              },
+              {
+                  "saturation": -84
+              },
+              {
+                  "lightness": 59
+              },
+              {
+                  "visibility": "on"
+              }
+          ]
+      },
+      {
+          "featureType": "landscape",
+          "elementType": "labels",
+          "stylers": [
+              {
+                  "hue": "#ffffff"
+              },
+              {
+                  "saturation": -100
+              },
+              {
+                  "lightness": 100
+              },
+              {
+                  "visibility": "off"
+              }
+          ]
+      },
+      {
+          "featureType": "road",
+          "elementType": "geometry",
+          "stylers": [
+              {
+                  "hue": "#ffffff"
+              },
+              {
+                  "saturation": -100
+              },
+              {
+                  "lightness": 100
+              },
+              {
+                  "visibility": "on"
+              }
+          ]
+      },
+      {
+          "featureType": "road",
+          "elementType": "labels",
+          "stylers": [
+              {
+                  "hue": "#bbbbbb"
+              },
+              {
+                  "saturation": -100
+              },
+              {
+                  "lightness": 26
+              },
+              {
+                  "visibility": "on"
+              }
+          ]
+      },
+      {
+          "featureType": "road.arterial",
+          "elementType": "geometry",
+          "stylers": [
+              {
+                  "hue": "#ffcc00"
+              },
+              {
+                  "saturation": 100
+              },
+              {
+                  "lightness": -35
+              },
+              {
+                  "visibility": "simplified"
+              }
+          ]
+      },
+      {
+          "featureType": "road.highway",
+          "elementType": "geometry",
+          "stylers": [
+              {
+                  "hue": "#ffcc00"
+              },
+              {
+                  "saturation": 100
+              },
+              {
+                  "lightness": -22
+              },
+              {
+                  "visibility": "on"
+              }
+          ]
+      },
+      {
+          "featureType": "poi.school",
+          "elementType": "all",
+          "stylers": [
+              {
+                  "hue": "#d7e4e4"
+              },
+              {
+                  "saturation": -60
+              },
+              {
+                  "lightness": 23
+              },
+              {
+                  "visibility": "on"
+              }
+          ]
+      }
+  ]
 
 
 
@@ -84,16 +266,35 @@ submit.addEventListener('click', function () {
 
         if (!title || !p_content) { 
 
-            alert( "沒有填寫完整" ); 
+             swal({
 
+                title: "標題 / 文章填寫不完整",
+                text: "請再檢查一次",
+                confirmButtonColor: "#0abab5",
+                confirmButtonText: '知道了'
+                          
+
+                });
 
         }else if (!selectedFile){
 
-            alert("您尚未選擇圖片");
+              swal({
+
+                title: "你還沒選擇圖片",
+                confirmButtonColor: "#0abab5",
+                confirmButtonText: '知道了'
+
+                });
 
         }else if (!roundedImage){
 
-            alert("您尚未裁切圖片");
+             swal({
+
+                title: "照片還沒裁切",
+                confirmButtonColor: "#0abab5",
+                confirmButtonText: '知道了'
+
+                });
 
         }else{
 
@@ -181,18 +382,24 @@ function uploadPost(title, category, p_content, downloadURL,email,name) {
 
 function initMap() {
 
-    myLatlng = new google.maps.LatLng(24.987516, 121.57607400000006);
+
+//Geolocation 
+if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+
+    myLatlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
     var map = new google.maps.Map(document.getElementById('pickmap'), {
         zoom: 15,
         center: myLatlng,
-        zoomControl: false,
-        mapTypeControl: false,
-        streetViewControl: false
+        styles: style
+        // zoomControl: false,
+        // mapTypeControl: false,
+        // streetViewControl: false
 
     });
 
     map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(gps);
-    map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+    map.controls[google.maps.ControlPosition.TOP_RIGHT].push(input);
 
     //marker icon resize
     var icon = {
@@ -209,8 +416,11 @@ function initMap() {
 
     });
 
+
     lat = myLatlng.lat();
     lng = myLatlng.lng();
+
+
 
 
 
@@ -222,30 +432,6 @@ function initMap() {
     // input.parentNode.insertBefore(gps,input);
 
 
-    // Geolocation 
-    // if (navigator.geolocation) {
-    //   navigator.geolocation.getCurrentPosition(function(position) {
-    //     var pos = {
-    //       lat: position.coords.latitude,
-    //       lng: position.coords.longitude
-    //     };
-
-    //     map.setCenter(pos);
-    //       marker = new google.maps.Marker({
-    //       position: pos,
-    //       map: map,
-    //     });
-
-    //     lat = position.coords.latitude;
-    //     lng = position.coords.longitude;
-
-    //   }, function() {
-    //     handleLocationError(true, map.getCenter());
-    //   });
-    // } else {
-    //   // Browser doesn't support Geolocation
-    //   handleLocationError(false, map.getCenter());
-    // }
 
 
     map.setOptions({
@@ -291,7 +477,7 @@ function initMap() {
 
         if (!place.geometry) {
 
-            alert("請填寫正確位址");
+            //alert("請填寫正確位址");
 
         } else {
 
@@ -327,6 +513,18 @@ function initMap() {
             handleLocationError(false, map.getCenter());
         }
     }
+
+
+    }, function() {
+     handleLocationError(true, map.getCenter());
+      });
+    } else {
+      // Browser doesn't support Geolocation
+      handleLocationError(false, map.getCenter());
+    }
+
+
+
 }
 
 

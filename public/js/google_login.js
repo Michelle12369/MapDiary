@@ -11,7 +11,7 @@ googleLoginBtn.addEventListener("click",function(){
 
 		console.log(user);
 
-	    firebase.database().ref('users/' + user.uid).set({
+	    firebase.database().ref('users/' + user.uid).update({
 	      userid: user.uid,
 		  email: user.email,
 	      name: user.displayName,

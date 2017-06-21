@@ -71,7 +71,8 @@ function addArticle(user){
       var keepReading = document.createElement("a");
       keepReading.innerHTML = "繼續閱讀";
       keepReading.className += "keepRead";
-      keepReading.href = "/article.html?key=" + content.article_key;
+      keepReading.href = "/article.html?key=" + childSnapshot.key;
+      console.log(childSnapshot.key);
 
       userBlock = document.createElement("div");
       userBlock.prepend(userPic);

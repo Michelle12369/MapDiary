@@ -13,7 +13,6 @@ var select = document.querySelector('#select');
 var select_category = document.querySelector('#select_category');
 var input = document.querySelector('#pac-input');
 var gps = document.querySelector('#gps');
-
 //修改照片
 var modal = document.querySelector('#myModal');
 var btn = document.querySelector("#myBtn");
@@ -34,6 +33,7 @@ parameters[key] = value;
 //
 var toggle = true;
 var postRef = firebase.database().ref('Post');
+var userRef = firebase.database().ref('users');
 //
 var style = [
       {
@@ -243,9 +243,27 @@ postRef.on('value', function(snapshot) {
 
           }else{
 
-             author.innerHTML = childData2.username+" # ";
+             var n = childData2.username+" # ";
+             author.innerHTML = '<a href="/user.html?key='+childData2.userid+'" target="_blank">'+n+'</a>';
+
 
           }
+
+
+          userRef.child(childData2.userid).on('value',function(snapshot){
+
+
+            if(snapshot.val().pic){
+
+              document.querySelector('.img-circle').src = snapshot.val().pic;
+              document.querySelector('#circle').href = '/user.html?key='+childData2.userid;
+
+            }
+
+
+
+          });
+
 
           firebase.auth().onAuthStateChanged(function(user) {
 
@@ -258,8 +276,8 @@ postRef.on('value', function(snapshot) {
            });
 
 
-          date.innerHTML = childData2.date+" # ";
-          type.innerHTML = "關於 "+category;
+            date.innerHTML = childData2.date+" # ";
+            type.innerHTML = "關於 "+category;
             content.innerHTML = childData2.p_content;
             //未來: 經緯度轉換成地址
             //map.src = map_url+'&q='+childData2.lat+','+childData2.lng;
@@ -284,7 +302,7 @@ postRef.on('value', function(snapshot) {
 
             }else{
 
-               title.innerHTML = '<a href="'+childData2.link+'">'+childData2.title+'</a>';
+               title.innerHTML = '<a href="'+childData2.link+'" target="_blank">'+childData2.title+'</a>';
           
 
             }
@@ -312,7 +330,7 @@ postRef.on('value', function(snapshot) {
           //如果有likes欄位->已經有人按讚、如果likes欄位有使用者的ID -> 已經按過讚了
           if(snapshot.child('like_user').exists() && snapshot.child('like_user').hasChild(user.uid)){
               heart.classList.add('likes-count'); //空心
-              heart.classList.toggle('like-click'); //加上實心
+              heart.classList.add('like-click'); //加上實心
                                            
           }else{
               
@@ -326,8 +344,7 @@ postRef.on('value', function(snapshot) {
     
 
         //連接使用者留言照片、留言網頁
-        var userRef = firebase.database().ref('users/'+user.uid);
-        userRef.once('value',function(snapshot){
+        userRef.child(user.uid).once('value',function(snapshot){
 
          current_comment_user.style = 'visible';
          comment_input.style = 'visible';
@@ -430,16 +447,20 @@ firebase.auth().onAuthStateChanged(function(user) {
                 if(snapshot.child('like_user').exists() && snapshot.child('like_user').hasChild(userid)){
 
                   postRef.child(c).child(id).child('like_user').child(userid).remove();
+                  userRef.child(userid).child('post').child(id).child('like_user').child(userid).remove();
                   count--;
                   postRef.child(c).child(id).child('like_count').set(count);
+                  userRef.child(userid).child('post').child(id).child('like_count').set(count);
                   toggle = false;
 
                                       
                 }else{
 
                   postRef.child(c).child(id).child('like_user').child(userid).set(username);
+                  userRef.child(userid).child('post').child(id).child('like_user').child(userid).set(username);
                   count++;
                   postRef.child(c).child(id).child('like_count').set(count);
+                  userRef.child(userid).child('post').child(id).child('like_count').set(count);
                   toggle = true;
 
                 }
@@ -512,18 +533,53 @@ firebase.auth().onAuthStateChanged(function(user) {
 
 
 
-            var r=confirm("確定刪除？")
-            
-            if (r==true){
+            // var r = confirm("確定刪除？");
+
+            // if (r==true){
             
              
-                postRef.child(c).child(id).remove();
-                var commentRef = firebase.database().ref('Comment/'+id);
-                commentRef.remove();
-                alert('文章已刪除');
-                window.location.replace("/user.html");
+                // postRef.child(c).child(id).remove();
+                // userRef.child(userid).child('post').child(id).remove();
+                // var commentRef = firebase.database().ref('Comment/'+id);
+                // commentRef.remove();
 
-            }  
+
+            //     alert('文章已刪除');
+            //     window.location.replace("/user.html");
+
+            // }  
+
+            swal({   
+
+              title: "確定刪除文章?",   
+              text: "文章刪除後無法復原",   
+              type: "warning",   
+              showCancelButton: true,   
+              confirmButtonColor: "#DD6B55",   
+              confirmButtonText: "好..刪好刪滿",   
+              cancelButtonText: "不..讓我想想",   
+              closeOnConfirm: false,   closeOnCancel: false }, 
+              function(isConfirm){   
+                if (isConfirm) {     
+                  swal({
+                    title:"刪除完成!", 
+                    text: "您的文章已被刪除", 
+                    type: "success",
+                    confirmButtonColor: "#0abab5" });   
+                  postRef.child(c).child(id).remove();
+                  userRef.child(userid).child('post').child(id).remove();
+                  var commentRef = firebase.database().ref('Comment/'+id);
+                  commentRef.remove();
+                  window.location.replace("/user.html");
+                } else {     
+                  swal({
+                    title: "取消刪除!", 
+                    text: "您的文章安全了", 
+                    type: "error",
+                    confirmButtonColor: "#0abab5"
+                  });   
+                } });
+
 
         });
 
@@ -533,12 +589,13 @@ firebase.auth().onAuthStateChanged(function(user) {
         document.querySelector('#edit').addEventListener('click',function(){
 
 
-            initMap2();
+            initMap2(lat,lng);
 
             var title = document.querySelector('#title');// <h2 id="title"></h2>
             like_div.style.display = 'none';//按讚區塊隱藏
             document.querySelector('#commentlist').style.display = 'none'; //留言列表
             document.querySelector('#commentuser').style.display = 'none'; //發表留言隱藏
+            document.querySelector('#circle').style.display = 'none';
             //更換title -> input
             var input = document.createElement('input');//新增 <input>
             input.id = "input";//<input id="input">
@@ -551,7 +608,12 @@ firebase.auth().onAuthStateChanged(function(user) {
             var textarea = document.createElement('textarea');//新增 <textarea>
             textarea.rows = 20;//<textarea rows='20'>
             content.parentNode.insertBefore(textarea, content);//加在content前
-            tinymce.init({selector:'textarea'});
+            tinymce.init({
+              selector: 'textarea',
+              plugins: "textcolor",
+              branding: false,
+              toolbar: " undo redo | forecolor | backcolor | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent |"
+            });
             tinyMCE.activeEditor.setContent(content.innerHTML);
             content.parentNode.removeChild(content);
 
@@ -641,11 +703,27 @@ firebase.auth().onAuthStateChanged(function(user) {
                   //確認是否填寫完畢(不完整)、會出現bug一直重複
                     if (!ntitle || !ncontent){
 
-                        alert("您有缺漏的部分");
+                        swal({
+
+                          title: "標題 / 文章填寫不完整",
+                          text: "請再檢查一次",
+                          confirmButtonColor: "#0abab5",
+                          confirmButtonText: '知道了'
+                          
+
+                        });
 
                     }else if (!roundedImage){
 
-                        alert("您尚未裁切圖片");
+                        swal({
+
+                          title: "照片還沒裁切",
+                          confirmButtonColor: "#0abab5",
+                          confirmButtonText: '知道了'
+
+                        });
+
+                        
 
                     }else{
 
@@ -663,7 +741,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 
                                   userlike = null;
 
-                                }
+                                } 
 
                                 postRef.child(c).child(id).remove();
                                 postRef.child(category).child(id).set({
@@ -681,7 +759,31 @@ firebase.auth().onAuthStateChanged(function(user) {
                                      like_user:  userlike,
                                      type: category
 
-                                })
+                                });
+
+                                if (!userlike){
+
+                                  userlike = null;
+
+                                } 
+
+                                userRef.child(userid).child('post').child(id).set({
+
+                                     userid: uid,
+                                     username: uname,
+                                     title: ntitle,
+                                     timestamp: timestamp,
+                                     date: dates,
+                                     lat: a,
+                                     lng: b,
+                                     p_content: ncontent, 
+                                     p_photo:uphoto,
+                                     like_count: ulike,
+                                     like_user:  userlike,
+                                     type: category
+
+
+                                });
                                 
 
                                 c = category;
@@ -698,7 +800,13 @@ firebase.auth().onAuthStateChanged(function(user) {
                                 postRef.child(c).child(id).child('timestamp').set(timestamp);
                                 postRef.child(c).child(id).child('type').set(c);
                                
-         
+                                userRef.child(userid).child('post').child(id).child('title').set(ntitle);
+                                userRef.child(userid).child('post').child(id).child('lat').set(a);
+                                userRef.child(userid).child('post').child(id).child('lng').set(b);
+                                userRef.child(userid).child('post').child(id).child('p_content').set(ncontent);
+                                userRef.child(userid).child('post').child(id).child('date').set(dates);
+                                userRef.child(userid).child('post').child(id).child('timestamp').set(timestamp);
+                                userRef.child(userid).child('post').child(id).child('type').set(c);
 
                               }
 
@@ -746,8 +854,31 @@ firebase.auth().onAuthStateChanged(function(user) {
                                      like_user:  userlike,
                                      type: category
 
-                                })
+                                });
                                 
+                                if (!userlike){
+
+                                  userlike = null;
+
+                                } 
+
+                                 userRef.child(userid).child('post').child(id).set({
+
+                                     userid: uid,
+                                     username: uname,
+                                     title: ntitle,
+                                     timestamp: timestamp,
+                                     date: dates,
+                                     lat: a,
+                                     lng: b,
+                                     p_content: ncontent, 
+                                     p_photo:uphoto,
+                                     like_count: ulike,
+                                     like_user:  userlike,
+                                     type: category
+
+
+                                });
 
                                 c = category;
 
@@ -764,6 +895,14 @@ firebase.auth().onAuthStateChanged(function(user) {
                                 postRef.child(c).child(id).child('lat').set(a);
                                 postRef.child(c).child(id).child('lng').set(b);
 
+                                userRef.child(userid).child('post').child(id).child('title').set(ntitle);
+                                userRef.child(userid).child('post').child(id).child('lat').set(a);
+                                userRef.child(userid).child('post').child(id).child('lng').set(b);
+                                userRef.child(userid).child('post').child(id).child('p_content').set(ncontent);
+                                userRef.child(userid).child('post').child(id).child('date').set(dates);
+                                userRef.child(userid).child('post').child(id).child('timestamp').set(timestamp);
+                                userRef.child(userid).child('post').child(id).child('type').set(c);
+                                userRef.child(userid).child('post').child(id).child('p_photo').set(downloadURL)
 
 
                               }
@@ -798,23 +937,23 @@ firebase.auth().onAuthStateChanged(function(user) {
                         // heart.classList.toggle('like-click'); //加上實心
 
 
-                        console.log(heart.classList.contains('like-click'));
+                        // console.log(heart.classList.contains('like-click'));
 
-                        //代表有按過讚 -> 要顯示實心的
-                        if (heart.classList.contains('like-click')){
-
-
-                            heart.classList.toggle('like-click');
+                        // //代表有按過讚 -> 要顯示實心的
+                        // if (heart.classList.contains('like-click')){
 
 
-
-                        }else{
+                        //     heart.classList.toggle('like-click');
 
 
 
-                             heart.classList.add('likes-count');
+                        // }else{
 
-                        }
+
+
+                        //      heart.classList.add('likes-count');
+
+                        // }
 
 
 
@@ -854,6 +993,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                         like_div.style.display = '';
                         document.querySelector('#commentlist').style.display= ''; //留言列表、發表留言隱藏
                         document.querySelector('#commentuser').style.display = '';
+                        document.querySelector('#circle').style.display = '';
                         document.querySelector('#done').style.display = 'none';
                         document.querySelector('#edit').style.display = 'inline';
 
@@ -864,7 +1004,6 @@ firebase.auth().onAuthStateChanged(function(user) {
 
             });
             
-
 
 
      } else {
@@ -914,7 +1053,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 
 
 
- function initMap2() {
+ function initMap2(lat,lng) {
 
     myLatlng = new google.maps.LatLng(lat,lng);
     var map = new google.maps.Map(document.getElementById('GoogleMap'), {
@@ -928,7 +1067,9 @@ firebase.auth().onAuthStateChanged(function(user) {
     });
 
     map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(gps);
-    map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+    map.controls[google.maps.ControlPosition.TOP_RIGHT].push(input);
+
+
 
     //marker icon resize
     var icon = {
@@ -992,7 +1133,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 
         if (!place.geometry) {
 
-            alert("請填寫正確位址");
+          //alert
 
         } else {
 
