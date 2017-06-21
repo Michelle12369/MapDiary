@@ -26,10 +26,12 @@ var c,id,lat,lng,uid,uphoto,uname,ulike,userlike,garyid;
 //Get the post ID (parameter) passed from search.html
 var query = location.search.substring(1);
 var parameters = {};
-var keyValuePairs = query.split("=");
-var key = keyValuePairs[0];
-var value = keyValuePairs[1];
-parameters[key] = value;
+var kVPairs = query.split("&");
+var postIdPairs = kVPairs[0].split("=");
+var typePairs = kVPairs[1].split("=");
+var value = postIdPairs[1]; //value -> postid
+var category = typePairs[1]; //postype -> category
+//parameters[key] = value;  
 //
 var toggle = true;
 var postRef = firebase.database().ref('Post');
@@ -222,22 +224,15 @@ var style = [
 
 function initMap() {
 
-postRef.on('value', function(snapshot) {
-  
-  snapshot.forEach(function(childSnapshot) {
 
-    category = childSnapshot.key;
+  postRef.child(category).child(value).on('value',function(snapshot){
 
-    childSnapshot.forEach(function(postIDSnapshot){
+    var postId = value;
+    var childData2 = snapshot.val();
 
-        postId = postIDSnapshot.key;
-        var childData2 = postIDSnapshot.val();
+    title.innerHTML = childData2.title;
 
-        if (postId == value){
-      
-          title.innerHTML = childData2.title;
-
-          if (!childData2.username){
+     if (!childData2.username){
 
              author.innerHTML = '匿名使用者'+" # ";
 
@@ -246,11 +241,10 @@ postRef.on('value', function(snapshot) {
              var n = childData2.username+" # ";
              author.innerHTML = '<a href="/user.html?key='+childData2.userid+'" target="_blank">'+n+'</a>';
 
-
           }
 
 
-          userRef.child(childData2.userid).on('value',function(snapshot){
+     userRef.child(childData2.userid).on('value',function(snapshot){
 
 
             if(snapshot.val().pic){
@@ -258,14 +252,20 @@ postRef.on('value', function(snapshot) {
               document.querySelector('.img-circle').src = snapshot.val().pic;
               document.querySelector('#circle').href = '/user.html?key='+childData2.userid;
 
+            }else{
+
+                    document.querySelector('.img-circle').style.display = 'none';
+
             }
 
-
+       
 
           });
 
 
-          firebase.auth().onAuthStateChanged(function(user) {
+
+
+     firebase.auth().onAuthStateChanged(function(user) {
 
               if (childData2.userid == user.uid){
 
@@ -276,7 +276,7 @@ postRef.on('value', function(snapshot) {
            });
 
 
-            date.innerHTML = childData2.date+" # ";
+         date.innerHTML = childData2.date+" # ";
             type.innerHTML = "關於 "+category;
             content.innerHTML = childData2.p_content;
             //未來: 經緯度轉換成地址
@@ -309,17 +309,7 @@ postRef.on('value', function(snapshot) {
 
 
 
-           
-
-
-        }
-
-    });
-  });
-
-
-
-  firebase.auth().onAuthStateChanged(function(user) {
+        firebase.auth().onAuthStateChanged(function(user) {
 
         if(user){
 
@@ -340,9 +330,6 @@ postRef.on('value', function(snapshot) {
         }); 
 
 
-
-    
-
         //連接使用者留言照片、留言網頁
         userRef.child(user.uid).once('value',function(snapshot){
 
@@ -357,7 +344,7 @@ postRef.on('value', function(snapshot) {
 
          }else{
 
-           current_comment_user.src = snapshot.val().pic;
+          current_comment_user.src = snapshot.val().pic;
 
          }
 
@@ -368,32 +355,34 @@ postRef.on('value', function(snapshot) {
 
   });
 
-   
-      var uluru = {lat: lat, lng: lng};
-      var map = new google.maps.Map(document.getElementById('GoogleMap'), {
-        zoom: 18,
-        center: uluru,
-        styles: style
 
-       });
+            var uluru = {lat: lat, lng: lng};
+            var map = new google.maps.Map(document.getElementById('GoogleMap'), {
+                zoom: 18,
+                center: uluru,
+                styles: style
 
-    var icon = {
+               });
 
-        url: 'img/placeholder.png', // url
-        scaledSize: new google.maps.Size(50, 50), // scaled size
-        };
+            var icon = {
 
-    marker = new google.maps.Marker({
+                url: 'img/placeholder.png', // url
+                scaledSize: new google.maps.Size(50, 50), // scaled size
+                };
 
-            position: uluru,
-            map: map,
-            animation: google.maps.Animation.DROP,
-            icon: icon
+            marker = new google.maps.Marker({
 
-        });
-     
-    document.querySelector('body').classList.add('loaded');
-});
+                    position: uluru,
+                    map: map,
+                    animation: google.maps.Animation.DROP,
+                    icon: icon
+
+                });  
+      
+
+      document.querySelector('body').classList.add('loaded');             
+
+  });
 
 
 }
@@ -523,7 +512,6 @@ firebase.auth().onAuthStateChanged(function(user) {
 
         //刪除文章
         document.querySelector('#delete').addEventListener('click',function(){
-
 
 
             // var r = confirm("確定刪除？");
@@ -681,11 +669,13 @@ firebase.auth().onAuthStateChanged(function(user) {
 
 
 
-            //完成
-            document.querySelector('#done').addEventListener('click',function(){
+          //完成
+          document.querySelector('#done').addEventListener('click',function(event){
 
 
+                    event.preventDefault();
                     var ntitle = document.querySelector('#input').value;
+                    console.log(ntitle);
                     var ncontent = tinyMCE.activeEditor.getContent();
                     var category = select_category.options[select_category.options.selectedIndex].value;
                     var d = new Date();
@@ -781,6 +771,8 @@ firebase.auth().onAuthStateChanged(function(user) {
 
                                 c = category;
 
+                                window.location.replace("/article.html?key="+id+"&Type="+c);
+
 
                               }else{
 
@@ -801,13 +793,13 @@ firebase.auth().onAuthStateChanged(function(user) {
                                 userRef.child(userid).child('post').child(id).child('timestamp').set(timestamp);
                                 userRef.child(userid).child('post').child(id).child('type').set(c);
 
+                                window.location.replace("/article.html?key="+id+"&Type="+c);
+
                               }
 
                                                         
 
                        }else{
-
-
 
 
                         var storageRef = firebase.storage().ref();    
@@ -875,6 +867,8 @@ firebase.auth().onAuthStateChanged(function(user) {
 
                                 c = category;
 
+                                window.location.replace("/article.html?key="+id+"&Type="+c);
+
 
                               }else{
 
@@ -895,7 +889,9 @@ firebase.auth().onAuthStateChanged(function(user) {
                                 userRef.child(userid).child('post').child(id).child('date').set(dates);
                                 userRef.child(userid).child('post').child(id).child('timestamp').set(timestamp);
                                 userRef.child(userid).child('post').child(id).child('type').set(c);
-                                userRef.child(userid).child('post').child(id).child('p_photo').set(downloadURL)
+                                userRef.child(userid).child('post').child(id).child('p_photo').set(downloadURL);
+
+                                window.location.replace("/article.html?key="+id+"&Type="+c);
 
 
                               }
@@ -906,91 +902,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 
                        }
 
-
-
-                        // heart.classList.remove('like-count'); //空心
-
-                        // var likeRef3 = firebase.database().ref('Post/'+c+'/'+id);
-                        // likeRef3.once('value',function(snapshot){
-
-                        //   //如果有likes欄位->已經有人按讚、如果likes欄位有使用者的ID -> 已經按過讚了
-                        //   if(snapshot.child('like_user').exists() && snapshot.child('like_user').hasChild(user.uid)){
-                        //       heart.classList.add('likes-count'); //空心
-                        //       heart.classList.toggle('like-click'); //加上實心
-                                                           
-                        //   }else{
-                              
-                        //       heart.classList.add('likes-count');
-                                                       
-                        //   }
-                        // }); 
-
-
-                        // heart.classList.add('likes-count'); //空心
-                        // heart.classList.toggle('like-click'); //加上實心
-
-
-                        // console.log(heart.classList.contains('like-click'));
-
-                        // //代表有按過讚 -> 要顯示實心的
-                        // if (heart.classList.contains('like-click')){
-
-
-                        //     heart.classList.toggle('like-click');
-
-
-
-                        // }else{
-
-
-
-                        //      heart.classList.add('likes-count');
-
-                        // }
-
-
-
-
-       
-
-                        //變回title
-                        var title = document.createElement('h2');
-                        var input = document.querySelector('#input');
-                        title.id = "title";
-                        title.innerHTML = input.value;
-                        input.parentNode.insertBefore(title, input);
-                        input.parentNode.removeChild(input);
-
-
-                        //變回content
-                        var textarea = document.querySelector('textarea');
-                        var content = document.createElement('div');
-                        content.id = 'content';
-                        textarea.parentNode.insertBefore(content, textarea);
-                        content.innerHTML = ncontent;
-                        textarea.parentNode.removeChild(textarea);
-                        tinymce.remove();
-                        
-
-                        //category變回文字
-                        select.style.display = 'none';
-                        type.style.display = '';
-                        author.style.display = "";
-                        date.style.display = "";
-
-
-                        //edit button選擇圖片消失
-                        edit_btn.style.display = 'none';
-
-
-                        like_div.style.display = '';
-                        document.querySelector('#commentlist').style.display= ''; //留言列表、發表留言隱藏
-                        document.querySelector('#commentuser').style.display = '';
-                        document.querySelector('#circle').style.display = '';
-                        document.querySelector('#done').style.display = 'none';
-                        document.querySelector('#edit').style.display = 'inline';
-
-
+                       
                     }
 
 
