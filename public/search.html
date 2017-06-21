@@ -74,9 +74,7 @@
                 font: 8px Verdana;
             }
             .dropbtn {
-
                 position: relative;
-
             }
         </style>
         <!-- <a href="/user.html" class="nav-right" id="Dname"></a> -->
@@ -137,7 +135,6 @@
         </div>
     </article>
 
-
     <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
     <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAKhb8ChbvlUFoHRmLxuC1JoUtBu2zW6T8&callback=initMap&libraries=places">
@@ -154,6 +151,7 @@
     parameters[kind] = value;
     var toggle = true;
     var now_artice = [];
+    var Sendtype = "&Type="+value
 
 
     //add layout
@@ -544,9 +542,10 @@ if (navigator.geolocation)
                             //<div class="col-md-6" >
                             add_col(a)
                             //<a href="article.html">
+
                             var  url  = document.createElement('a');
                             var  url_href = document.createAttribute("href");
-                            url_href.value = "article.html?key="+acticle_key;
+                            url_href.value = "article.html?key="+acticle_key+Sendtype;
                             url.setAttributeNode(url_href);
                             //var textnode = document.createTextNode("article.html"); 
                             //url.appendChild(textnode);  
@@ -584,10 +583,7 @@ if (navigator.geolocation)
 
 }
 
-google.maps.event.addListenerOnce(map, 'idle', function(){
-    // do something only the first time the map is loaded
-        document.querySelector('body').classList.add('loaded');
-    });
+
 
   map.addListener('dragend', function(e)
           {
@@ -623,7 +619,7 @@ google.maps.event.addListenerOnce(map, 'idle', function(){
                                 //<a href="article.html">
                                 var  url  = document.createElement('a');
                                 var  url_href = document.createAttribute("href");
-                                url_href.value = "article.html?key="+acticle_key;
+                                url_href.value = "article.html?key="+acticle_key+Sendtype;
                                 url.setAttributeNode(url_href);
                                 //var textnode = document.createTextNode("article.html"); 
                                 //url.appendChild(textnode);  
@@ -717,7 +713,7 @@ google.maps.event.addListenerOnce(map, 'idle', function(){
                            //<a href="article.html">
                            var  url  = document.createElement('a');
                            var  url_href = document.createAttribute("href");
-                           url_href.value = "article.html?key="+acticle_key;
+                           url_href.value = "article.html?key="+acticle_key+Sendtype;
                            url.setAttributeNode(url_href);
                            //var textnode = document.createTextNode("article.html"); 
                            //url.appendChild(textnode);  
@@ -793,7 +789,8 @@ google.maps.event.addListenerOnce(map, 'idle', function(){
        }
       var acticle_key = snapshot.getKey();
       var article_title = snapshot.child('title').val();
-      var open_url = "article.html?key="+acticle_key
+      var Sendtype = "&Type="+value
+      var open_url = "article.html?key="+acticle_key+Sendtype;
 
       var content_button = '<button'+" "+"onClick="+Open_Web(open_url)+">";
 
