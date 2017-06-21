@@ -72,16 +72,29 @@ firebase.auth().onAuthStateChanged(function(user) {
         notekey[i] = snap.getKey();
         i++;
 
+       
+
+
+
         var detail = document.createElement('a');
         detail.className = "dropdown-item";
         detail.id = i;
-        detail.href = "article.html?key="+article;
+        detail.href = "article.html?key="+article+"&Type="+snap.val().category;
+      
+
+        if (reader == user.displayName){
+
+
+        }else{
+
         if(read==false){
           detail.style.backgroundColor = "lightseagreen"; 
           x++;
           document.querySelector('.notification-counter').innerHTML = x;
           document.querySelector('.notification-counter').style.display = '';
         };
+
+
         if(type=="like"){
           detail.innerText = reader+"說你的文章讚";
         }else{
@@ -91,6 +104,11 @@ firebase.auth().onAuthStateChanged(function(user) {
           noteDetail.append(detail);
         }
 
+
+        }
+
+
+      
       });
 //gary
     // user.sendEmailVerification(); 送驗證信

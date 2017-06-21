@@ -247,14 +247,15 @@ function initMap() {
      userRef.child(childData2.userid).on('value',function(snapshot){
 
 
-            if(snapshot.val().pic){
+            if(!snapshot.val().pic){
+
+              document.querySelector('.img-circle').style.display = 'none';
+
+            }else{
 
               document.querySelector('.img-circle').src = snapshot.val().pic;
               document.querySelector('#circle').href = '/user.html?key='+childData2.userid;
 
-            }else{
-
-                    document.querySelector('.img-circle').style.display = 'none';
 
             }
 
@@ -451,6 +452,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                     article: value,
                     reader: user.displayName,
                     read: false,
+                    category: c
                   });
                   //gary
 
@@ -486,6 +488,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                 article: value,
                 reader: user.displayName,
                 read: false,
+                category: c
               });
             //gary
 
