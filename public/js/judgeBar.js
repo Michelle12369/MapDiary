@@ -7,6 +7,7 @@ var note = document.getElementById('note');
 var noteDetail = document.getElementById('noteDetail');
 var notekey = [];
 var noteId = "";
+var x = 0;
 firebase.auth().onAuthStateChanged(function(user) {
   if (user) {
     user = user;
@@ -61,20 +62,25 @@ firebase.auth().onAuthStateChanged(function(user) {
       }
       noteId = user.uid;
       var i = 0;
+
       var noteref = firebase.database().ref('users/'+user.uid+'/notification');
       noteref.on('child_added', function(snap){
-        var article = snap.child('article').val();
-        var read = snap.child('read').val();
-        var reader = snap.child('reader').val();
-        var type = snap.child('type').val();
+        var article = snap.val().article;
+        var read = snap.val().read;
+        var reader = snap.val().reader;
+        var type = snap.val().type;
         notekey[i] = snap.getKey();
         i++;
 
         var detail = document.createElement('a');
         detail.className = "dropdown-item";
+        detail.id = i;
         detail.href = "article.html?key="+article;
         if(read==false){
           detail.style.backgroundColor = "lightseagreen"; 
+          x++;
+          document.querySelector('.notification-counter').innerHTML = x;
+          document.querySelector('.notification-counter').style.display = '';
         };
         if(type=="like"){
           detail.innerText = reader+"說你的文章讚";
@@ -84,6 +90,7 @@ firebase.auth().onAuthStateChanged(function(user) {
         if(noteDetail!=null){
           noteDetail.append(detail);
         }
+
       });
 //gary
     // user.sendEmailVerification(); 送驗證信
@@ -116,7 +123,10 @@ note.addEventListener("click",function(){
     var updates = {};
     for(var j=0;j<notekey.length;j++){
         updates['users/'+noteId+'/notification/'+notekey[j]+'/read'] = true;
-    }
+            }
     firebase.database().ref().update(updates);
+    document.querySelector('.notification-counter').style.display = 'none';
+    x = 0;
+
   }
 });
