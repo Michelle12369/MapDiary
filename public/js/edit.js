@@ -354,7 +354,7 @@ function uploadPost(title, category, p_content, downloadURL,email,name) {
         });
 
         var postId = newPost.getKey();
-        var post_page = "/article.html?key="+postId;
+        var post_page = "/article.html?key="+postId+"&Type="+category;
         window.location.replace(post_page);
 
 
