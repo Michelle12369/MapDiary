@@ -23,7 +23,11 @@ firebase.auth().onAuthStateChanged(function(user) {
     if( user!=null && ( user.uid == userValue || userValue ==null)){
 
       if(user.photoURL != null && profilePic != null){
-        profilePic.src = user.photoURL;
+        if(user.providerData[0].providerId == "facebook.com"){
+            profilePic.src = "https://graph.facebook.com/" + user.providerData[0].uid +"/picture?height=500";
+        }else{
+          profilePic.src = user.photoURL;
+        }
         profileName.innerHTML = user.displayName;
       } else {
         profilePic.src = "img/man.png";
