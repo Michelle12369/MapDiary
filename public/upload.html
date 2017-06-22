@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pixnet Emma js SDK</title>
+    <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+    <script>
+
+
+		    var i = 1;
+		    var user = 'PHT880';
+
+
+		    //,'nikitarh','s045488'  may1215may
+
+		    $.getJSON("https://emma.pixnet.cc/blog/articles?user="+user+"&format=json&pretty_print=1&client_id=20223c1d170bafa8075492bb10e4fcbb", function(result){
+
+
+		    	$.each(result.articles, function(index, entry) {
+
+
+					 if (entry.site_category == '生活綜合'){
+
+					 
+					 	if (i < 12){
+
+
+					 	if(!entry.location){ console.log('nononi') }
+
+
+					 	else{
+
+
+					 	console.log(entry.location.latitude);
+					 	var lat = entry.location.latitude;
+					 	var lng = entry.location.longitude;
+
+					 	
+
+					 	
+
+					 	$.getJSON("https://emma.pixnet.cc/blog/articles/"+entry.id+"?user="+user+"&client_id=20223c1d170bafa8075492bb10e4fcbb",function(result){
+
+
+
+					 		var uname = result.article.user.display_name;
+					 		 var userid = result.article.user.name;
+					 		 var title = result.article.title;
+					 		 var timestamp = result.article.public_at*1000;
+					 		 var p_content =result.article.body;
+					 		 var link = result.article.link;
+					 		 var d = new Date(result.article.public_at*1000);
+						     var month = d.getMonth()+1;
+						     var date = d.getFullYear()+"/"+month+"/"+d.getDate();
+						     var url = result.article.thumb;
+						     var hit = result.article.hits.total;
+						     console.log(title);
+						     console.log(url);
+							 
+
+					 		 if (!uname){
+
+					 		 	uname = result.article.username;
+
+
+					 		 }
+
+
+					 		  var keyurl = url.split('&');
+							  var p_photo = keyurl[0]+'&width=960';
+
+				
+
+
+						 		  var postRef = firebase.database().ref('Post');
+	                              postRef.child('Charity').push({
+
+	                                     userid: userid,
+	                                     username: uname,
+	                                     title: title,
+	                                     timestamp: timestamp,
+	                                     date: date,
+	                                     lat: lat,
+	                                     lng: lng,
+	                                     p_content: p_content, 
+	                                     p_photo: url,
+	                                     like_count: hit,
+	                                     type: 'Charity',
+	                                     link: link
+
+	                                });
+
+
+
+					 	});
+					 	
+
+					 	}
+
+					 
+					 }
+
+					 i++;
+					
+					 }
+
+					
+
+					});
+
+				 
+					
+		 	
+
+
+		    });
+
+
+		
+   	</script>
+
+          
+</head>
+<body>
+<script src="https://www.gstatic.com/firebasejs/4.1.1/firebase.js"></script>
+<script>
+        // Initialize Firebase
+          var config = {
+            apiKey: "AIzaSyCxtNaITKHzASF0PNhcr1mU6ah0Ru7FTqc",
+            authDomain: "sna-map-4f1bb.firebaseapp.com",
+            databaseURL: "https://sna-map-4f1bb.firebaseio.com",
+            projectId: "sna-map-4f1bb",
+            storageBucket: "sna-map-4f1bb.appspot.com",
+            messagingSenderId: "1022375312771"
+          };
+          firebase.initializeApp(config);
+</script>
+</body>
+</html>
